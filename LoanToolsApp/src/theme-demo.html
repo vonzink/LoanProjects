@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theme Switcher Demo - MSFG Loan Tools</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="description" content="Theme switcher demo for MSFG Loan Tools">
+    <meta name="theme-color" content="#e94560">
+    
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #1a1a1a;
+            --bg-card: rgba(255, 255, 255, 0.05);
+            --bg-card-hover: rgba(255, 255, 255, 0.08);
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --text-muted: #808080;
+            --accent-primary: #3b82f6;
+            --accent-secondary: #1d4ed8;
+            --accent-success: #10b981;
+            --accent-warning: #f59e0b;
+            --accent-danger: #ef4444;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --border-hover: rgba(255, 255, 255, 0.2);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.4);
+            --body-bg: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--body-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            margin-bottom: 2rem;
+            border-radius: 0 0 16px 16px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo img {
+            width: 60px;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .theme-info {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(20px);
+            box-shadow: var(--shadow);
+        }
+
+        .theme-info h2 {
+            color: var(--accent-primary);
+            margin-bottom: 1rem;
+        }
+
+        .theme-info p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .theme-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            backdrop-filter: blur(20px);
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .theme-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--border-hover);
+        }
+
+        .theme-card h3 {
+            color: var(--accent-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .theme-card p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .theme-features {
+            list-style: none;
+        }
+
+        .theme-features li {
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .theme-features li::before {
+            content: "✓";
+            color: var(--accent-success);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        .demo-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(20px);
+            box-shadow: var(--shadow);
+        }
+
+        .demo-section h2 {
+            color: var(--accent-primary);
+            margin-bottom: 1rem;
+        }
+
+        .demo-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .btn {
+            background: var(--accent-primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            background: var(--accent-secondary);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--border-hover);
+        }
+
+        .demo-content {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .demo-content h4 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .demo-content p {
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent-primary);
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            transition: color 0.2s ease;
+        }
+
+        .back-link:hover {
+            color: var(--accent-secondary);
+        }
+
+        .back-link svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .theme-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .demo-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <div class="logo-text">MSFG Loan Tools</div>
+            </div>
+        </div>
+
+        <a href="LoanToolsHub.html" class="back-link">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+            </svg>
+            Back to Hub
+        </a>
+
+        <div class="hero">
+            <h1>Theme Switcher Demo</h1>
+            <p>See how the theme switcher works across different visual styles</p>
+        </div>
+
+        <div class="theme-info">
+            <h2>🎨 Theme System</h2>
+            <p>The theme switcher provides three distinct visual styles that automatically adapt all components, colors, and styling across your loan tools.</p>
+            <p><strong>Look for the theme toggle in the top-right corner!</strong> 🌙🌤️☀️</p>
+        </div>
+
+        <div class="theme-grid">
+            <div class="theme-card">
+                <h3>🌙 Dark Theme</h3>
+                <p>Professional dark interface perfect for low-light environments and modern aesthetics.</p>
+                <ul class="theme-features">
+                    <li>Deep dark backgrounds</li>
+                    <li>High contrast text</li>
+                    <li>Subtle glassy effects</li>
+                    <li>Easy on the eyes</li>
+                </ul>
+            </div>
+
+            <div class="theme-card">
+                <h3>🌤️ Default Theme</h3>
+                <p>Balanced design with moderate contrast and professional appearance.</p>
+                <ul class="theme-features">
+                    <li>Light backgrounds</li>
+                    <li>Medium contrast</li>
+                    <li>Professional look</li>
+                    <li>Good readability</li>
+                </ul>
+            </div>
+
+            <div class="theme-card">
+                <h3>☀️ Light Theme</h3>
+                <p>Bright, clean interface ideal for well-lit environments and traditional preferences.</p>
+                <ul class="theme-features">
+                    <li>Bright white backgrounds</li>
+                    <li>High contrast</li>
+                    <li>Clean appearance</li>
+                    <li>Traditional look</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h2>🎯 Interactive Demo</h2>
+            <p>Try the theme switcher to see how these elements change:</p>
+            
+            <div class="demo-buttons">
+                <button class="btn">Primary Button</button>
+                <button class="btn-secondary">Secondary Button</button>
+                <button class="btn" style="background: var(--accent-success);">Success Button</button>
+                <button class="btn" style="background: var(--accent-warning);">Warning Button</button>
+                <button class="btn" style="background: var(--accent-danger);">Danger Button</button>
+            </div>
+
+            <div class="demo-content">
+                <h4>Sample Content Card</h4>
+                <p>This card demonstrates how different elements adapt to theme changes.</p>
+                <p>Notice how backgrounds, borders, shadows, and text colors all update automatically.</p>
+                <p>The theme switcher remembers your preference and applies it across all pages!</p>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h2>🔧 Technical Features</h2>
+            <ul class="theme-features">
+                <li><strong>Automatic:</strong> Themes apply instantly without page refresh</li>
+                <li><strong>Persistent:</strong> Your choice is saved in localStorage</li>
+                <li><strong>Consistent:</strong> Same theme across all loan tool pages</li>
+                <li><strong>Responsive:</strong> Works on desktop, tablet, and mobile</li>
+                <li><strong>Accessible:</strong> High contrast options for better visibility</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Theme Switcher -->
+    <script src="theme-switcher.js"></script>
+
+    <!-- ZZ Signature -->
+    <div style="position: fixed; bottom: 20px; right: 20px; font-size: 12px; color: var(--text-muted); font-family: monospace; z-index: 1000;">
+        ZZ
+    </div>
+</body>
+</html>
+

@@ -1,0 +1,191 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'MSFG Loan Tools - AWS Infrastructure'
+
+Parameters:
+  DomainName:
+    Type: String
+    Default: ''
+    Description: 'Custom domain name (optional) - e.g., loantools.yourdomain.com'
+  
+  CertificateArn:
+    Type: String
+    Default: ''
+    Description: 'ARN of SSL certificate for custom domain (required if DomainName is provided)'
+
+Resources:
+  # S3 Bucket for website hosting
+  WebsiteBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub 'msfg-loan-tools-${AWS::AccountId}'
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+      WebsiteConfiguration:
+        IndexDocument: LoanToolsHub.html
+        ErrorDocument: LoanToolsHub.html
+      CorsConfiguration:
+        CorsRules:
+          - AllowedHeaders: ['*']
+            AllowedMethods: [GET, HEAD]
+            AllowedOrigins: ['*']
+            MaxAge: 3000
+
+  # Bucket policy for public read access
+  WebsiteBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref WebsiteBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: PublicReadGetObject
+            Effect: Allow
+            Principal: '*'
+            Action: 's3:GetObject'
+            Resource: !Sub '${WebsiteBucket}/*'
+
+  # CloudFront Origin Access Identity
+  CloudFrontOAI:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: !Sub 'OAI for ${AWS::StackName}'
+
+  # CloudFront Distribution
+  CloudFrontDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Origins:
+          - Id: S3Origin
+            DomainName: !GetAtt WebsiteBucket.RegionalDomainName
+            S3OriginConfig:
+              OriginAccessIdentity: !Sub 'origin-access-identity/cloudfront/${CloudFrontOAI}'
+        Enabled: true
+        DefaultRootObject: LoanToolsHub.html
+        DefaultCacheBehavior:
+          TargetOriginId: S3Origin
+          ViewerProtocolPolicy: redirect-to-https
+          AllowedMethods:
+            - GET
+            - HEAD
+            - OPTIONS
+          CachedMethods:
+            - GET
+            - HEAD
+          ForwardedValues:
+            QueryString: false
+            Cookies:
+              Forward: none
+          Compress: true
+          MinTTL: 0
+          DefaultTTL: 3600
+          MaxTTL: 86400
+        CustomErrorResponses:
+          - ErrorCode: 404
+            ResponseCode: 200
+            ResponsePagePath: /LoanToolsHub.html
+        PriceClass: PriceClass_100
+        ViewerCertificate:
+          CloudFrontDefaultCertificate: !If 
+            - UseCustomDomain
+            - false
+            - true
+          AcmCertificateArn: !If
+            - UseCustomDomain
+            - !Ref CertificateArn
+            - !Ref AWS::NoValue
+          SslSupportMethod: !If
+            - UseCustomDomain
+            - sni-only
+            - !Ref AWS::NoValue
+          MinimumProtocolVersion: !If
+            - UseCustomDomain
+            - TLSv1.2_2021
+            - !Ref AWS::NoValue
+        Aliases: !If
+          - UseCustomDomain
+          - [!Ref DomainName]
+          - []
+
+  # Route53 Hosted Zone (if custom domain provided)
+  HostedZone:
+    Type: AWS::Route53::HostedZone
+    Condition: UseCustomDomain
+    Properties:
+      Name: !Ref DomainName
+
+  # Route53 A Record for CloudFront
+  CloudFrontAliasRecord:
+    Type: AWS::Route53::RecordSet
+    Condition: UseCustomDomain
+    Properties:
+      HostedZoneId: !Ref HostedZone
+      Name: !Ref DomainName
+      Type: A
+      AliasTarget:
+        DNSName: !GetAtt CloudFrontDistribution.DomainName
+        HostedZoneId: Z2FDTNDATAQYW2  # CloudFront hosted zone ID
+        EvaluateTargetHealth: false
+
+  # Route53 AAAA Record for CloudFront (IPv6)
+  CloudFrontAliasRecordIPv6:
+    Type: AWS::Route53::RecordSet
+    Condition: UseCustomDomain
+    Properties:
+      HostedZoneId: !Ref HostedZone
+      Name: !Ref DomainName
+      Type: AAAA
+      AliasTarget:
+        DNSName: !GetAtt CloudFrontDistribution.DomainName
+        HostedZoneId: Z2FDTNDATAQYW2  # CloudFront hosted zone ID
+        EvaluateTargetHealth: false
+
+Conditions:
+  UseCustomDomain: !Not [!Equals [!Ref DomainName, '']]
+
+Outputs:
+  WebsiteBucketName:
+    Description: 'Name of S3 bucket for website hosting'
+    Value: !Ref WebsiteBucket
+    Export:
+      Name: !Sub '${AWS::StackName}-WebsiteBucketName'
+
+  WebsiteBucketDomainName:
+    Description: 'Domain name of S3 bucket'
+    Value: !GetAtt WebsiteBucket.DomainName
+    Export:
+      Name: !Sub '${AWS::StackName}-WebsiteBucketDomainName'
+
+  CloudFrontDistributionId:
+    Description: 'CloudFront Distribution ID'
+    Value: !Ref CloudFrontDistribution
+    Export:
+      Name: !Sub '${AWS::StackName}-CloudFrontDistributionId'
+
+  CloudFrontDomainName:
+    Description: 'CloudFront Distribution Domain Name'
+    Value: !GetAtt CloudFrontDistribution.DomainName
+    Export:
+      Name: !Sub '${AWS::StackName}-CloudFrontDomainName'
+
+  WebsiteURL:
+    Description: 'Website URL'
+    Value: !If
+      - UseCustomDomain
+      - !Sub 'https://${DomainName}'
+      - !Sub 'https://${CloudFrontDistribution.DomainName}'
+    Export:
+      Name: !Sub '${AWS::StackName}-WebsiteURL'
+
+  HostedZoneId:
+    Description: 'Route53 Hosted Zone ID'
+    Value: !If
+      - UseCustomDomain
+      - !Ref HostedZone
+      - 'Not configured'
+    Export:
+      Name: !Sub '${AWS::StackName}-HostedZoneId'

@@ -1,0 +1,71 @@
+{
+  "name": "MSFG Loan Tools",
+  "short_name": "Loan Tools",
+  "description": "Professional mortgage calculation tools for loan officers and processors",
+  "start_url": "/LoanToolsHub.html",
+  "display": "standalone",
+  "background_color": "#1a1a2e",
+  "theme_color": "#e94560",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en-US",
+  "categories": ["finance", "business", "productivity"],
+  "icons": [
+    {
+      "src": "../assets/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "../assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "../assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "LLPM Tool",
+      "short_name": "LLPM",
+      "description": "Pricing adjustments calculator",
+      "url": "/LLPMTool.html",
+      "icons": [
+        {
+          "src": "../assets/icon.svg",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Buydown Calculator",
+      "short_name": "Buydown",
+      "description": "3-2-1 buydown calculator",
+      "url": "/BuydownCalculator.html",
+      "icons": [
+        {
+          "src": "../assets/icon.svg",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "APR Calculator",
+      "short_name": "APR",
+      "description": "Annual Percentage Rate calculator",
+      "url": "/APRCalculator.html",
+      "icons": [
+        {
+          "src": "../assets/icon.svg",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ]
+}
+
+

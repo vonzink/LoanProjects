@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APR Calculator - MSFG Home Loans</title>
+    <style>
+        :root {
+            --bg-primary: #0a0b0f;
+            --bg-secondary: #1a1d29;
+            --bg-tertiary: #252837;
+            --text-primary: #ffffff;
+            --text-secondary: #b8c5d6;
+            --text-muted: #6b7689;
+            --accent-primary: #4F46E5;
+            --accent-secondary: #7C3AED;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --error: #EF4444;
+            --border-primary: rgba(255, 255, 255, 0.1);
+            --border-secondary: rgba(255, 255, 255, 0.05);
+            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-success: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            --gradient-warning: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 1rem 0;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .back-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.875rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-primary);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .back-link:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent-primary);
+            transform: translateX(-2px);
+        }
+
+        .logo {
+            height: 80px;
+            width: auto;
+        }
+
+        .page-title {
+            font-size: 1.875rem;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-primary);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(20px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .card-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .card-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Grid Layout */
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-primary);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        /* Results */
+        .results-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-primary);
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-secondary);
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .result-value {
+            font-weight: 700;
+            font-size: 1.125rem;
+            color: var(--text-primary);
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .result-value.large {
+            font-size: 1.5rem;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            border: 1px solid var(--border-primary);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .btn-link {
+            background: none;
+            color: var(--accent-primary);
+            padding: 0.25rem 0;
+            font-size: 0.875rem;
+            text-transform: none;
+            letter-spacing: normal;
+            border: none;
+            margin-top: 0.5rem;
+        }
+
+        .btn-link:hover {
+            color: var(--accent-secondary);
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Fee Breakdown Styles */
+        .fee-breakdown {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-primary);
+            border-radius: 8px;
+        }
+
+        .fee-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .fee-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .fee-section h4 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .fee-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .fee-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .fee-item label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .fee-item .form-input {
+            font-size: 0.875rem;
+            padding: 0.5rem;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 3rem;
+            padding: 2rem 0;
+            border-top: 1px solid var(--border-secondary);
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        .footer-title {
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .card {
+                padding: 1.5rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <a href="http://loan-tools-hub.s3-website-us-west-1.amazonaws.com" class="back-link">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                    Back to Hub
+                </a>
+            </div>
+            <img src="https://msfg-media.s3.us-west-2.amazonaws.com/Assets/LOGOS/MSFG+Home+Loans/MSFG-Color-Transparent.png" alt="MSFG Home Loans" class="logo">
+        </header>
+
+        <!-- Main Content -->
+        <div class="grid">
+            <!-- Input Section -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Loan Information</h2>
+                    <p class="card-description">
+                        Enter the loan details to calculate the Annual Percentage Rate (APR). 
+                        The APR represents the true cost of borrowing including interest rate, points, and fees.
+                    </p>
+                </div>
+
+                <form id="aprForm">
+                    <div class="form-group">
+                        <label for="loanAmount" class="form-label">Loan Amount</label>
+                        <input type="number" id="loanAmount" class="form-input" value="0" min="0" step="1000">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="interestRate" class="form-label">Nominal Interest Rate (Annual %)</label>
+                        <input type="number" id="interestRate" class="form-input" value="0" min="0" max="20" step="0.001">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="loanTerm" class="form-label">Loan Term (Years)</label>
+                        <input type="number" id="loanTerm" class="form-input" value="30" min="1" max="50" step="1">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="discountPoints" class="form-label">Discount Points (%)</label>
+                        <input type="number" id="discountPoints" class="form-input" value="0" min="0" max="10" step="0.125">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="financedFees" class="form-label">Financed Fees ($)</label>
+                        <input type="number" id="financedFees" class="form-input" value="0" min="0" step="100">
+                        <button type="button" class="btn btn-link" onclick="toggleFeeBreakdown('financed')">
+                            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                            Show Fee Breakdown
+                        </button>
+                    </div>
+
+                    <div id="financedFeeBreakdown" class="fee-breakdown" style="display: none;">
+                        <div class="fee-section">
+                            <h4>APR Fees (Included in APR calculation)</h4>
+                            <div class="fee-grid">
+                                <div class="fee-item">
+                                    <label for="originationFee">Origination Fee ($)</label>
+                                    <input type="number" id="originationFee" class="form-input" value="0" min="0" step="100" onchange="updateFinancedFees()">
+                                </div>
+                                <div class="fee-item">
+                                    <label for="processingFee">Processing Fee ($)</label>
+                                    <input type="number" id="processingFee" class="form-input" value="0" min="0" step="100" onchange="updateFinancedFees()">
+                                </div>
+                                <div class="fee-item">
+                                    <label for="underwritingFee">Underwriting Fee ($)</label>
+                                    <input type="number" id="underwritingFee" class="form-input" value="0" min="0" step="100" onchange="updateFinancedFees()">
+                                </div>
+                                <div class="fee-item">
+                                    <label for="applicationFee">Application Fee ($)</label>
+                                    <input type="number" id="applicationFee" class="form-input" value="0" min="0" step="100" onchange="updateFinancedFees()">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fee-section">
+                            <h4>Non-APR Fees (Not included in APR calculation)</h4>
+                            <div class="fee-grid">
+                                <div class="fee-item">
+                                    <label for="creditReportFee">Credit Report ($)</label>
+                                    <input type="number" id="creditReportFee" class="form-input" value="0" min="0" step="100">
+                                </div>
+                                <div class="fee-item">
+                                    <label for="floodCertFee">Flood Certificate ($)</label>
+                                    <input type="number" id="floodCertFee" class="form-input" value="0" min="0" step="100">
+                                </div>
+                                <div class="fee-item">
+                                    <label for="taxServiceFee">Tax Service ($)</label>
+                                    <input type="number" id="taxServiceFee" class="form-input" value="0" min="0" step="100">
+                                </div>
+                                <div class="fee-item">
+                                    <label for="otherFinancedFees">Other Fees ($)</label>
+                                    <input type="number" id="otherFinancedFees" class="form-input" value="0" min="0" step="100" onchange="updateFinancedFees()">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="prepaidFees" class="form-label">Prepaid Fees ($)</label>
+                        <input type="number" id="prepaidFees" class="form-input" value="0" min="0" step="100">
+                        <small style="color: var(--text-muted); display: block; margin-top: 0.25rem;">
+                            Note: Monthly MI (if required) must be included in APR calculation
+                        </small>
+                        <button type="button" class="btn btn-link" onclick="toggleFeeBreakdown('prepaid')">
+                            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                            Show Fee Breakdown
+                        </button>
+                    </div>
+
+                    <div id="prepaidFeeBreakdown" class="fee-breakdown" style="display: none;">
+                        <div class="fee-section">
+                            <h4>APR Fees (Included in APR calculation)</h4>
+                            <div class="fee-grid">
+                                <div class="fee-item">
+                                    <label for="prepaidInterest">Prepaid Interest ($)</label>
+                                    <input type="number" id="prepaidInterest" class="form-input" value="0" min="0" step="100" onchange="updatePrepaidFees()">
+                                </div>
+                                <div class="fee-item">
+                                    <label for="mortgageInsurance">Mortgage Insurance ($)</label>
+                                    <input type="number" id="mortgageInsurance" class="form-input" value="0" min="0" step="100" onchange="updatePrepaidFees()">
+                                </div>
+                                <div class="fee-item">
+                                    <label for="monthlyMI">Monthly MI (if required)</label>
+                                    <input type="number" id="monthlyMI" class="form-input" value="0" min="0" step="100" onchange="updatePrepaidFees()">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fee-section">
+                            <h4>Non-APR Fees (Not included in APR calculation)</h4>
+                            <div class="fee-grid">
+                                <div class="fee-item">
+                                    <label for="escrowReserves">Escrow Reserves ($)</label>
+                                    <input type="number" id="escrowReserves" class="form-input" value="0" min="0" step="100">
+                                </div>
+                                <div class="fee-item">
+                                    <label for="titleInsurance">Title Insurance ($)</label>
+                                    <input type="number" id="titleInsurance" class="form-input" value="0" min="0" step="100">
+                                </div>
+                                <div class="fee-item">
+                                    <label for="recordingFees">Recording Fees ($)</label>
+                                    <input type="number" id="recordingFees" class="form-input" value="0" min="0" step="100">
+                                </div>
+                                <div class="fee-item">
+                                    <label for="otherPrepaidFees">Other Prepaid ($)</label>
+                                    <input type="number" id="otherPrepaidFees" class="form-input" value="0" min="0" step="100" onchange="updatePrepaidFees()">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Results Section -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">APR Calculation Results</h2>
+                    <p class="card-description">
+                        Real-time calculation of monthly payment, amount financed, and Annual Percentage Rate.
+                    </p>
+                </div>
+
+                <div class="results-section">
+                    <div class="result-item">
+                        <span class="result-label">Monthly Payment (P&I)</span>
+                        <span class="result-value" id="monthlyPayment">$0.00</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Amount Financed</span>
+                        <span class="result-value" id="amountFinanced">$0.00</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Total Finance Charges</span>
+                        <span class="result-value" id="financeCharges">$0.00</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Annual Percentage Rate</span>
+                        <span class="result-value large" id="aprResult">0.000%</span>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button type="button" class="btn btn-primary" onclick="exportCSV()">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        Export CSV
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="printView()">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+                        </svg>
+                        Print View
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="shareLink()">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"></path>
+                        </svg>
+                        Share Link
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="clearAll()">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                        </svg>
+                        Clear All
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-title">APR Calculation Method</div>
+            <p>
+                The Annual Percentage Rate (APR) is calculated using an iterative bisection method to find the interest rate 
+                that equates the present value of monthly payments to the amount financed. The calculation includes the loan amount, 
+                nominal interest rate, discount points, financed fees, and prepaid fees. This method provides an accurate approximation 
+                of the APR as defined by federal lending regulations. Actual APR may differ slightly depending on compounding 
+                conventions, rounding practices, and specific lender policies.
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // Utility functions
+        function parseNum(val) {
+            const n = parseFloat(val);
+            return isNaN(n) ? 0 : n;
+        }
+
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }).format(amount);
+        }
+
+        function formatPercent(rate, decimals = 3) {
+            return rate.toFixed(decimals) + '%';
+        }
+
+        // Calculate monthly payment using standard mortgage formula
+        function calculateMonthlyPayment(principal, annualRate, years) {
+            if (annualRate === 0) {
+                return principal / (years * 12);
+            }
+            
+            const monthlyRate = annualRate / 12;
+            const numberOfPayments = years * 12;
+            
+            return (principal * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -numberOfPayments));
+        }
+
+        // Calculate present value of payments
+        function calculatePresentValue(payment, annualRate, numberOfPayments) {
+            if (annualRate === 0) {
+                return payment * numberOfPayments;
+            }
+            
+            const monthlyRate = annualRate / 12;
+            let presentValue = 0;
+            
+            for (let i = 1; i <= numberOfPayments; i++) {
+                presentValue += payment / Math.pow(1 + monthlyRate, i);
+            }
+            
+            return presentValue;
+        }
+
+        // Calculate APR using the correct mortgage lending formula
+        // Solve: loanAmount - financeCharges = Sum of [monthlyPayment / (1 + r)^n] for all n
+        function calculateAPR(monthlyPayment, amountFinanced, numberOfPayments) {
+            // Handle edge cases
+            if (amountFinanced <= 0 || monthlyPayment <= 0 || numberOfPayments <= 0) {
+                return 0;
+            }
+            
+            // If total payments <= amount financed, APR is 0
+            if (monthlyPayment * numberOfPayments <= amountFinanced) {
+                return 0;
+            }
+            
+            // Use Newton-Raphson method for better accuracy
+            let rate = 0.06 / 12; // Initial guess: 6% annual rate
+            const tolerance = 0.000001;
+            const maxIterations = 100;
+            
+            for (let i = 0; i < maxIterations; i++) {
+                let presentValue = 0;
+                let derivative = 0;
+                
+                // Calculate present value and its derivative
+                for (let n = 1; n <= numberOfPayments; n++) {
+                    const factor = Math.pow(1 + rate, n);
+                    presentValue += monthlyPayment / factor;
+                    derivative -= (n * monthlyPayment) / (factor * (1 + rate));
+                }
+                
+                const error = presentValue - amountFinanced;
+                
+                if (Math.abs(error) < tolerance) {
+                    return rate * 12; // Convert to annual rate
+                }
+                
+                // Newton-Raphson update
+                rate = rate - error / derivative;
+                
+                // Keep rate within reasonable bounds
+                if (rate < 0) rate = 0.001 / 12;
+                if (rate > 0.5 / 12) rate = 0.5 / 12; // 50% annual max
+            }
+            
+            // If Newton-Raphson doesn't converge, fall back to bisection
+            let lowRate = 0;
+            let highRate = 0.5 / 12; // 50% annual rate as upper bound
+            
+            for (let i = 0; i < maxIterations; i++) {
+                const midRate = (lowRate + highRate) / 2;
+                
+                // Calculate present value using the correct formula
+                let presentValue = 0;
+                for (let n = 1; n <= numberOfPayments; n++) {
+                    presentValue += monthlyPayment / Math.pow(1 + midRate, n);
+                }
+                
+                if (Math.abs(presentValue - amountFinanced) < tolerance) {
+                    return midRate * 12; // Convert to annual rate
+                }
+                
+                if (presentValue > amountFinanced) {
+                    lowRate = midRate;
+                } else {
+                    highRate = midRate;
+                }
+            }
+            
+            // Return the best approximation found
+            return ((lowRate + highRate) / 2) * 12;
+        }
+
+        // Get current state from form inputs
+        function getCurrentState() {
+            return {
+                loanAmount: parseNum(document.getElementById('loanAmount').value),
+                interestRate: parseNum(document.getElementById('interestRate').value) / 100,
+                loanTerm: parseNum(document.getElementById('loanTerm').value),
+                discountPoints: parseNum(document.getElementById('discountPoints').value) / 100,
+                financedFees: parseNum(document.getElementById('financedFees').value),
+                prepaidFees: parseNum(document.getElementById('prepaidFees').value)
+            };
+        }
+
+        // Main calculation function
+        function calculateResults() {
+            const state = getCurrentState();
+            
+            // Handle edge cases
+            if (state.loanAmount <= 0 || state.interestRate <= 0 || state.loanTerm <= 0) {
+                document.getElementById('monthlyPayment').textContent = formatCurrency(0);
+                document.getElementById('amountFinanced').textContent = formatCurrency(0);
+                document.getElementById('financeCharges').textContent = formatCurrency(0);
+                document.getElementById('aprResult').textContent = formatPercent(0);
+                return;
+            }
+            
+            // For APR calculation:
+            // 1. Amount Financed = Loan Amount - Prepaid Finance Charges (points + prepaid fees)
+            // 2. Monthly Payment = Based on (Loan Amount + Financed Fees) at nominal rate
+            // 3. Total Finance Charges = All interest + financed fees over life of loan
+            
+            const pointsAmount = state.loanAmount * state.discountPoints;
+            const amountFinanced = state.loanAmount - pointsAmount - state.prepaidFees;
+            
+            // Principal for payment calculation includes financed fees
+            const principal = state.loanAmount + state.financedFees;
+            
+            // Calculate monthly payment based on principal and nominal rate
+            const monthlyPayment = calculateMonthlyPayment(principal, state.interestRate, state.loanTerm);
+            
+            // Calculate total finance charges (all payments minus amount financed)
+            const totalPayments = monthlyPayment * state.loanTerm * 12;
+            const financeCharges = totalPayments - amountFinanced;
+            
+            // Calculate APR using the correct formula
+            const numberOfPayments = state.loanTerm * 12;
+            const apr = calculateAPR(monthlyPayment, amountFinanced, numberOfPayments);
+            
+            // Validate APR result - it should be reasonable
+            if (apr > state.interestRate * 2.5) {
+                console.warn('APR seems unusually high:', apr, 'for nominal rate:', state.interestRate);
+                console.log('Amount Financed:', amountFinanced, 'Monthly Payment:', monthlyPayment, 'Payments:', numberOfPayments);
+            }
+            
+            // Update display
+            document.getElementById('monthlyPayment').textContent = formatCurrency(monthlyPayment);
+            document.getElementById('amountFinanced').textContent = formatCurrency(Math.max(0, amountFinanced));
+            document.getElementById('financeCharges').textContent = formatCurrency(Math.max(0, financeCharges));
+            document.getElementById('aprResult').textContent = formatPercent(apr * 100);
+            
+            // Update URL parameters
+            updateURL(state);
+        }
+
+        // URL state management
+        function serializeState(state) {
+            return new URLSearchParams({
+                la: state.loanAmount.toString(),
+                ir: (state.interestRate * 100).toString(),
+                lt: state.loanTerm.toString(),
+                dp: (state.discountPoints * 100).toString(),
+                ff: state.financedFees.toString(),
+                pf: state.prepaidFees.toString()
+            }).toString();
+        }
+
+        function deserializeState(params) {
+            return {
+                loanAmount: parseNum(params.get('la')) || 0,
+                interestRate: (parseNum(params.get('ir')) || 0) / 100,
+                loanTerm: parseNum(params.get('lt')) || 30,
+                discountPoints: (parseNum(params.get('dp')) || 0) / 100,
+                financedFees: parseNum(params.get('ff')) || 0,
+                prepaidFees: parseNum(params.get('pf')) || 0
+            };
+        }
+
+        function updateURL(state) {
+            const url = new URL(window.location);
+            url.search = serializeState(state);
+            window.history.replaceState({}, '', url);
+        }
+
+        function applyState(state) {
+            document.getElementById('loanAmount').value = state.loanAmount;
+            document.getElementById('interestRate').value = (state.interestRate * 100).toFixed(3);
+            document.getElementById('loanTerm').value = state.loanTerm;
+            document.getElementById('discountPoints').value = (state.discountPoints * 100).toFixed(3);
+            document.getElementById('financedFees').value = state.financedFees;
+            document.getElementById('prepaidFees').value = state.prepaidFees;
+        }
+
+        // Export functions
+        function exportCSV() {
+            const state = getCurrentState();
+            const principal = state.loanAmount + state.financedFees;
+            const monthlyPayment = calculateMonthlyPayment(principal, state.interestRate, state.loanTerm);
+            const pointsAmount = state.loanAmount * state.discountPoints;
+            const amountFinanced = state.loanAmount - pointsAmount - state.prepaidFees;
+            const totalPayments = monthlyPayment * state.loanTerm * 12;
+            const financeCharges = totalPayments - amountFinanced;
+            const numberOfPayments = state.loanTerm * 12;
+            const apr = calculateAPR(monthlyPayment, amountFinanced, numberOfPayments);
+            
+            const csvData = [
+                ['APR Calculator Results', ''],
+                ['', ''],
+                ['Loan Information', ''],
+                ['Loan Amount', formatCurrency(state.loanAmount)],
+                ['Interest Rate', formatPercent(state.interestRate * 100, 3)],
+                ['Loan Term', state.loanTerm + ' years'],
+                ['Discount Points', formatPercent(state.discountPoints * 100, 3)],
+                ['Financed Fees', formatCurrency(state.financedFees)],
+                ['Prepaid Fees', formatCurrency(state.prepaidFees)],
+                ['', ''],
+                ['Calculation Results', ''],
+                ['Monthly Payment (P&I)', formatCurrency(monthlyPayment)],
+                ['Amount Financed', formatCurrency(amountFinanced)],
+                ['Total Finance Charges', formatCurrency(financeCharges)],
+                ['Annual Percentage Rate (APR)', formatPercent(apr * 100, 3)],
+                ['', ''],
+                ['Generated on', new Date().toLocaleString()]
+            ];
+            
+            const csvContent = csvData.map(row => row.join(',')).join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'apr_calculation.csv';
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function printView() {
+            window.print();
+        }
+
+        function shareLink() {
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                alert('Link copied to clipboard!');
+            }).catch(() => {
+                alert('Unable to copy link. Please copy the URL manually.');
+            });
+        }
+
+        function clearAll() {
+            const defaultState = {
+                loanAmount: 0,
+                interestRate: 0,
+                loanTerm: 30,
+                discountPoints: 0,
+                financedFees: 0,
+                prepaidFees: 0
+            };
+            applyState(defaultState);
+            calculateResults();
+        }
+
+        // Event listeners
+        function wireEvents() {
+            const inputs = ['loanAmount', 'interestRate', 'loanTerm', 'discountPoints', 'financedFees', 'prepaidFees'];
+            inputs.forEach(id => {
+                document.getElementById(id).addEventListener('input', calculateResults);
+                document.getElementById(id).addEventListener('change', calculateResults);
+            });
+        }
+
+        // Initialize
+        function initialize() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const state = deserializeState(urlParams);
+            applyState(state);
+            wireEvents();
+            calculateResults();
+        }
+
+        // Debug function
+        window.APRCalculator = {
+            debug: function() {
+                const state = getCurrentState();
+                console.log('Current State:', state);
+                return state;
+            },
+            getCurrentState,
+            calculateResults,
+            version: '1.0.0'
+        };
+
+        // Fee Breakdown Functions
+        function toggleFeeBreakdown(type) {
+            const breakdown = document.getElementById(type + 'FeeBreakdown');
+            const button = event.target.closest('.btn-link');
+            const icon = button.querySelector('svg');
+            
+            if (breakdown.style.display === 'none') {
+                breakdown.style.display = 'block';
+                button.innerHTML = `
+                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+                    </svg>
+                    Hide Fee Breakdown
+                `;
+            } else {
+                breakdown.style.display = 'none';
+                button.innerHTML = `
+                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                    Show Fee Breakdown
+                `;
+            }
+        }
+
+        function updateFinancedFees() {
+            const aprFees = [
+                'originationFee',
+                'processingFee', 
+                'underwritingFee',
+                'applicationFee',
+                'otherFinancedFees'
+            ];
+            
+            let total = 0;
+            aprFees.forEach(feeId => {
+                total += parseNum(document.getElementById(feeId).value);
+            });
+            
+            document.getElementById('financedFees').value = total;
+            calculateResults();
+        }
+
+        function updatePrepaidFees() {
+            const aprFees = [
+                'prepaidInterest',
+                'mortgageInsurance',
+                'monthlyMI',
+                'otherPrepaidFees'
+            ];
+            
+            let total = 0;
+            aprFees.forEach(feeId => {
+                total += parseNum(document.getElementById(feeId).value);
+            });
+            
+            document.getElementById('prepaidFees').value = total;
+            calculateResults();
+        }
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initialize);
+    </script>
+    
+    <!-- Theme Switcher -->
+    <script src="theme-switcher.js"></script>
+
+    <!-- ZZ Signature -->
+    <div style="position: fixed; bottom: 20px; right: 20px; font-size: 12px; color: var(--muted); font-family: monospace; z-index: 1000;">
+        ZZ
+    </div>
+</body>
+</html>

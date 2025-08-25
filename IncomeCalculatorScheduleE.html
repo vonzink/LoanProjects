@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MSFG • Schedule E Income Calculator</title>
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #1a1a1a;
+            --bg-card: rgba(255, 255, 255, 0.05);
+            --bg-card-hover: rgba(255, 255, 255, 0.08);
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --text-muted: #808080;
+            --accent-primary: #3b82f6;
+            --accent-secondary: #1d4ed8;
+            --accent-success: #10b981;
+            --accent-warning: #f59e0b;
+            --accent-danger: #ef4444;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --border-hover: rgba(255, 255, 255, 0.2);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.4);
+            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-success: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-warning: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            --gradient-danger: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo img {
+            width: 80px;
+            height: auto;
+            border-radius: 8px;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+        }
+
+
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .hero h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .notes {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        .section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            border-color: var(--border-hover);
+            background: var(--bg-card-hover);
+        }
+
+        .section h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section h3::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+        }
+
+        .property {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+        }
+
+        .property:hover {
+            border-color: var(--border-hover);
+            background: var(--bg-card-hover);
+        }
+
+        .property h4 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .property h4::before {
+            content: '';
+            width: 3px;
+            height: 20px;
+            background: var(--gradient-success);
+            border-radius: 2px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        th {
+            background: var(--accent-primary);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .result {
+            font-weight: bold;
+            background: var(--gradient-success);
+            color: white;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            display: inline-block;
+            min-width: 140px;
+            text-align: right;
+            font-size: 1rem;
+        }
+
+        .result-label {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-right: 1rem;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .result-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .result-item h5 {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .result-item .result {
+            font-size: 1.25rem;
+            padding: 1rem 1.5rem;
+            min-width: 180px;
+        }
+
+        .footer {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        .actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            justify-content: center;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--accent-primary);
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 0.875rem;
+        }
+
+        .btn:hover {
+            background: var(--accent-secondary);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn.secondary {
+            background: var(--accent-warning);
+        }
+
+        .btn.secondary:hover {
+            background: #d97706;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        }
+
+        .btn.duplicate {
+            background: var(--accent-success);
+        }
+
+        .btn.duplicate:hover {
+            background: #059669;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .section, .property {
+                padding: 1.5rem;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+            
+            table {
+                font-size: 0.875rem;
+            }
+            
+            th, td {
+                padding: 0.75rem;
+            }
+            
+            .actions {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-left: 0.5rem;
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--accent-success);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <img src="https://msfg-media.s3.us-west-2.amazonaws.com/Assets/LOGOS/MSFG+Home+Loans/MSFG-Color-Transparent.png" alt="MSFG Logo">
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <h2>Schedule E Income Calculator</h2>
+            <p>Calculate monthly income from Schedule E (Rental Income) tax returns. Enter figures and get policy-based monthly calculations for non-subject properties.</p>
+        </section>
+
+        <div class="notes">
+            <strong>Important:</strong> Only add lines 9 and 16 (insurance/taxes) for income purposes if the borrower needs them to qualify. 
+            If adding them back, a mortgage statement or lender's activity statement verifying that the payment includes PITI is required.
+        </div>
+
+        <div id="properties">
+            <!-- Property sections will be dynamically generated -->
+        </div>
+
+        <!-- Combined totals -->
+        <section class="section">
+            <h3>Combined Schedule E Income <span class="status-badge">Live</span></h3>
+            <div class="results-grid">
+                <div class="result-item">
+                    <h5>Combined Monthly Income</h5>
+                    <span id="combinedMonthly" class="result">$0.00</span>
+                </div>
+            </div>
+        </section>
+
+        <div class="actions">
+            <button class="btn duplicate" onclick="duplicateProperty()">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                </svg>
+                Add Property
+            </button>
+            <button class="btn" onclick="exportCSV()">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                Export CSV
+            </button>
+            <button class="btn secondary" onclick="printView()">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+                </svg>
+                Print View
+            </button>
+            <button class="btn secondary" onclick="clearAll()">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                </svg>
+                Clear All
+            </button>
+        </div>
+
+        <div class="footer">
+            <strong>Calculation Policy:</strong> This tool replicates the calculation logic from your Schedule E worksheet. 
+            Monthly income is calculated by dividing property income by 12. Always verify results against your tax documentation.
+        </div>
+    </main>
+
+    <script>
+        let propertyCount = 1;
+
+        function createPropertySection(propertyNumber) {
+            const div = document.createElement('div');
+            div.className = 'property';
+            div.id = `property-${propertyNumber}`;
+            div.innerHTML = `
+                <h4>Property #${propertyNumber} <span class="status-badge">Live</span></h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Description</th>
+                            <th>Property ${propertyNumber}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Rents received (Line 3)</td>
+                            <td><input type="number" id="p${propertyNumber}_rents" value="0" onchange="calculate()" placeholder="0"></td>
+                        </tr>
+                        <tr>
+                            <td>Royalties received (Line 4)</td>
+                            <td><input type="number" id="p${propertyNumber}_royalties" value="0" onchange="calculate()" placeholder="0"></td>
+                        </tr>
+                        <tr>
+                            <td>Amortization/Casualty Loss (Line 19)</td>
+                            <td><input type="number" id="p${propertyNumber}_casualty" value="0" onchange="calculate()" placeholder="0"></td>
+                        </tr>
+                        <tr>
+                            <td>Total expenses (Line 20)</td>
+                            <td><input type="number" id="p${propertyNumber}_expenses" value="0" onchange="calculate()" placeholder="0"></td>
+                        </tr>
+                        <tr>
+                            <td>Depreciation (Line 18)</td>
+                            <td><input type="number" id="p${propertyNumber}_dep" value="0" onchange="calculate()" placeholder="0"></td>
+                        </tr>
+                        <tr>
+                            <td>Insurance (Line 9)</td>
+                            <td><input type="number" id="p${propertyNumber}_ins" value="0" onchange="calculate()" placeholder="0"></td>
+                        </tr>
+                        <tr>
+                            <td>Mortgage interest (Line 12)</td>
+                            <td><input type="number" id="p${propertyNumber}_int" value="0" onchange="calculate()" placeholder="0"></td>
+                        </tr>
+                        <tr>
+                            <td>Taxes (Line 16)</td>
+                            <td><input type="number" id="p${propertyNumber}_tax" value="0" onchange="calculate()" placeholder="0"></td>
+                        </tr>
+                        <tr>
+                            <td>Monthly payment on credit report</td>
+                            <td><input type="number" id="p${propertyNumber}_payment" value="0" onchange="calculate()" placeholder="0"></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="results-grid">
+                    <div class="result-item">
+                        <h5>Total Property Income</h5>
+                        <span id="p${propertyNumber}_totalYear1" class="result">$0.00</span>
+                    </div>
+                    <div class="result-item">
+                        <h5>Monthly Average</h5>
+                        <span id="p${propertyNumber}_avgMonthly" class="result">$0.00</span>
+                    </div>
+                    <div class="result-item">
+                        <h5>Net Monthly Income/Loss</h5>
+                        <span id="p${propertyNumber}_netMonthly" class="result">$0.00</span>
+                    </div>
+                </div>
+            `;
+            return div;
+        }
+
+        function parseNumber(value) {
+            const n = parseFloat(value);
+            return isNaN(n) ? 0 : n;
+        }
+
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }).format(amount);
+        }
+
+        function calculateProperty(propertyNumber) {
+            const rents = parseNumber(document.getElementById(`p${propertyNumber}_rents`).value);
+            const royalties = parseNumber(document.getElementById(`p${propertyNumber}_royalties`).value);
+            const casualty = parseNumber(document.getElementById(`p${propertyNumber}_casualty`).value);
+            const expenses = parseNumber(document.getElementById(`p${propertyNumber}_expenses`).value);
+            const dep = parseNumber(document.getElementById(`p${propertyNumber}_dep`).value);
+            const ins = parseNumber(document.getElementById(`p${propertyNumber}_ins`).value);
+            const int = parseNumber(document.getElementById(`p${propertyNumber}_int`).value);
+            const tax = parseNumber(document.getElementById(`p${propertyNumber}_tax`).value);
+            const payment = parseNumber(document.getElementById(`p${propertyNumber}_payment`).value);
+
+            // Compute total property income
+            const totalPropertyIncome = rents + royalties + casualty + dep + ins + int + tax - expenses;
+            const avgMonthly = totalPropertyIncome / 12;
+            const netMonthly = avgMonthly - payment;
+
+            return {
+                totalPropertyIncome,
+                avgMonthly,
+                netMonthly
+            };
+        }
+
+        function calculate() {
+            let combinedMonthly = 0;
+
+            for (let i = 1; i <= propertyCount; i++) {
+                const results = calculateProperty(i);
+                
+                document.getElementById(`p${i}_totalYear1`).textContent = formatCurrency(results.totalPropertyIncome);
+                document.getElementById(`p${i}_avgMonthly`).textContent = formatCurrency(results.avgMonthly);
+                document.getElementById(`p${i}_netMonthly`).textContent = formatCurrency(results.netMonthly);
+                
+                combinedMonthly += results.netMonthly;
+            }
+
+            document.getElementById('combinedMonthly').textContent = formatCurrency(combinedMonthly);
+        }
+
+        function duplicateProperty() {
+            propertyCount++;
+            const container = document.getElementById('properties');
+            const newProperty = createPropertySection(propertyCount);
+            container.appendChild(newProperty);
+            calculate();
+        }
+
+        function exportCSV() {
+            const data = [
+                ['Schedule E Income Calculator'],
+                ['']
+            ];
+
+            for (let i = 1; i <= propertyCount; i++) {
+                const results = calculateProperty(i);
+                
+                data.push([`Property #${i}`, 'Amount']);
+                data.push(['Rents received (Line 3)', parseNumber(document.getElementById(`p${i}_rents`).value)]);
+                data.push(['Royalties received (Line 4)', parseNumber(document.getElementById(`p${i}_royalties`).value)]);
+                data.push(['Amortization/Casualty Loss (Line 19)', parseNumber(document.getElementById(`p${i}_casualty`).value)]);
+                data.push(['Depreciation (Line 18)', parseNumber(document.getElementById(`p${i}_dep`).value)]);
+                data.push(['Insurance (Line 9)', parseNumber(document.getElementById(`p${i}_ins`).value)]);
+                data.push(['Mortgage interest (Line 12)', parseNumber(document.getElementById(`p${i}_int`).value)]);
+                data.push(['Taxes (Line 16)', parseNumber(document.getElementById(`p${i}_tax`).value)]);
+                data.push(['Total expenses (Line 20)', parseNumber(document.getElementById(`p${i}_expenses`).value)]);
+                data.push(['Monthly payment on credit report', parseNumber(document.getElementById(`p${i}_payment`).value)]);
+                data.push(['Total Property Income', results.totalPropertyIncome]);
+                data.push(['Monthly Average', results.avgMonthly]);
+                data.push(['Net Monthly Income/Loss', results.netMonthly]);
+                data.push(['', '']);
+            }
+
+            // Calculate combined total
+            let combinedMonthly = 0;
+            for (let i = 1; i <= propertyCount; i++) {
+                const results = calculateProperty(i);
+                combinedMonthly += results.netMonthly;
+            }
+
+            data.push(['Results', 'Amount']);
+            data.push(['Combined Monthly Income', combinedMonthly]);
+
+            const csvContent = data.map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'schedule_e_income_calculator.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        function printView() {
+            window.print();
+        }
+
+        function clearAll() {
+            const inputs = document.querySelectorAll('input[type="number"]');
+            inputs.forEach(input => {
+                input.value = '0';
+            });
+            calculate();
+        }
+
+        // Initialize with first property
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.getElementById('properties');
+            const firstProperty = createPropertySection(1);
+            container.appendChild(firstProperty);
+            calculate();
+        });
+
+        // Expose debug function
+        window.IncomeCalculatorScheduleE = {
+            debug: function() {
+                const properties = {};
+                let combinedMonthly = 0;
+
+                for (let i = 1; i <= propertyCount; i++) {
+                    const results = calculateProperty(i);
+                    combinedMonthly += results.netMonthly;
+
+                    properties[`property_${i}`] = {
+                        inputs: {
+                            rents: parseNumber(document.getElementById(`p${i}_rents`).value),
+                            royalties: parseNumber(document.getElementById(`p${i}_royalties`).value),
+                            casualty: parseNumber(document.getElementById(`p${i}_casualty`).value),
+                            expenses: parseNumber(document.getElementById(`p${i}_expenses`).value),
+                            depreciation: parseNumber(document.getElementById(`p${i}_dep`).value),
+                            insurance: parseNumber(document.getElementById(`p${i}_ins`).value),
+                            interest: parseNumber(document.getElementById(`p${i}_int`).value),
+                            taxes: parseNumber(document.getElementById(`p${i}_tax`).value),
+                            payment: parseNumber(document.getElementById(`p${i}_payment`).value)
+                        },
+                        calculations: {
+                            totalPropertyIncome: results.totalPropertyIncome,
+                            avgMonthly: results.avgMonthly,
+                            netMonthly: results.netMonthly
+                        }
+                    };
+                }
+
+                return {
+                    propertyCount: propertyCount,
+                    properties: properties,
+                    combined: {
+                        monthlyIncome: combinedMonthly
+                    },
+                    version: '2.0.0'
+                };
+            }
+        };
+    </script>
+    
+    <!-- Theme Switcher -->
+    <script src="theme-switcher.js"></script>
+    
+    <!-- ZZ Signature -->
+    <div style="position: fixed; bottom: 20px; right: 20px; font-size: 12px; color: var(--text-muted); font-family: monospace; z-index: 1000;">
+        ZZ
+    </div>
+</body>
+</html>

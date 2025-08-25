@@ -1,0 +1,72 @@
+{
+  "name": "msfg-loan-tools",
+  "version": "1.0.0",
+  "description": "Professional mortgage calculation tools for loan officers and processors",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "build": "electron-builder",
+    "build:mac": "electron-builder --mac",
+    "build:win": "electron-builder --win",
+    "dist": "npm run build:mac && npm run build:win"
+  },
+  "keywords": [
+    "mortgage",
+    "loan",
+    "calculator",
+    "apr",
+    "buydown",
+    "llpm",
+    "income"
+  ],
+  "author": "MSFG",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^37.3.1",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.msfg.loantools",
+    "productName": "MSFG Loan Tools",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "src/**/*",
+      "assets/**/*",
+      "main.js",
+      "package.json"
+    ],
+    "mac": {
+      "category": "public.app-category.finance",
+      "icon": "assets/icon.icns",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ]
+    },
+    "win": {
+      "icon": "assets/0.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
+  }
+}

@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MSFG • Loan Tools Hub</title>
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #1a1a1a;
+            --bg-card: rgba(255, 255, 255, 0.05);
+            --bg-card-hover: rgba(255, 255, 255, 0.08);
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --text-muted: #808080;
+            --accent-primary: #3b82f6;
+            --accent-secondary: #1d4ed8;
+            --accent-success: #10b981;
+            --accent-warning: #f59e0b;
+            --accent-danger: #ef4444;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --border-hover: rgba(255, 255, 255, 0.2);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.4);
+            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-success: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-warning: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            --gradient-danger: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo img {
+            width: 80px;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .hero h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .tool-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--border-hover);
+            background: var(--bg-card-hover);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .tool-card:hover::before {
+            opacity: 1;
+        }
+
+        .tool-card.msfg-tool::before {
+            background: var(--gradient-primary);
+        }
+
+        .tool-card.external-tool::before {
+            background: var(--gradient-secondary);
+        }
+
+        .tool-card.external-tool:hover {
+            border-color: rgba(240, 87, 108, 0.3);
+        }
+
+        .tool-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .tool-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .tool-icon.llpm {
+            background: var(--gradient-primary);
+        }
+
+        .tool-icon.buydown {
+            background: var(--gradient-success);
+        }
+
+        .tool-icon.xml {
+            background: var(--gradient-warning);
+        }
+
+        .tool-icon.calculator {
+            background: var(--gradient-danger);
+        }
+
+        .tool-icon.income {
+            background: var(--gradient-warning);
+        }
+
+        .tool-icon.questionnaire {
+            background: var(--gradient-primary);
+        }
+
+        .tool-icon.apr {
+            background: var(--gradient-success);
+        }
+
+        /* Collapsible Sections */
+        .category-section {
+            position: relative;
+        }
+
+        .category-title {
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .category-title:hover {
+            color: var(--accent-primary);
+        }
+
+        .category-title::after {
+            content: '▼';
+            font-size: 0.875rem;
+            transition: transform 0.3s ease;
+            color: var(--text-secondary);
+        }
+
+        .category-section.collapsed .category-title::after {
+            transform: rotate(-90deg);
+        }
+
+        .category-section.collapsed .tools-grid {
+            display: none;
+        }
+
+        .tools-grid {
+            transition: all 0.3s ease;
+        }
+
+        /* Income Calculator Series Section */
+        .income-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 3rem 0;
+        }
+
+        .income-section .category-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .income-section p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.125rem;
+            max-width: 600px;
+            margin: 0 auto 2rem auto;
+            text-align: center;
+        }
+
+        .income-tool-card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(20px);
+        }
+
+        .income-tool-card:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .income-tool-card .tool-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .income-tool-card .tool-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.875rem;
+            color: white;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .income-tool-card .tool-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 0.25rem;
+        }
+
+        .income-tool-card .tool-subtitle {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .income-tool-card .tool-description {
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .income-tool-card .tool-features {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .income-tool-card .tool-features li {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .income-tool-card .tool-features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: bold;
+        }
+
+        .income-tool-card .tool-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .income-tool-card .tool-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .income-tool-card .tool-link svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .tool-icon.external {
+            background: var(--gradient-secondary);
+        }
+
+        .tool-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .tool-subtitle {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .tool-description {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .tool-features {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .tool-features li {
+            padding: 0.25rem 0;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tool-features li::before {
+            content: '✓';
+            color: var(--accent-success);
+            font-weight: bold;
+        }
+
+        .tool-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--accent-primary);
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 0.875rem;
+        }
+
+        .tool-link:hover {
+            background: var(--accent-secondary);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .tool-link.external {
+            background: var(--accent-warning);
+        }
+
+        .tool-link.external:hover {
+            background: #d97706;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        }
+
+        .tool-link svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .category-section {
+            margin-bottom: 3rem;
+        }
+
+        .category-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .category-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-color);
+            margin-top: 3rem;
+        }
+
+        .footer p {
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+            
+            .tool-card {
+                padding: 1.5rem;
+            }
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-left: 0.5rem;
+        }
+
+        .status-badge.live {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--accent-success);
+        }
+
+        .status-badge.external {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--accent-warning);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <img src="https://msfg-media.s3.us-west-2.amazonaws.com/Assets/LOGOS/MSFG+Home+Loans/MSFG-Color-Transparent.png" alt="MSFG Logo">
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <h2>Lending Tools Dashboard</h2>
+            <p>Access all your essential loan processing and analysis tools in one place. Built for efficiency and accuracy.</p>
+        </section>
+
+        <section class="category-section collapsed">
+            <h3 class="category-title">MSFG Custom Tools</h3>
+            <div class="tools-grid">
+                <div class="tool-card msfg-tool">
+                    <div class="tool-header">
+                        <div class="tool-icon llpm">LP</div>
+                        <div>
+                            <div class="tool-title">LLPM Tool <span class="status-badge live">Live</span></div>
+                            <div class="tool-subtitle">Loan-Level Price Adjustment Calculator</div>
+                        </div>
+                    </div>
+                    <p class="tool-description">
+                        Real-time pricing adjustment calculator for Conventional, FHA, VA, and USDA loans. 
+                        Calculate total adjustments, final points, and dollar cost/credit based on loan characteristics.
+                    </p>
+                    <ul class="tool-features">
+                        <li>Multi-program support (Conventional, FHA, VA, USDA)</li>
+                        <li>Real-time LTV, DTI, and CLTV calculations</li>
+                        <li>LLPA waivers and Minimum Mortgage Insurance</li>
+                        <li>Shareable links and CSV export</li>
+                    </ul>
+                    <a href="http://llpm-tool.s3-website-us-east-1.amazonaws.com" class="tool-link" target="_blank">
+                        Open LLPM Tool
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="tool-card msfg-tool">
+                    <div class="tool-header">
+                        <div class="tool-icon buydown">BD</div>
+                        <div>
+                            <div class="tool-title">Buydown Calculator <span class="status-badge live">Live</span></div>
+                            <div class="tool-subtitle">3-2-1 Interest Rate Buydown Calculator</div>
+                        </div>
+                    </div>
+                    <p class="tool-description">
+                        Calculate temporary interest rate buydowns (3-2-1, 2-1, 1-0) with year-by-year payment analysis, 
+                        monthly savings, and total buydown cost calculations.
+                    </p>
+                    <ul class="tool-features">
+                        <li>Multiple buydown types (3-2-1, 2-1, 1-0)</li>
+                        <li>Property taxes and insurance integration</li>
+                        <li>Interactive charts and payment comparisons</li>
+                        <li>CSV export and shareable links</li>
+                    </ul>
+                    <a href="http://buydown-calculator.s3-website-us-west-1.amazonaws.com" class="tool-link" target="_blank">
+                        Open Buydown Calculator
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="tool-card msfg-tool">
+                    <div class="tool-header">
+                        <div class="tool-icon xml">XML</div>
+                        <div>
+                            <div class="tool-title">Loan Doc Checklist <span class="status-badge live">Live</span></div>
+                            <div class="tool-subtitle">MISMO 3.4 XML Document Generator</div>
+                        </div>
+                    </div>
+                    <p class="tool-description">
+                        Upload DU/MISMO 3.4 XML files to automatically generate comprehensive borrower and property 
+                        documentation checklists. Runs fully in-browser for data security.
+                    </p>
+                    <ul class="tool-features">
+                        <li>MISMO 3.4 XML parsing</li>
+                        <li>Per-borrower documentation lists</li>
+                        <li>Employment and residence coverage checks</li>
+                        <li>Self-employment and REO analysis</li>
+                    </ul>
+                    <a href="https://loantools.s3.us-east-1.amazonaws.com/XMLread.html" class="tool-link" target="_blank">
+                        Open Doc Checklist
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="tool-card msfg-tool">
+                    <div class="tool-header">
+                        <div class="tool-icon calculator">CALC</div>
+                        <div>
+                            <div class="tool-title">MSFG Calculator <span class="status-badge live">Live</span></div>
+                            <div class="tool-subtitle">Comprehensive Loan Calculator</div>
+                        </div>
+                    </div>
+                    <p class="tool-description">
+                        Access the official MSFG loan calculator for comprehensive mortgage calculations, 
+                        payment analysis, and loan scenario modeling.
+                    </p>
+                    <ul class="tool-features">
+                        <li>Comprehensive loan calculations</li>
+                        <li>Payment analysis and scenarios</li>
+                        <li>Official MSFG platform</li>
+                        <li>Professional loan modeling</li>
+                    </ul>
+                    <a href="https://dashboard.msfgco.com/calculator/index.html" class="tool-link" target="_blank">
+                        Open MSFG Calculator
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="tool-card msfg-tool">
+                    <div class="tool-header">
+                        <div class="tool-icon questionnaire">?</div>
+                        <div>
+                            <div class="tool-title">Income Calculator Questionnaire <span class="status-badge live">Live</span></div>
+                            <div class="tool-subtitle">Find Your Required Calculators</div>
+                        </div>
+                    </div>
+                    <p class="tool-description">
+                        Answer questions about your income situation to get personalized recommendations for the right income calculators.
+                    </p>
+                    <ul class="tool-features">
+                        <li>6 targeted questions</li>
+                        <li>Employment type analysis</li>
+                        <li>Business structure identification</li>
+                        <li>Income source evaluation</li>
+                        <li>Personalized recommendations</li>
+                    </ul>
+                    <a href="http://msfg-income-calculator.s3-website-us-west-1.amazonaws.com/IncomeCalculatorQuestionnaire.html" class="tool-link" target="_blank">
+                        Start Questionnaire
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="tool-card msfg-tool">
+                    <div class="tool-header">
+                        <div class="tool-icon apr">APR</div>
+                        <div>
+                            <div class="tool-title">APR Calculator <span class="status-badge live">Live</span></div>
+                            <div class="tool-subtitle">Annual Percentage Rate Calculator</div>
+                        </div>
+                    </div>
+                    <p class="tool-description">
+                        Calculate the Annual Percentage Rate (APR) for fixed-rate loans including discount points, financed fees, and prepaid costs.
+                    </p>
+                    <ul class="tool-features">
+                        <li>Real-time APR calculation</li>
+                        <li>Discount points integration</li>
+                        <li>Financed and prepaid fee support</li>
+                        <li>Iterative bisection method</li>
+                        <li>Federal regulation compliance</li>
+                    </ul>
+                    <a href="http://apr-calculator.s3-website-us-west-1.amazonaws.com" class="tool-link" target="_blank">
+                        Open APR Calculator
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                    </a>
+                </div>
+
+
+            </div>
+        </section>
+
+        <!-- Income Calculator Series -->
+        <section class="income-section category-section collapsed">
+            <h3 class="category-title">Income Calculator Series</h3>
+            <p>Professional income calculation tools for comprehensive tax form analysis and monthly income determination</p>
+            <div class="tools-grid">
+                <div class="income-tool-card">
+                    <div class="tool-header">
+                        <div class="tool-icon">1040</div>
+                        <div>
+                            <div class="tool-title">Form 1040 Page 1 <span class="status-badge live">Live</span></div>
+                            <div class="tool-subtitle">W-2, Pensions, Alimony & Benefits</div>
+                        </div>
+                    </div>
+                    <p class="tool-description">
+                        Calculate monthly income from Form 1040 Page 1 sources including W-2 income, alimony, pensions, unemployment, and Social Security benefits.
+                    </p>
+                    <ul class="tool-features">
+                        <li>W-2 income calculations</li>
+                        <li>Pension and annuity distributions</li>
+                        <li>Alimony and unemployment compensation</li>
+                        <li>Social Security benefits</li>
+                        <li>Policy-based monthly calculations</li>
+                    </ul>
+                    <a href="http://msfg-income-calculator.s3-website-us-west-1.amazonaws.com" class="tool-link" target="_blank">
+                        Open Form 1040 Calculator
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="income-tool-card">
+                    <div class="tool-header">
+                        <div class="tool-icon">SCH C</div>
+                        <div>
+                            <div class="tool-title">Schedule C <span class="status-badge live">Live</span></div>
+                            <div class="tool-subtitle">Sole Proprietorship Income</div>
+                        </div>
+                    </div>
+                    <p class="tool-description">
+                        Calculate monthly income from Schedule C (Sole Proprietorship) tax returns with support for multiple businesses and comprehensive deductions.
+                    </p>
+                    <ul class="tool-features">
+                        <li>Net profit or loss calculations</li>
+                        <li>Depreciation and depletion</li>
+                        <li>Business use of home</li>
+                        <li>Multiple business support</li>
+                        <li>Meal & entertainment exclusions</li>
+                    </ul>
+                    <a href="http://msfg-income-calculator.s3-website-us-west-1.amazonaws.com/IncomeCalculatorScheduleC.html" class="tool-link" target="_blank">
+                        Open Schedule C Calculator
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="income-tool-card">
+                    <div class="tool-header">
+                        <div class="tool-icon">SCH E</div>
+                        <div>
+                            <div class="tool-title">Schedule E <span class="status-badge live">Live</span></div>
+                            <div class="tool-subtitle">Rental Income & Royalties</div>
+                        </div>
+                    </div>
+                    <p class="tool-description">
+                        Calculate monthly income from Schedule E (Rental Income) tax returns including rents, royalties, and investment property income.
+                    </p>
+                    <ul class="tool-features">
+                        <li>Rental income calculations</li>
+                        <li>Royalty income processing</li>
+                        <li>Depreciation and casualty loss</li>
+                        <li>Insurance and tax considerations</li>
+                        <li>Credit report payment integration</li>
+                    </ul>
+                    <a href="http://msfg-income-calculator.s3-website-us-west-1.amazonaws.com/IncomeCalculatorScheduleE.html" class="tool-link" target="_blank">
+                        Open Schedule E Calculator
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="income-tool-card">
+                    <div class="tool-header">
+                        <div class="tool-icon">SUBJ</div>
+                        <div>
+                            <div class="tool-title">Schedule E Subject Property <span class="status-badge live">Live</span></div>
+                            <div class="tool-subtitle">Subject Property Income</div>
+                        </div>
+                    </div>
+                    <p class="tool-description">
+                        Calculate monthly income from Schedule E (Subject Property) tax returns for the property being financed with simplified calculations.
+                    </p>
+                    <ul class="tool-features">
+                        <li>Subject property income</li>
+                        <li>Rental and royalty income</li>
+                        <li>Depreciation and casualty loss</li>
+                        <li>Insurance and tax considerations</li>
+                        <li>Simplified qualification calculations</li>
+                    </ul>
+                    <a href="http://msfg-income-calculator.s3-website-us-west-1.amazonaws.com/IncomeCalculatorScheduleESubject.html" class="tool-link" target="_blank">
+                        Open Subject Property Calculator
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="income-tool-card">
+                    <div class="tool-header">
+                        <div class="tool-icon">SCH B</div>
+                        <div>
+                            <div class="tool-title">Schedule B <span class="status-badge live">Live</span></div>
+                            <div class="tool-subtitle">Interest & Dividend Income</div>
+                        </div>
+                    </div>
+                    <p class="tool-description">
+                        Calculate monthly income from Schedule B (Interest & Dividend Income) tax returns for up to five financial institutions.
+                    </p>
+                    <ul class="tool-features">
+                        <li>Interest income calculations</li>
+                        <li>Tax-exempt interest processing</li>
+                        <li>Dividend income tracking</li>
+                        <li>Multi-institution support</li>
+                        <li>Policy-based monthly averaging</li>
+                    </ul>
+                    <a href="http://msfg-income-calculator.s3-website-us-west-1.amazonaws.com/IncomeCalculatorScheduleB.html" class="tool-link" target="_blank">
+                        Open Schedule B Calculator
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="income-tool-card">
+                    <div class="tool-header">
+                        <div class="tool-icon">SCH D</div>
+                        <div>
+                            <div class="tool-title">Schedule D <span class="status-badge live">Live</span></div>
+                            <div class="tool-subtitle">Capital Gains & Losses</div>
+                        </div>
+                    </div>
+                    <p class="tool-description">
+                        Calculate monthly income from Schedule D (Capital Gains/Losses) tax returns with support for short-term and long-term gains or losses.
+                    </p>
+                    <ul class="tool-features">
+                        <li>Short-term capital gains/losses</li>
+                        <li>Long-term capital gains/losses</li>
+                        <li>Loss handling with negative values</li>
+                        <li>Policy-based monthly averaging</li>
+                        <li>Simplified calculation interface</li>
+                    </ul>
+                    <a href="http://msfg-income-calculator.s3-website-us-west-1.amazonaws.com/IncomeCalculatorScheduleD.html" class="tool-link" target="_blank">
+                        Open Schedule D Calculator
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="income-tool-card">
+                    <div class="tool-header">
+                        <div class="tool-icon">SCH F</div>
+                        <div>
+                            <div class="tool-title">Schedule F <span class="status-badge live">Live</span></div>
+                            <div class="tool-subtitle">Farm Income</div>
+                        </div>
+                    </div>
+                    <p class="tool-description">
+                        Calculate monthly income from Schedule F (Farm Income) tax returns with proper add-backs and exclusions for farm operations.
+                    </p>
+                    <ul class="tool-features">
+                        <li>Net profit or loss calculations</li>
+                        <li>Coop & CCC payments</li>
+                        <li>Depreciation and amortization add-backs</li>
+                        <li>Business use of home</li>
+                        <li>Meal & entertainment exclusions</li>
+                    </ul>
+                    <a href="http://msfg-income-calculator.s3-website-us-west-1.amazonaws.com/IncomeCalculatorScheduleF.html" class="tool-link" target="_blank">
+                        Open Schedule F Calculator
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="income-tool-card">
+                    <div class="tool-header">
+                        <div class="tool-icon">1065</div>
+                        <div>
+                            <div class="tool-title">Form 1065 <span class="status-badge live">Live</span></div>
+                            <div class="tool-subtitle">Partnership Income</div>
+                        </div>
+                    </div>
+                    <p class="tool-description">
+                        Calculate monthly income from Form 1065 partnership returns with ownership percentages and comprehensive add-backs.
+                    </p>
+                    <ul class="tool-features">
+                        <li>Dual partnership support</li>
+                        <li>Ownership percentage calculations</li>
+                        <li>Depreciation and depletion add-backs</li>
+                        <li>Short-term debt exclusions</li>
+                        <li>Meal & entertainment exclusions</li>
+                    </ul>
+                    <a href="http://msfg-income-calculator.s3-website-us-west-1.amazonaws.com/IncomeCalculator1065.html" class="tool-link" target="_blank">
+                        Open 1065 Calculator
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="income-tool-card">
+                    <div class="tool-header">
+                        <div class="tool-icon">K-1</div>
+                        <div>
+                            <div class="tool-title">1065 K-1 <span class="status-badge live">Live</span></div>
+                            <div class="tool-subtitle">Partnership Distributions</div>
+                        </div>
+                    </div>
+                    <p class="tool-description">
+                        Calculate monthly income from 1065 K-1 partnership distributions with support for multiple partnerships.
+                    </p>
+                    <ul class="tool-features">
+                        <li>Multiple K-1 support (up to 4)</li>
+                        <li>Ordinary business income/loss</li>
+                        <li>Rental income and real estate loss</li>
+                        <li>Guaranteed payments to partner</li>
+                        <li>Combined monthly calculations</li>
+                    </ul>
+                    <a href="http://msfg-income-calculator.s3-website-us-west-1.amazonaws.com/IncomeCalculatorK1.html" class="tool-link" target="_blank">
+                        Open K-1 Calculator
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="income-tool-card">
+                    <div class="tool-header">
+                        <div class="tool-icon">1120</div>
+                        <div>
+                            <div class="tool-title">Form 1120 <span class="status-badge live">Live</span></div>
+                            <div class="tool-subtitle">Corporation Income</div>
+                        </div>
+                    </div>
+                    <p class="tool-description">
+                        Calculate monthly income from C-corporation (Form 1120) returns with ownership percentages and comprehensive add-backs.
+                    </p>
+                    <ul class="tool-features">
+                        <li>Comprehensive income line items</li>
+                        <li>Ownership percentage calculations</li>
+                        <li>Depreciation and depletion add-backs</li>
+                        <li>Tax and expense deductions</li>
+                        <li>Dividend exclusions</li>
+                    </ul>
+                    <a href="http://msfg-income-calculator.s3-website-us-west-1.amazonaws.com/IncomeCalculator1120.html" class="tool-link" target="_blank">
+                        Open 1120 Calculator
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="income-tool-card">
+                    <div class="tool-header">
+                        <div class="tool-icon">1120S</div>
+                        <div>
+                            <div class="tool-title">Form 1120S <span class="status-badge live">Live</span></div>
+                            <div class="tool-subtitle">S-Corporation Income</div>
+                        </div>
+                    </div>
+                    <p class="tool-description">
+                        Calculate monthly income from S-corporation (Form 1120S) returns with ownership percentages and comprehensive add-backs.
+                    </p>
+                    <ul class="tool-features">
+                        <li>Dual corporation support</li>
+                        <li>Ownership percentage calculations</li>
+                        <li>Depreciation and depletion add-backs</li>
+                        <li>Mortgage and expense deductions</li>
+                        <li>Combined monthly calculations</li>
+                    </ul>
+                    <a href="http://msfg-income-calculator.s3-website-us-west-1.amazonaws.com/IncomeCalculator1120S.html" class="tool-link" target="_blank">
+                        Open 1120S Calculator
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="income-tool-card">
+                    <div class="tool-header">
+                        <div class="tool-icon">1120S K-1</div>
+                        <div>
+                            <div class="tool-title">1120S K-1 <span class="status-badge live">Live</span></div>
+                            <div class="tool-subtitle">S-Corporation Distributions</div>
+                        </div>
+                    </div>
+                    <p class="tool-description">
+                        Calculate monthly income from 1120S K-1 S-corporation distributions with support for multiple K-1s.
+                    </p>
+                    <ul class="tool-features">
+                        <li>Multiple K-1 support (up to 4)</li>
+                        <li>Ordinary business income/loss</li>
+                        <li>Rental income and real estate loss</li>
+                        <li>Other rental income/loss</li>
+                        <li>Combined monthly calculations</li>
+                    </ul>
+                    <a href="http://msfg-income-calculator.s3-website-us-west-1.amazonaws.com/IncomeCalculator1120SK1.html" class="tool-link" target="_blank">
+                        Open 1120S K-1 Calculator
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="income-tool-card">
+                    <div class="tool-header">
+                        <div class="tool-icon">1038</div>
+                        <div>
+                            <div class="tool-title">Rental Income Worksheet (1038) <span class="status-badge live">Live</span></div>
+                            <div class="tool-subtitle">Investment Property Income</div>
+                        </div>
+                    </div>
+                    <p class="tool-description">
+                        Calculate qualifying rental income from investment properties with comprehensive income and expense analysis.
+                    </p>
+                    <ul class="tool-features">
+                        <li>Multiple property support (up to 4)</li>
+                        <li>Fair rental days calculation</li>
+                        <li>Comprehensive expense analysis</li>
+                        <li>Add-back calculations</li>
+                        <li>Time-in-service adjustments</li>
+                    </ul>
+                    <a href="http://msfg-income-calculator.s3-website-us-west-1.amazonaws.com/IncomeCalculatorRental1038.html" class="tool-link" target="_blank">
+                        Open 1038 Calculator
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section class="category-section collapsed">
+            <h3 class="category-title">External Tools & Services</h3>
+            <div class="tools-grid">
+                <div class="tool-card external-tool">
+                    <div class="tool-header">
+                        <div class="tool-icon external">MMI</div>
+                        <div>
+                            <div class="tool-title">MMI DataCenter <span class="status-badge external">External</span></div>
+                            <div class="tool-subtitle">Mortgage Market Intelligence Platform</div>
+                        </div>
+                    </div>
+                    <p class="tool-description">
+                        Access comprehensive mortgage market data, analytics, and intelligence tools for 
+                        market analysis and competitive positioning.
+                    </p>
+                    <ul class="tool-features">
+                        <li>Market data and analytics</li>
+                        <li>Competitive intelligence</li>
+                        <li>Industry insights and reports</li>
+                        <li>Real-time market monitoring</li>
+                    </ul>
+                    <a href="https://mmi.run/l/login" class="tool-link external" target="_blank">
+                        Login to MMI
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="tool-card external-tool">
+                    <div class="tool-header">
+                        <div class="tool-icon external">LR</div>
+                        <div>
+                            <div class="tool-title">ListReports <span class="status-badge external">External</span></div>
+                            <div class="tool-subtitle">Agent Intelligence & Market Reports</div>
+                        </div>
+                    </div>
+                    <p class="tool-description">
+                        Access agent intelligence, market reports, and comprehensive listing data for 
+                        real estate market analysis and lead generation.
+                    </p>
+                    <ul class="tool-features">
+                        <li>Agent intelligence data</li>
+                        <li>Market reports and analytics</li>
+                        <li>Listing data and insights</li>
+                        <li>Lead generation tools</li>
+                    </ul>
+                    <a href="https://listreports.com/login?redirect=https%253A%252F%252Flistreports.com%252Fagent-intel%253Ftab%253Dlistside" class="tool-link external" target="_blank">
+                        Login to ListReports
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="tool-card external-tool">
+                    <div class="tool-header">
+                        <div class="tool-icon external">PP</div>
+                        <div>
+                            <div class="tool-title">PassportPro247 <span class="status-badge external">External</span></div>
+                            <div class="tool-subtitle">Title & Escrow Management Platform</div>
+                        </div>
+                    </div>
+                    <p class="tool-description">
+                        Comprehensive title and escrow management platform powered by ICE. 
+                        Streamline closing processes and manage title operations efficiently.
+                    </p>
+                    <ul class="tool-features">
+                        <li>Title and escrow management</li>
+                        <li>Closing process automation</li>
+                        <li>Document management</li>
+                        <li>ICE-powered platform</li>
+                    </ul>
+                    <a href="https://www.passportpro247.com/Home?ReturnUrl=%2FAccount%2FIndex" class="tool-link external" target="_blank">
+                        Login to PassportPro
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="tool-card external-tool">
+                    <div class="tool-header">
+                        <div class="tool-icon external">FL</div>
+                        <div>
+                            <div class="tool-title">Flueid Pro <span class="status-badge external">External</span></div>
+                            <div class="tool-subtitle">Digital Mortgage Platform</div>
+                        </div>
+                    </div>
+                    <p class="tool-description">
+                        Advanced digital mortgage platform for streamlined loan processing, 
+                        document management, and borrower experience optimization.
+                    </p>
+                    <ul class="tool-features">
+                        <li>Digital mortgage processing</li>
+                        <li>Document automation</li>
+                        <li>Borrower portal</li>
+                        <li>Workflow optimization</li>
+                    </ul>
+                    <a href="https://pro.flueid.com/auth/sign-in" class="tool-link external" target="_blank">
+                        Login to Flueid
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2025 MSFG Home Loans. All tools are designed for internal use and efficiency.</p>
+    </footer>
+
+    <script>
+        // Add some interactive features
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add click tracking for analytics (if needed)
+            const toolLinks = document.querySelectorAll('.tool-link');
+            
+            toolLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const toolName = this.closest('.tool-card').querySelector('.tool-title').textContent.trim();
+                    console.log(`Tool accessed: ${toolName}`);
+                    
+                    // You can add analytics tracking here
+                    // Example: gtag('event', 'tool_access', { tool_name: toolName });
+                });
+            });
+
+            // Add smooth hover effects
+            const toolCards = document.querySelectorAll('.tool-card');
+            
+            toolCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-4px) scale(1.02)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+
+            // Add keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    // Close any open modals or return to top
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Expose a debug function for development
+        // Collapsible sections functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const categoryTitles = document.querySelectorAll('.category-title');
+            
+            categoryTitles.forEach(title => {
+                title.addEventListener('click', function() {
+                    const section = this.closest('.category-section');
+                    section.classList.toggle('collapsed');
+                });
+            });
+        });
+
+        window.LoanToolsHub = {
+            debug: function() {
+                return {
+                    tools: {
+                        msfg: [
+                            'LLPM Tool',
+                            'Buydown Calculator', 
+                            'Loan Doc Checklist',
+                            'MSFG Calculator',
+                            'Income Calculator Questionnaire',
+                            'APR Calculator'
+                        ],
+                        income: [
+                            'Form 1040 Page 1',
+                            'Schedule C',
+                            'Schedule E',
+                            'Schedule E Subject Property',
+                            'Schedule B',
+                            'Schedule D',
+                            'Schedule F',
+                            'Form 1065',
+                            '1065 K-1',
+                            'Form 1120',
+                            'Form 1120S',
+                            '1120S K-1',
+                            'Rental Income Worksheet (1038)'
+                        ],
+                        external: [
+                            'MMI DataCenter',
+                            'ListReports',
+                            'PassportPro247',
+                            'Flueid Pro'
+                        ]
+                    },
+                    version: '1.0.0',
+                    lastUpdated: new Date().toISOString()
+                };
+            }
+        };
+    </script>
+    
+    <!-- Theme Switcher -->
+    <script src="theme-switcher.js"></script>
+
+    <!-- ZZ Signature -->
+    <div style="position: fixed; bottom: 20px; right: 20px; font-size: 12px; color: var(--text-muted); font-family: monospace; z-index: 1000;">
+        ZZ
+    </div>
+</body>
+</html>

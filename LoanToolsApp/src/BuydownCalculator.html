@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MSFG • 3-2-1 Buydown Calculator</title>
+  <style>
+    :root {
+      --bg: #0b0f14; --panel: #121821; --muted: #a4b1c2; --text: #e9eef5;
+      --ok: #2ecc71; --warn: #f39c12; --need: #e74c3c; --accent: #00d4ff; --border: #223042; --chip: #1a2230;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, sans-serif; background: radial-gradient(80vw 80vh at 75% -10%, #0f1724, var(--bg)); color: var(--text); }
+    header { padding: 24px 20px 8px; position: sticky; top: 0; background: linear-gradient(180deg, rgba(11,15,20,.95), rgba(11,15,20,.75) 60%, transparent); backdrop-filter: blur(4px); }
+    .brand { display:flex; align-items:center; gap:12px; }
+    .back-link { display:flex; align-items:center; gap:6px; color: var(--muted); text-decoration: none; font-size: 12px; padding: 6px 10px; border-radius: 6px; transition: .2s ease; border: 1px solid var(--border); }
+    .back-link:hover { color: var(--text); border-color: var(--accent); background: #00d4ff11; }
+    .logo { width: 80px; height: auto; border-radius: 10px; background-image: url('https://msfg-media.s3.us-west-2.amazonaws.com/Assets/LOGOS/MSFG+Home+Loans/MSFG-Color-Transparent.png'); background-size: contain; background-repeat: no-repeat; background-position: center; box-shadow: 0 0 24px #00d4ff33; }
+    h1 { font-size: 20px; margin: 0; letter-spacing: .3px; }
+    main { max-width: 1400px; margin: 0 auto; padding: 12px 20px 60px; }
+    .card { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 16px; box-shadow: 0 10px 30px rgba(0,0,0,.25); }
+    .card h2 { font-size: 16px; margin: 0 0 12px; font-weight: 650; letter-spacing: .2px; }
+    .subtle { color: var(--muted); font-size: 13px; }
+    .btn { display:inline-flex; gap:8px; align-items:center; background: linear-gradient(180deg, #0f2533, #0a1a25); border:1px solid #2a425b; color: var(--text); padding: 10px 14px; border-radius: 12px; cursor: pointer; text-decoration: none; font-weight:600; }
+    .btn:hover { border-color: var(--accent); box-shadow: 0 0 0 3px #00d4ff22 inset; }
+    .summary { display:grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 10px; }
+    @media (max-width: 1000px){ .summary{ grid-template-columns: repeat(2, 1fr);} }
+    .kv { background: var(--chip); border: 1px solid var(--border); padding: 12px; border-radius: 12px; }
+    .kv .k { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .5px; }
+    .kv .v { font-size: 14px; margin-top: 6px; }
+    .chips { display:flex; flex-wrap: wrap; gap: 8px; }
+    .chip { background: var(--chip); border: 1px solid var(--border); padding: 8px 10px; border-radius: 999px; font-size: 12px; }
+    .chip.highlight { background: rgba(46, 204, 113, 0.2); border: 2px solid rgba(46, 204, 113, 0.6); color: #2ecc71; font-weight: 600; font-size: 14px; }
+    .chip.ok { border-color: #2d5d3a; } .chip.warn { border-color: #564214; } .chip.need { border-color: #5d2d2d; }
+    .section { margin-top: 8px; }
+    .section h3 { margin: 14px 0 8px; font-size: 14px; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 10px 8px; border-bottom: 1px solid #213046; text-align: left; font-size: 14px; vertical-align: top; }
+    tr:hover td { background: #0f1520; }
+    .actions { display:flex; gap: 8px; justify-content: flex-end; margin-top: 10px; }
+    .small { font-size: 12px; color: var(--muted); }
+    .hidden { display:none; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; color: #9fc4ff; }
+    
+    /* Form controls */
+    .input-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
+    @media (max-width: 600px) { .input-row { grid-template-columns: 1fr; } }
+    .input-group { display: flex; flex-direction: column; gap: 4px; }
+    .input-group label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+    .input-group input, .input-group select { background: var(--chip); border: 1px solid var(--border); color: var(--text); padding: 8px 10px; border-radius: 8px; font-size: 14px; }
+    .input-group input:focus, .input-group select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px #00d4ff22 inset; }
+    
+    /* Radio pills */
+    .radio-pills { display: flex; gap: 8px; }
+    .radio-pills label { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+    .radio-pills input[type="radio"] { display: none; }
+    .radio-pills span { background: var(--chip); border: 1px solid var(--border); padding: 6px 12px; border-radius: 999px; font-size: 12px; transition: .2s ease; }
+    .radio-pills input[type="radio"]:checked + span { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+    
+    /* Toggles */
+    .toggle-group { display: flex; align-items: center; gap: 8px; }
+    .toggle { position: relative; width: 40px; height: 20px; background: var(--border); border-radius: 999px; cursor: pointer; transition: .2s ease; }
+    .toggle.active { background: var(--accent); }
+    .toggle::after { content: ''; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; background: var(--text); border-radius: 50%; transition: .2s ease; }
+    .toggle.active::after { transform: translateX(20px); }
+    
+    /* Warning chip */
+    .warning { background: #3a1c1c; border: 1px solid #5d2d2d; color: #ffb3a8; padding: 8px 12px; border-radius: 8px; font-size: 12px; margin-top: 8px; }
+    
+    /* Buydown specific styles */
+    .buydown-year { background: var(--chip); border: 1px solid var(--border); padding: 12px; border-radius: 12px; margin-bottom: 8px; }
+    .buydown-year h4 { margin: 0 0 8px; font-size: 14px; color: var(--accent); }
+    .year-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .year-kv { background: var(--panel); border: 1px solid var(--border); padding: 8px; border-radius: 8px; }
+    .year-kv .k { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .5px; }
+    .year-kv .v { font-size: 13px; margin-top: 4px; font-weight: 600; }
+    
+    /* Payment comparison styles */
+    .payment-comparison { background: var(--chip); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+    .comparison-row { display: flex; align-items: center; padding: 12px; border-bottom: 1px solid var(--border); }
+    .comparison-row:last-child { border-bottom: none; }
+    .comparison-label { flex: 1; font-size: 14px; }
+    .comparison-value { flex: 1; text-align: center; font-weight: 600; font-size: 14px; }
+    .comparison-diff { flex: 1; text-align: right; font-size: 12px; color: var(--muted); }
+    .comparison-diff.savings { color: #2ecc71; }
+    .comparison-diff.cost { color: #e74c3c; }
+    
+    /* Chart styles */
+    .chart-controls { display: flex; gap: 8px; margin-bottom: 16px; }
+    .chart-controls .btn { flex: 1; }
+    #chartContainer { background: var(--chip); border: 1px solid var(--border); border-radius: 12px; padding: 16px; text-align: center; }
+    #buydownChart { max-width: 100%; height: auto; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <a href="http://loan-tools-hub.s3-website-us-west-1.amazonaws.com" class="back-link">
+        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+        </svg>
+        Back to Hub
+      </a>
+      <div class="logo" aria-hidden="true"></div>
+    </div>
+  </header>
+
+  <main>
+    <div class="card">
+      <h2>Loan Details</h2>
+        
+        <div class="input-row">
+          <div class="input-group">
+            <label for="loanAmount">Loan Amount ($)</label>
+            <input type="number" id="loanAmount" step="1000" value="0" />
+          </div>
+          <div class="input-group">
+            <label for="noteRate">Note Rate (%)</label>
+            <input type="number" id="noteRate" step="0.125" value="0" />
+          </div>
+          <div class="input-group">
+            <label for="loanTerm">Loan Term (Years)</label>
+            <select id="loanTerm">
+              <option value="30" selected>30</option>
+              <option value="20">20</option>
+              <option value="15">15</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="input-row">
+          <div class="input-group">
+            <label for="buydownType">Buydown Type</label>
+            <select id="buydownType">
+              <option value="3-2-1" selected>3-2-1 Buydown</option>
+              <option value="2-1">2-1 Buydown</option>
+              <option value="1-0">1-0 Buydown</option>
+              
+            </select>
+          </div>
+        </div>
+
+
+
+        <div class="section">
+          <h3>Additional Options</h3>
+          <div class="toggle-group">
+            <div class="toggle" id="includeTaxes"></div>
+            <label for="includeTaxes">Include Property Taxes</label>
+          </div>
+          
+          <div class="toggle-group" style="margin-top: 8px;">
+            <div class="toggle" id="includeInsurance"></div>
+            <label for="includeInsurance">Include Insurance</label>
+          </div>
+        </div>
+
+        <div class="section" id="taxInsuranceSection" style="display: none;">
+          <h3>Tax & Insurance</h3>
+          <div class="input-row">
+            <div class="input-group">
+              <label for="propertyTaxes">Annual Property Taxes ($)</label>
+              <input type="number" id="propertyTaxes" step="100" value="0" />
+            </div>
+            <div class="input-group">
+              <label for="insurance">Annual Insurance ($)</label>
+              <input type="number" id="insurance" step="100" value="0" />
+            </div>
+            <div class="input-group">
+              <label for="hoa">Annual HOA (if applicable) ($)</label>
+              <input type="number" id="hoa" step="100" value="0" />
+            </div>
+          </div>
+        </div>
+
+        <div id="warning" class="warning hidden"></div>
+    </div>
+
+    <div class="card">
+      <h2>Buydown Summary</h2>
+        
+        <div class="chips">
+          <div class="chip" id="chipLoanAmount">Loan: $0</div>
+          <div class="chip" id="chipNoteRate">Note Rate: 0%</div>
+          <div class="chip" id="chipBuydownType">3-2-1 Buydown</div>
+          <div class="chip highlight" id="chipTotalCost">Buydown Cost: $0</div>
+        </div>
+
+        <div class="summary" style="margin-top: 16px;">
+          <div class="kv">
+            <div class="k">Base Payment</div>
+            <div class="v" id="kvBasePayment">$0</div>
+          </div>
+          <div class="kv">
+            <div class="k">Current Year Payment</div>
+            <div class="v" id="kvYear1Payment">$0</div>
+          </div>
+          <div class="kv">
+            <div class="k">Monthly Savings</div>
+            <div class="v" id="kvMonthlySavings">$0</div>
+          </div>
+          <div class="kv">
+            <div class="k">Total Cost</div>
+            <div class="v" id="kvTotalCost">$0</div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h3>Payment Comparison</h3>
+          <div class="payment-comparison">
+            <div class="comparison-row">
+              <div class="comparison-label">Full Payment</div>
+              <div class="comparison-value" id="fullPaymentValue">$0</div>
+              <div class="comparison-diff">Base</div>
+            </div>
+            <div class="comparison-row">
+              <div class="comparison-label">Year 3 Payment</div>
+              <div class="comparison-value" id="year3PaymentValue">$0</div>
+              <div class="comparison-diff" id="year3Diff">$0</div>
+            </div>
+            <div class="comparison-row">
+              <div class="comparison-label">Prior Year Payment</div>
+              <div class="comparison-value" id="year2PaymentValue">$0</div>
+              <div class="comparison-diff" id="year2Diff">$0</div>
+            </div>
+            <div class="comparison-row">
+              <div class="comparison-label">Current Year Payment</div>
+              <div class="comparison-value" id="year1PaymentValue">$0</div>
+              <div class="comparison-diff" id="year1Diff">$0</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h3>Year-by-Year Breakdown</h3>
+          <div id="yearlyBreakdown"></div>
+        </div>
+
+        <div class="section">
+          <h3>Visual Charts</h3>
+          <div class="chart-controls">
+            <button id="btnPaymentChart" class="btn">Payment Comparison Chart</button>
+            <button id="btnRemainingChart" class="btn">Buydown Remaining Chart</button>
+          </div>
+          <div id="chartContainer" style="display: none;">
+            <canvas id="buydownChart" width="400" height="300"></canvas>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button id="btnCsv" class="btn">Export CSV</button>
+          <button id="btnPrint" class="btn">Print</button>
+          <button id="btnShare" class="btn">Copy Share Link</button>
+        </div>
+    </div>
+
+    <div class="card">
+      <h2>How 3-2-1 Buydowns Work</h2>
+      <ul class="small">
+                        <li><strong>Current Year:</strong> Interest rate is reduced by 3% from the note rate</li>
+                <li><strong>Prior Year:</strong> Interest rate is reduced by 2% from the note rate</li>
+        <li><strong>Year 3:</strong> Interest rate is reduced by 1% from the note rate</li>
+        <li><strong>Full Payment:</strong> Interest rate returns to the full note rate</li>
+        <li><strong>Funding:</strong> Typically paid by seller, lender, or borrower as a credit at closing</li>
+        <li><strong>Benefits:</strong> Lower initial payments help borrowers qualify and reduce early payment shock</li>
+      </ul>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script type="module" src="buydown.js"></script>
+  
+  <!-- Theme Switcher -->
+  <script src="theme-switcher.js"></script>
+
+  <!-- ZZ Signature -->
+  <div style="position: fixed; bottom: 20px; right: 20px; font-size: 12px; color: var(--muted); font-family: monospace; z-index: 1000;">
+    ZZ
+  </div>
+</body>
+</html>
