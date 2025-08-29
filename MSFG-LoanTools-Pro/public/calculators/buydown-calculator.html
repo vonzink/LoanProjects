@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buydown Calculator - MSFG Loan Tools Pro</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="description" content="Calculate temporary and permanent buydown scenarios">
+    <meta name="theme-color" content="#3b82f6">
+    
+    <!-- Master CSS -->
+    <link rel="stylesheet" href="../css/master.css">
+    
+    <!-- Custom Styles -->
+    <style>
+        .calculator-header {
+            background: var(--gradient-secondary);
+            padding: var(--space-8) 0;
+            margin-bottom: var(--space-8);
+        }
+        
+        .calculator-title {
+            color: var(--text-primary);
+            text-align: center;
+            margin-bottom: var(--space-4);
+        }
+        
+        .calculator-subtitle {
+            color: var(--text-secondary);
+            text-align: center;
+            font-size: var(--font-size-lg);
+        }
+        
+        .pdf-drop-zone {
+            border: 2px dashed var(--border-primary);
+            border-radius: var(--radius-lg);
+            padding: var(--space-8);
+            text-align: center;
+            transition: all var(--transition-fast);
+            margin-bottom: var(--space-6);
+        }
+        
+        .pdf-drop-zone:hover {
+            border-color: var(--primary-500);
+            background: rgba(59, 130, 246, 0.05);
+        }
+        
+        .pdf-drop-zone.dragover {
+            border-color: var(--primary-500);
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        .results-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: var(--radius-xl);
+            padding: var(--space-6);
+            margin-top: var(--space-6);
+        }
+        
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-3) 0;
+            border-bottom: 1px solid var(--border-primary);
+        }
+        
+        .result-item:last-child {
+            border-bottom: none;
+            font-weight: var(--font-weight-bold);
+            font-size: var(--font-size-lg);
+        }
+        
+        .result-label {
+            color: var(--text-secondary);
+        }
+        
+        .result-value {
+            color: var(--text-primary);
+            font-weight: var(--font-weight-medium);
+        }
+        
+        .form-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: var(--radius-xl);
+            padding: var(--space-6);
+            margin-bottom: var(--space-6);
+        }
+        
+        .section-title {
+            font-size: var(--font-size-xl);
+            font-weight: var(--font-weight-semibold);
+            color: var(--text-primary);
+            margin-bottom: var(--space-4);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+        
+        .buydown-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: var(--space-4);
+        }
+        
+        .buydown-table th,
+        .buydown-table td {
+            padding: var(--space-3);
+            text-align: left;
+            border-bottom: 1px solid var(--border-primary);
+        }
+        
+        .buydown-table th {
+            background: var(--bg-secondary);
+            font-weight: var(--font-weight-semibold);
+            color: var(--text-primary);
+        }
+        
+        .buydown-table td {
+            color: var(--text-secondary);
+        }
+        
+        .buydown-table .highlight {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--text-primary);
+            font-weight: var(--font-weight-medium);
+        }
+        
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-primary);
+            margin-bottom: var(--space-6);
+        }
+        
+        .tab {
+            padding: var(--space-3) var(--space-6);
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all var(--transition-fast);
+        }
+        
+        .tab.active {
+            color: var(--text-primary);
+            border-bottom-color: var(--primary-500);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <img src="../assets/icon.svg" alt="MSFG Logo">
+            <div>
+                <h2 style="margin: 0; color: var(--text-primary);">MSFG</h2>
+                <p style="margin: 0; color: var(--text-secondary); font-size: var(--font-size-sm);">Loan Tools Pro</p>
+            </div>
+        </div>
+        
+        <nav class="nav">
+            <a href="../index.html" class="nav-link">Home</a>
+            <a href="#" class="nav-link active">Buydown Calculator</a>
+        </nav>
+    </header>
+
+    <!-- Calculator Header -->
+    <section class="calculator-header">
+        <div class="container">
+            <h1 class="calculator-title">Buydown Calculator</h1>
+            <p class="calculator-subtitle">Analyze temporary and permanent buydown scenarios</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row">
+            <!-- Input Form -->
+            <div class="col">
+                <!-- PDF Import Section -->
+                <div class="form-section">
+                    <h3 class="section-title">
+                        📄 PDF Import
+                        <span class="feature-badge pdf-feature">Drag & Drop</span>
+                    </h3>
+                    <div class="pdf-drop-zone" id="pdfDropZone">
+                        <div style="font-size: var(--font-size-4xl); margin-bottom: var(--space-4);">📄</div>
+                        <h4>Import Loan Documents</h4>
+                        <p class="text-secondary">Drop Loan Estimate or Closing Disclosure PDFs here to auto-fill the form</p>
+                        <button class="btn btn-primary mt-4" onclick="selectPDFFile()">Browse Files</button>
+                    </div>
+                </div>
+
+                <!-- Loan Information -->
+                <div class="form-section">
+                    <h3 class="section-title">💰 Loan Information</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="form-group">
+                            <label class="form-label" for="loanAmount">Loan Amount</label>
+                            <input type="number" id="loanAmount" class="form-input" placeholder="300,000" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="interestRate">Interest Rate (%)</label>
+                            <input type="number" id="interestRate" class="form-input" placeholder="5.5" step="0.125" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="loanTerm">Loan Term (Years)</label>
+                            <select id="loanTerm" class="form-select" required>
+                                <option value="">Select Term</option>
+                                <option value="15">15 Years</option>
+                                <option value="20">20 Years</option>
+                                <option value="30">30 Years</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="paymentType">Payment Type</label>
+                            <select id="paymentType" class="form-select" required>
+                                <option value="principal-interest">Principal & Interest</option>
+                                <option value="interest-only">Interest Only</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Buydown Type Selection -->
+                <div class="form-section">
+                    <h3 class="section-title">📊 Buydown Analysis</h3>
+                    
+                    <div class="tabs">
+                        <button class="tab active" onclick="switchTab('temporary')">Temporary Buydown</button>
+                        <button class="tab" onclick="switchTab('permanent')">Permanent Buydown</button>
+                    </div>
+                    
+                    <!-- Temporary Buydown -->
+                    <div id="temporary" class="tab-content active">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="form-group">
+                                <label class="form-label" for="buydownType">Buydown Type</label>
+                                <select id="buydownType" class="form-select" onchange="updateBuydownFields()">
+                                    <option value="1-2-3">1-2-3 Buydown</option>
+                                    <option value="2-1">2-1 Buydown</option>
+                                    <option value="1-1">1-1 Buydown</option>
+                                    <option value="custom">Custom Buydown</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="buydownDuration">Duration (Years)</label>
+                                <input type="number" id="buydownDuration" class="form-input" value="3" min="1" max="5">
+                            </div>
+                        </div>
+                        
+                        <div id="customBuydownFields" class="d-none mt-4">
+                            <h4>Custom Rate Reductions</h4>
+                            <div class="grid grid-cols-3 gap-4">
+                                <div class="form-group">
+                                    <label class="form-label">Year 1 Reduction (%)</label>
+                                    <input type="number" id="year1Reduction" class="form-input" placeholder="1.0" step="0.125">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Year 2 Reduction (%)</label>
+                                    <input type="number" id="year2Reduction" class="form-input" placeholder="0.5" step="0.125">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Year 3 Reduction (%)</label>
+                                    <input type="number" id="year3Reduction" class="form-input" placeholder="0.25" step="0.125">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Permanent Buydown -->
+                    <div id="permanent" class="tab-content">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="form-group">
+                                <label class="form-label" for="permanentReduction">Rate Reduction (%)</label>
+                                <input type="number" id="permanentReduction" class="form-input" placeholder="0.5" step="0.125">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="buydownCost">Buydown Cost</label>
+                                <input type="number" id="buydownCost" class="form-input" placeholder="0">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="d-flex justify-between items-center mb-6">
+                    <button class="btn btn-secondary" onclick="clearForm()">Clear Form</button>
+                    <button class="btn btn-primary" onclick="calculateBuydown()">Calculate Buydown</button>
+                </div>
+            </div>
+
+            <!-- Results -->
+            <div class="col">
+                <div class="results-section">
+                    <h3 class="section-title">📊 Results</h3>
+                    
+                    <div id="resultsContent">
+                        <div class="text-center text-secondary">
+                            <div style="font-size: var(--font-size-4xl); margin-bottom: var(--space-4);">💰</div>
+                            <p>Enter loan information and click "Calculate Buydown" to see results</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Schedule -->
+                <div class="results-section mt-6">
+                    <h3 class="section-title">📅 Payment Schedule</h3>
+                    <div id="paymentSchedule">
+                        <p class="text-secondary">Payment schedule will appear here after calculation</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PDF.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    
+    <!-- Scripts -->
+    <script src="../js/pdf-parser.js"></script>
+    <script src="../js/app.js"></script>
+    
+    <script>
+        let currentTab = 'temporary';
+        
+        function switchTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update tab content
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            
+            currentTab = tabName;
+        }
+        
+        function updateBuydownFields() {
+            const buydownType = document.getElementById('buydownType').value;
+            const customFields = document.getElementById('customBuydownFields');
+            
+            if (buydownType === 'custom') {
+                customFields.classList.remove('d-none');
+            } else {
+                customFields.classList.add('d-none');
+                
+                // Set default values based on type
+                switch (buydownType) {
+                    case '1-2-3':
+                        document.getElementById('year1Reduction').value = '1.0';
+                        document.getElementById('year2Reduction').value = '0.5';
+                        document.getElementById('year3Reduction').value = '0.25';
+                        break;
+                    case '2-1':
+                        document.getElementById('year1Reduction').value = '0.5';
+                        document.getElementById('year2Reduction').value = '0.25';
+                        document.getElementById('year3Reduction').value = '0';
+                        break;
+                    case '1-1':
+                        document.getElementById('year1Reduction').value = '0.25';
+                        document.getElementById('year2Reduction').value = '0.25';
+                        document.getElementById('year3Reduction').value = '0';
+                        break;
+                }
+            }
+        }
+        
+        function calculateBuydown() {
+            // Get form values
+            const loanAmount = parseFloat(document.getElementById('loanAmount').value) || 0;
+            const interestRate = parseFloat(document.getElementById('interestRate').value) || 0;
+            const loanTerm = parseInt(document.getElementById('loanTerm').value) || 30;
+            const paymentType = document.getElementById('paymentType').value;
+            
+            if (currentTab === 'temporary') {
+                calculateTemporaryBuydown(loanAmount, interestRate, loanTerm, paymentType);
+            } else {
+                calculatePermanentBuydown(loanAmount, interestRate, loanTerm, paymentType);
+            }
+        }
+        
+        function calculateTemporaryBuydown(loanAmount, interestRate, loanTerm, paymentType) {
+            const buydownType = document.getElementById('buydownType').value;
+            const duration = parseInt(document.getElementById('buydownDuration').value) || 3;
+            
+            let reductions = [];
+            
+            if (buydownType === 'custom') {
+                reductions = [
+                    parseFloat(document.getElementById('year1Reduction').value) || 0,
+                    parseFloat(document.getElementById('year2Reduction').value) || 0,
+                    parseFloat(document.getElementById('year3Reduction').value) || 0
+                ];
+            } else {
+                switch (buydownType) {
+                    case '1-2-3':
+                        reductions = [1.0, 0.5, 0.25];
+                        break;
+                    case '2-1':
+                        reductions = [0.5, 0.25, 0];
+                        break;
+                    case '1-1':
+                        reductions = [0.25, 0.25, 0];
+                        break;
+                }
+            }
+            
+            // Calculate payments
+            const baseMonthlyPayment = calculateMonthlyPayment(loanAmount, interestRate, loanTerm, paymentType);
+            const buydownPayments = [];
+            let totalSavings = 0;
+            
+            for (let year = 1; year <= duration; year++) {
+                const reduction = reductions[year - 1] || 0;
+                const buydownRate = interestRate - reduction;
+                const buydownPayment = calculateMonthlyPayment(loanAmount, buydownRate, loanTerm, paymentType);
+                const monthlySavings = baseMonthlyPayment - buydownPayment;
+                const yearlySavings = monthlySavings * 12;
+                
+                buydownPayments.push({
+                    year: year,
+                    rate: buydownRate,
+                    payment: buydownPayment,
+                    savings: monthlySavings,
+                    yearlySavings: yearlySavings
+                });
+                
+                totalSavings += yearlySavings;
+            }
+            
+            // Display results
+            displayTemporaryResults(baseMonthlyPayment, buydownPayments, totalSavings);
+            displayPaymentSchedule(buydownPayments, baseMonthlyPayment, duration);
+        }
+        
+        function calculatePermanentBuydown(loanAmount, interestRate, loanTerm, paymentType) {
+            const reduction = parseFloat(document.getElementById('permanentReduction').value) || 0;
+            const buydownCost = parseFloat(document.getElementById('buydownCost').value) || 0;
+            
+            const baseMonthlyPayment = calculateMonthlyPayment(loanAmount, interestRate, loanTerm, paymentType);
+            const buydownRate = interestRate - reduction;
+            const buydownPayment = calculateMonthlyPayment(loanAmount, buydownRate, loanTerm, paymentType);
+            
+            const monthlySavings = baseMonthlyPayment - buydownPayment;
+            const yearlySavings = monthlySavings * 12;
+            const totalSavings = yearlySavings * loanTerm;
+            const netSavings = totalSavings - buydownCost;
+            
+            // Display results
+            displayPermanentResults(baseMonthlyPayment, buydownPayment, monthlySavings, totalSavings, netSavings, buydownCost);
+        }
+        
+        function calculateMonthlyPayment(principal, rate, years, paymentType) {
+            const monthlyRate = rate / 100 / 12;
+            const numberOfPayments = years * 12;
+            
+            if (paymentType === 'interest-only') {
+                return principal * monthlyRate;
+            } else {
+                return principal * (monthlyRate * Math.pow(1 + monthlyRate, numberOfPayments)) / 
+                       (Math.pow(1 + monthlyRate, numberOfPayments) - 1);
+            }
+        }
+        
+        function displayTemporaryResults(basePayment, buydownPayments, totalSavings) {
+            const resultsContent = document.getElementById('resultsContent');
+            
+            let html = `
+                <div class="result-item">
+                    <span class="result-label">Base Monthly Payment</span>
+                    <span class="result-value">$${basePayment.toFixed(2)}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Total Savings (${buydownPayments.length} years)</span>
+                    <span class="result-value">$${totalSavings.toFixed(2)}</span>
+                </div>
+            `;
+            
+            buydownPayments.forEach(payment => {
+                html += `
+                    <div class="result-item">
+                        <span class="result-label">Year ${payment.year} Payment (${payment.rate.toFixed(3)}%)</span>
+                        <span class="result-value">$${payment.payment.toFixed(2)}</span>
+                    </div>
+                `;
+            });
+            
+            resultsContent.innerHTML = html;
+        }
+        
+        function displayPermanentResults(basePayment, buydownPayment, monthlySavings, totalSavings, netSavings, buydownCost) {
+            const resultsContent = document.getElementById('resultsContent');
+            
+            resultsContent.innerHTML = `
+                <div class="result-item">
+                    <span class="result-label">Base Monthly Payment</span>
+                    <span class="result-value">$${basePayment.toFixed(2)}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Buydown Monthly Payment</span>
+                    <span class="result-value">$${buydownPayment.toFixed(2)}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Monthly Savings</span>
+                    <span class="result-value">$${monthlySavings.toFixed(2)}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Total Savings</span>
+                    <span class="result-value">$${totalSavings.toFixed(2)}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Buydown Cost</span>
+                    <span class="result-value">$${buydownCost.toFixed(2)}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Net Savings</span>
+                    <span class="result-value">$${netSavings.toFixed(2)}</span>
+                </div>
+            `;
+        }
+        
+        function displayPaymentSchedule(buydownPayments, basePayment, duration) {
+            const scheduleDiv = document.getElementById('paymentSchedule');
+            
+            let html = `
+                <table class="buydown-table">
+                    <thead>
+                        <tr>
+                            <th>Year</th>
+                            <th>Rate</th>
+                            <th>Monthly Payment</th>
+                            <th>Monthly Savings</th>
+                            <th>Yearly Savings</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            // Add buydown years
+            buydownPayments.forEach(payment => {
+                html += `
+                    <tr class="highlight">
+                        <td>${payment.year}</td>
+                        <td>${payment.rate.toFixed(3)}%</td>
+                        <td>$${payment.payment.toFixed(2)}</td>
+                        <td>$${payment.savings.toFixed(2)}</td>
+                        <td>$${payment.yearlySavings.toFixed(2)}</td>
+                    </tr>
+                `;
+            });
+            
+            // Add remaining years
+            for (let year = duration + 1; year <= 30; year++) {
+                html += `
+                    <tr>
+                        <td>${year}</td>
+                        <td>${(buydownPayments[0]?.rate + buydownPayments[0]?.reduction || 0).toFixed(3)}%</td>
+                        <td>$${basePayment.toFixed(2)}</td>
+                        <td>$0.00</td>
+                        <td>$0.00</td>
+                    </tr>
+                `;
+            }
+            
+            html += `
+                    </tbody>
+                </table>
+            `;
+            
+            scheduleDiv.innerHTML = html;
+        }
+        
+        function clearForm() {
+            const inputs = document.querySelectorAll('input, select');
+            inputs.forEach(input => {
+                input.value = '';
+            });
+            
+            // Reset defaults
+            document.getElementById('loanTerm').value = '30';
+            document.getElementById('paymentType').value = 'principal-interest';
+            document.getElementById('buydownDuration').value = '3';
+            document.getElementById('buydownType').value = '1-2-3';
+            
+            document.getElementById('resultsContent').innerHTML = `
+                <div class="text-center text-secondary">
+                    <div style="font-size: var(--font-size-4xl); margin-bottom: var(--space-4);">💰</div>
+                    <p>Enter loan information and click "Calculate Buydown" to see results</p>
+                </div>
+            `;
+            
+            document.getElementById('paymentSchedule').innerHTML = `
+                <p class="text-secondary">Payment schedule will appear here after calculation</p>
+            `;
+        }
+        
+        function selectPDFFile() {
+            console.log('PDF file selection triggered');
+        }
+        
+        // Initialize calculator
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Buydown Calculator loaded');
+            
+            // Set default values
+            document.getElementById('loanTerm').value = '30';
+            document.getElementById('paymentType').value = 'principal-interest';
+            document.getElementById('buydownDuration').value = '3';
+            document.getElementById('buydownType').value = '1-2-3';
+        });
+    </script>
+</body>
+</html>

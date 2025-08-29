@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Income Calculator - MSFG Loan Tools Pro</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="description" content="Calculate qualifying income from various tax forms and sources">
+    <meta name="theme-color" content="#3b82f6">
+    
+    <!-- Master CSS -->
+    <link rel="stylesheet" href="../css/master.css">
+    
+    <!-- Custom Styles -->
+    <style>
+        .calculator-header {
+            background: var(--gradient-success);
+            padding: var(--space-8) 0;
+            margin-bottom: var(--space-8);
+        }
+        
+        .calculator-title {
+            color: var(--text-primary);
+            text-align: center;
+            margin-bottom: var(--space-4);
+        }
+        
+        .calculator-subtitle {
+            color: var(--text-secondary);
+            text-align: center;
+            font-size: var(--font-size-lg);
+        }
+        
+        .pdf-drop-zone {
+            border: 2px dashed var(--border-primary);
+            border-radius: var(--radius-lg);
+            padding: var(--space-8);
+            text-align: center;
+            transition: all var(--transition-fast);
+            margin-bottom: var(--space-6);
+        }
+        
+        .pdf-drop-zone:hover {
+            border-color: var(--primary-500);
+            background: rgba(59, 130, 246, 0.05);
+        }
+        
+        .pdf-drop-zone.dragover {
+            border-color: var(--primary-500);
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        .results-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: var(--radius-xl);
+            padding: var(--space-6);
+            margin-top: var(--space-6);
+        }
+        
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-3) 0;
+            border-bottom: 1px solid var(--border-primary);
+        }
+        
+        .result-item:last-child {
+            border-bottom: none;
+            font-weight: var(--font-weight-bold);
+            font-size: var(--font-size-lg);
+        }
+        
+        .result-label {
+            color: var(--text-secondary);
+        }
+        
+        .result-value {
+            color: var(--text-primary);
+            font-weight: var(--font-weight-medium);
+        }
+        
+        .form-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: var(--radius-xl);
+            padding: var(--space-6);
+            margin-bottom: var(--space-6);
+        }
+        
+        .section-title {
+            font-size: var(--font-size-xl);
+            font-weight: var(--font-weight-semibold);
+            color: var(--text-primary);
+            margin-bottom: var(--space-4);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+        
+        .income-source {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: var(--radius-lg);
+            padding: var(--space-4);
+            margin-bottom: var(--space-4);
+        }
+        
+        .income-source-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-3);
+        }
+        
+        .income-source-title {
+            font-weight: var(--font-weight-semibold);
+            color: var(--text-primary);
+        }
+        
+        .remove-source {
+            background: var(--accent-danger);
+            color: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            padding: var(--space-1) var(--space-2);
+            cursor: pointer;
+            font-size: var(--font-size-xs);
+        }
+        
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-primary);
+            margin-bottom: var(--space-6);
+        }
+        
+        .tab {
+            padding: var(--space-3) var(--space-6);
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all var(--transition-fast);
+        }
+        
+        .tab.active {
+            color: var(--text-primary);
+            border-bottom-color: var(--primary-500);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .qualification-summary {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: var(--space-4);
+            margin-top: var(--space-4);
+        }
+        
+        .qualification-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: var(--space-2);
+        }
+        
+        .qualification-item:last-child {
+            margin-bottom: 0;
+            padding-top: var(--space-2);
+            border-top: 1px solid var(--border-primary);
+            font-weight: var(--font-weight-semibold);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <img src="../assets/icon.svg" alt="MSFG Logo">
+            <div>
+                <h2 style="margin: 0; color: var(--text-primary);">MSFG</h2>
+                <p style="margin: 0; color: var(--text-secondary); font-size: var(--font-size-sm);">Loan Tools Pro</p>
+            </div>
+        </div>
+        
+        <nav class="nav">
+            <a href="../index.html" class="nav-link">Home</a>
+            <a href="#" class="nav-link active">Income Calculator</a>
+        </nav>
+    </header>
+
+    <!-- Calculator Header -->
+    <section class="calculator-header">
+        <div class="container">
+            <h1 class="calculator-title">Income Calculator</h1>
+            <p class="calculator-subtitle">Calculate qualifying income from various tax forms and sources</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row">
+            <!-- Input Form -->
+            <div class="col">
+                <!-- PDF Import Section -->
+                <div class="form-section">
+                    <h3 class="section-title">
+                        📄 PDF Import
+                        <span class="feature-badge pdf-feature">Drag & Drop</span>
+                    </h3>
+                    <div class="pdf-drop-zone" id="pdfDropZone">
+                        <div style="font-size: var(--font-size-4xl); margin-bottom: var(--space-4);">📄</div>
+                        <h4>Import Tax Documents</h4>
+                        <p class="text-secondary">Drop 1040, 1065, 1120, W-2, or other tax forms here to auto-fill</p>
+                        <button class="btn btn-primary mt-4" onclick="selectPDFFile()">Browse Files</button>
+                    </div>
+                </div>
+
+                <!-- Income Sources -->
+                <div class="form-section">
+                    <h3 class="section-title">💼 Income Sources</h3>
+                    
+                    <div class="tabs">
+                        <button class="tab active" onclick="switchTab('w2')">W-2 Income</button>
+                        <button class="tab" onclick="switchTab('self-employed')">Self-Employed</button>
+                        <button class="tab" onclick="switchTab('rental')">Rental Income</button>
+                        <button class="tab" onclick="switchTab('other')">Other Income</button>
+                    </div>
+                    
+                    <!-- W-2 Income -->
+                    <div id="w2" class="tab-content active">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="form-group">
+                                <label class="form-label" for="w2Wages">Wages, Tips, Other Compensation</label>
+                                <input type="number" id="w2Wages" class="form-input" placeholder="0">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="w2FederalTax">Federal Income Tax Withheld</label>
+                                <input type="number" id="w2FederalTax" class="form-input" placeholder="0">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="w2SocialSecurity">Social Security Wages</label>
+                                <input type="number" id="w2SocialSecurity" class="form-input" placeholder="0">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="w2Medicare">Medicare Wages</label>
+                                <input type="number" id="w2Medicare" class="form-input" placeholder="0">
+                            </div>
+                        </div>
+                        <button class="btn btn-secondary mt-4" onclick="addIncomeSource('w2')">Add W-2 Income</button>
+                    </div>
+                    
+                    <!-- Self-Employed Income -->
+                    <div id="self-employed" class="tab-content">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="form-group">
+                                <label class="form-label" for="scheduleCGrossReceipts">Gross Receipts</label>
+                                <input type="number" id="scheduleCGrossReceipts" class="form-input" placeholder="0">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="scheduleCExpenses">Total Expenses</label>
+                                <input type="number" id="scheduleCExpenses" class="form-input" placeholder="0">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="scheduleCNetProfit">Net Profit</label>
+                                <input type="number" id="scheduleCNetProfit" class="form-input" placeholder="0">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="scheduleCYears">Years in Business</label>
+                                <input type="number" id="scheduleCYears" class="form-input" placeholder="1" min="1">
+                            </div>
+                        </div>
+                        <button class="btn btn-secondary mt-4" onclick="addIncomeSource('self-employed')">Add Self-Employed Income</button>
+                    </div>
+                    
+                    <!-- Rental Income -->
+                    <div id="rental" class="tab-content">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="form-group">
+                                <label class="form-label" for="scheduleERentalIncome">Rental Income</label>
+                                <input type="number" id="scheduleERentalIncome" class="form-input" placeholder="0">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="scheduleERentalExpenses">Rental Expenses</label>
+                                <input type="number" id="scheduleERentalExpenses" class="form-input" placeholder="0">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="scheduleENetRental">Net Rental Income</label>
+                                <input type="number" id="scheduleENetRental" class="form-input" placeholder="0">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="scheduleEProperties">Number of Properties</label>
+                                <input type="number" id="scheduleEProperties" class="form-input" placeholder="1" min="1">
+                            </div>
+                        </div>
+                        <button class="btn btn-secondary mt-4" onclick="addIncomeSource('rental')">Add Rental Income</button>
+                    </div>
+                    
+                    <!-- Other Income -->
+                    <div id="other" class="tab-content">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="form-group">
+                                <label class="form-label" for="otherIncomeType">Income Type</label>
+                                <select id="otherIncomeType" class="form-select">
+                                    <option value="dividends">Dividends</option>
+                                    <option value="interest">Interest</option>
+                                    <option value="capital-gains">Capital Gains</option>
+                                    <option value="pension">Pension</option>
+                                    <option value="social-security">Social Security</option>
+                                    <option value="alimony">Alimony</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="otherIncomeAmount">Amount</label>
+                                <input type="number" id="otherIncomeAmount" class="form-input" placeholder="0">
+                            </div>
+                        </div>
+                        <button class="btn btn-secondary mt-4" onclick="addIncomeSource('other')">Add Other Income</button>
+                    </div>
+                </div>
+
+                <!-- Debt Information -->
+                <div class="form-section">
+                    <h3 class="section-title">💳 Debt Information</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="form-group">
+                            <label class="form-label" for="autoPayment">Auto Payment</label>
+                            <input type="number" id="autoPayment" class="form-input" placeholder="0">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="creditCardPayment">Credit Card Payment</label>
+                            <input type="number" id="creditCardPayment" class="form-input" placeholder="0">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="studentLoanPayment">Student Loan Payment</label>
+                            <input type="number" id="studentLoanPayment" class="form-input" placeholder="0">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="otherDebtPayment">Other Debt Payment</label>
+                            <input type="number" id="otherDebtPayment" class="form-input" placeholder="0">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="d-flex justify-between items-center mb-6">
+                    <button class="btn btn-secondary" onclick="clearForm()">Clear Form</button>
+                    <button class="btn btn-primary" onclick="calculateIncome()">Calculate Income</button>
+                </div>
+            </div>
+
+            <!-- Results -->
+            <div class="col">
+                <div class="results-section">
+                    <h3 class="section-title">📊 Income Summary</h3>
+                    
+                    <div id="incomeSources">
+                        <p class="text-secondary">Income sources will appear here</p>
+                    </div>
+                    
+                    <div id="resultsContent">
+                        <div class="text-center text-secondary">
+                            <div style="font-size: var(--font-size-4xl); margin-bottom: var(--space-4);">💼</div>
+                            <p>Add income sources and click "Calculate Income" to see results</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Qualification Summary -->
+                <div class="results-section mt-6">
+                    <h3 class="section-title">✅ Qualification Summary</h3>
+                    <div id="qualificationSummary">
+                        <p class="text-secondary">Qualification details will appear here after calculation</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PDF.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    
+    <!-- Scripts -->
+    <script src="../js/pdf-parser.js"></script>
+    <script src="../js/app.js"></script>
+    
+    <script>
+        let currentTab = 'w2';
+        let incomeSources = [];
+        
+        function switchTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update tab content
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            
+            currentTab = tabName;
+        }
+        
+        function addIncomeSource(type) {
+            let source = {
+                id: Date.now(),
+                type: type,
+                data: {}
+            };
+            
+            switch (type) {
+                case 'w2':
+                    source.data = {
+                        wages: parseFloat(document.getElementById('w2Wages').value) || 0,
+                        federalTax: parseFloat(document.getElementById('w2FederalTax').value) || 0,
+                        socialSecurity: parseFloat(document.getElementById('w2SocialSecurity').value) || 0,
+                        medicare: parseFloat(document.getElementById('w2Medicare').value) || 0
+                    };
+                    source.qualifyingIncome = source.data.wages;
+                    source.description = `W-2 Income: $${source.data.wages.toLocaleString()}`;
+                    break;
+                    
+                case 'self-employed':
+                    source.data = {
+                        grossReceipts: parseFloat(document.getElementById('scheduleCGrossReceipts').value) || 0,
+                        expenses: parseFloat(document.getElementById('scheduleCExpenses').value) || 0,
+                        netProfit: parseFloat(document.getElementById('scheduleCNetProfit').value) || 0,
+                        years: parseInt(document.getElementById('scheduleCYears').value) || 1
+                    };
+                    // For self-employed, typically use 2-year average or current year
+                    source.qualifyingIncome = source.data.netProfit * 0.75; // 75% of net profit
+                    source.description = `Self-Employed: $${source.qualifyingIncome.toLocaleString()}`;
+                    break;
+                    
+                case 'rental':
+                    source.data = {
+                        rentalIncome: parseFloat(document.getElementById('scheduleERentalIncome').value) || 0,
+                        rentalExpenses: parseFloat(document.getElementById('scheduleERentalExpenses').value) || 0,
+                        netRental: parseFloat(document.getElementById('scheduleENetRental').value) || 0,
+                        properties: parseInt(document.getElementById('scheduleEProperties').value) || 1
+                    };
+                    source.qualifyingIncome = source.data.netRental * 0.75; // 75% of net rental income
+                    source.description = `Rental Income: $${source.qualifyingIncome.toLocaleString()}`;
+                    break;
+                    
+                case 'other':
+                    source.data = {
+                        type: document.getElementById('otherIncomeType').value,
+                        amount: parseFloat(document.getElementById('otherIncomeAmount').value) || 0
+                    };
+                    source.qualifyingIncome = source.data.amount;
+                    source.description = `${source.data.type.charAt(0).toUpperCase() + source.data.type.slice(1)}: $${source.data.amount.toLocaleString()}`;
+                    break;
+            }
+            
+            incomeSources.push(source);
+            updateIncomeSources();
+            clearIncomeForm();
+        }
+        
+        function removeIncomeSource(id) {
+            incomeSources = incomeSources.filter(source => source.id !== id);
+            updateIncomeSources();
+        }
+        
+        function updateIncomeSources() {
+            const sourcesDiv = document.getElementById('incomeSources');
+            
+            if (incomeSources.length === 0) {
+                sourcesDiv.innerHTML = '<p class="text-secondary">No income sources added</p>';
+                return;
+            }
+            
+            let html = '<h4>Income Sources:</h4>';
+            
+            incomeSources.forEach(source => {
+                html += `
+                    <div class="income-source">
+                        <div class="income-source-header">
+                            <span class="income-source-title">${source.description}</span>
+                            <button class="remove-source" onclick="removeIncomeSource(${source.id})">Remove</button>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 text-sm">
+                            <div>Qualifying Income: $${source.qualifyingIncome.toLocaleString()}</div>
+                            <div>Type: ${source.type}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            sourcesDiv.innerHTML = html;
+        }
+        
+        function clearIncomeForm() {
+            const inputs = document.querySelectorAll('#w2 input, #self-employed input, #rental input, #other input');
+            inputs.forEach(input => {
+                input.value = '';
+            });
+            
+            // Reset defaults
+            document.getElementById('scheduleCYears').value = '1';
+            document.getElementById('scheduleEProperties').value = '1';
+            document.getElementById('otherIncomeType').value = 'dividends';
+        }
+        
+        function calculateIncome() {
+            const totalQualifyingIncome = incomeSources.reduce((sum, source) => sum + source.qualifyingIncome, 0);
+            const monthlyIncome = totalQualifyingIncome / 12;
+            
+            // Get debt information
+            const autoPayment = parseFloat(document.getElementById('autoPayment').value) || 0;
+            const creditCardPayment = parseFloat(document.getElementById('creditCardPayment').value) || 0;
+            const studentLoanPayment = parseFloat(document.getElementById('studentLoanPayment').value) || 0;
+            const otherDebtPayment = parseFloat(document.getElementById('otherDebtPayment').value) || 0;
+            
+            const totalMonthlyDebt = autoPayment + creditCardPayment + studentLoanPayment + otherDebtPayment;
+            const debtToIncomeRatio = totalMonthlyDebt / monthlyIncome * 100;
+            
+            // Display results
+            displayResults(totalQualifyingIncome, monthlyIncome, totalMonthlyDebt, debtToIncomeRatio);
+            displayQualificationSummary(monthlyIncome, totalMonthlyDebt, debtToIncomeRatio);
+        }
+        
+        function displayResults(totalIncome, monthlyIncome, totalDebt, dtiRatio) {
+            const resultsContent = document.getElementById('resultsContent');
+            
+            resultsContent.innerHTML = `
+                <div class="result-item">
+                    <span class="result-label">Total Qualifying Income</span>
+                    <span class="result-value">$${totalIncome.toLocaleString()}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Monthly Income</span>
+                    <span class="result-value">$${monthlyIncome.toFixed(2)}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Total Monthly Debt</span>
+                    <span class="result-value">$${totalDebt.toFixed(2)}</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Debt-to-Income Ratio</span>
+                    <span class="result-value">${dtiRatio.toFixed(1)}%</span>
+                </div>
+            `;
+        }
+        
+        function displayQualificationSummary(monthlyIncome, totalDebt, dtiRatio) {
+            const summaryDiv = document.getElementById('qualificationSummary');
+            
+            let qualificationStatus = 'Qualified';
+            let statusColor = 'var(--accent-success)';
+            
+            if (dtiRatio > 43) {
+                qualificationStatus = 'May Need Additional Documentation';
+                statusColor = 'var(--accent-warning)';
+            }
+            if (dtiRatio > 50) {
+                qualificationStatus = 'Likely Disqualified';
+                statusColor = 'var(--accent-danger)';
+            }
+            
+            summaryDiv.innerHTML = `
+                <div class="qualification-summary">
+                    <div class="qualification-item">
+                        <span>Monthly Income:</span>
+                        <span>$${monthlyIncome.toFixed(2)}</span>
+                    </div>
+                    <div class="qualification-item">
+                        <span>Monthly Debt:</span>
+                        <span>$${totalDebt.toFixed(2)}</span>
+                    </div>
+                    <div class="qualification-item">
+                        <span>DTI Ratio:</span>
+                        <span>${dtiRatio.toFixed(1)}%</span>
+                    </div>
+                    <div class="qualification-item" style="color: ${statusColor};">
+                        <span>Qualification Status:</span>
+                        <span>${qualificationStatus}</span>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function clearForm() {
+            incomeSources = [];
+            updateIncomeSources();
+            clearIncomeForm();
+            
+            // Clear debt information
+            const debtInputs = document.querySelectorAll('#autoPayment, #creditCardPayment, #studentLoanPayment, #otherDebtPayment');
+            debtInputs.forEach(input => {
+                input.value = '';
+            });
+            
+            document.getElementById('resultsContent').innerHTML = `
+                <div class="text-center text-secondary">
+                    <div style="font-size: var(--font-size-4xl); margin-bottom: var(--space-4);">💼</div>
+                    <p>Add income sources and click "Calculate Income" to see results</p>
+                </div>
+            `;
+            
+            document.getElementById('qualificationSummary').innerHTML = `
+                <p class="text-secondary">Qualification details will appear here after calculation</p>
+            `;
+        }
+        
+        function selectPDFFile() {
+            console.log('PDF file selection triggered');
+        }
+        
+        // Initialize calculator
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Income Calculator loaded');
+            updateIncomeSources();
+        });
+    </script>
+</body>
+</html>

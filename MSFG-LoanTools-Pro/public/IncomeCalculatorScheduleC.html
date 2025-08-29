@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MSFG • Form 1040 Page 1 Income Calculator</title>
+    <title>MSFG • Schedule C Income Calculator</title>
     <style>
         :root {
             --bg-primary: #0a0a0a;
@@ -126,6 +126,17 @@
             margin: 0 auto;
         }
 
+        .notes {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
         .section {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
@@ -157,12 +168,6 @@
             height: 24px;
             background: var(--gradient-primary);
             border-radius: 2px;
-        }
-
-        .section p {
-            color: var(--text-secondary);
-            margin-bottom: 1rem;
-            font-size: 0.875rem;
         }
 
         table {
@@ -231,6 +236,21 @@
             font-weight: 600;
             color: var(--text-primary);
             margin-right: 1rem;
+        }
+
+        .sign-positive {
+            color: var(--accent-success);
+            font-weight: bold;
+        }
+
+        .sign-negative {
+            color: var(--accent-danger);
+            font-weight: bold;
+        }
+
+        .sign-both {
+            color: var(--accent-warning);
+            font-weight: bold;
         }
 
         .combined-total {
@@ -359,191 +379,180 @@
 
     <main class="container">
         <section class="hero">
-            <h2>Form 1040 Page 1 Income Calculator</h2>
-            <p>Calculate monthly income from Form 1040 Page 1 sources. Enter annual amounts and get policy-based monthly calculations.</p>
+            <h2>Schedule C Income Calculator</h2>
+            <p>Calculate monthly income from Schedule C (Sole Proprietorship) tax returns. Enter figures and get policy-based monthly calculations.</p>
         </section>
 
-        <!-- Section: Self-Employed W-2s -->
-        <section class="section">
-            <h3>W-2 Income <span class="status-badge">Live</span></h3>
-            <p>Enter Box 1 amounts from up to four W-2 forms. Use Prior Year for comparison if available.</p>
-            <table>
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Box 1 W-2 Income</th>
-                        <th>Current Year</th>
-                        <th>Prior Year (optional)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>W-2 Income</td>
-                        <td><input type="number" id="w2_1_y1" value="0" onchange="calc1040()" placeholder="0"></td>
-                        <td><input type="number" id="w2_1_y2" value="0" onchange="calc1040()" placeholder="0"></td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>W-2 Income</td>
-                        <td><input type="number" id="w2_2_y1" value="0" onchange="calc1040()" placeholder="0"></td>
-                        <td><input type="number" id="w2_2_y2" value="0" onchange="calc1040()" placeholder="0"></td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>W-2 Income</td>
-                        <td><input type="number" id="w2_3_y1" value="0" onchange="calc1040()" placeholder="0"></td>
-                        <td><input type="number" id="w2_3_y2" value="0" onchange="calc1040()" placeholder="0"></td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td>W-2 Income</td>
-                        <td><input type="number" id="w2_4_y1" value="0" onchange="calc1040()" placeholder="0"></td>
-                        <td><input type="number" id="w2_4_y2" value="0" onchange="calc1040()" placeholder="0"></td>
-                    </tr>
-                </tbody>
-            </table>
-            <p>
-                <span class="result-label">Monthly Income (policy):</span>
-                <span id="w2_month" class="result">$0.00</span>
-            </p>
-        </section>
+        <div class="notes">
+            <strong>Instructions:</strong> Enter figures from the borrower's Schedule C tax return. Positive values (income) should be entered without signs; 
+            negative values (losses) should be entered with a leading minus sign. Lines designated "+/–" may be either positive or negative. 
+            Meal and entertainment exclusion amounts should be entered as positive numbers—the calculator will subtract them automatically.
+        </div>
 
-        <!-- Section: Alimony Received -->
+        <!-- Business 1 -->
         <section class="section">
-            <h3>Alimony Received (Line 11)</h3>
-            <p>Enter alimony received amounts from Form 1040 Line 11.</p>
+            <h3>Business 1 <span class="status-badge">Live</span></h3>
             <table>
                 <thead>
                     <tr>
                         <th>Description</th>
+                        <th>Sign</th>
                         <th>Current Year</th>
                         <th>Prior Year (optional)</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Alimony Received</td>
-                        <td><input type="number" id="alimony1" value="0" onchange="calc1040()" placeholder="0"></td>
-                        <td><input type="number" id="alimony2" value="0" onchange="calc1040()" placeholder="0"></td>
+                        <td>Net Profit or Loss (Line 31)</td>
+                        <td class="sign-positive">+</td>
+                        <td><input type="number" id="b1_np1" value="0" onchange="calcC()" placeholder="0"></td>
+                        <td><input type="number" id="b1_np2" value="0" onchange="calcC()" placeholder="0"></td>
+                    </tr>
+                    <tr>
+                        <td>Other Income or Loss (Line 6 – non‑recurring)</td>
+                        <td class="sign-both">+/–</td>
+                        <td><input type="number" id="b1_oth1" value="0" onchange="calcC()" placeholder="0"></td>
+                        <td><input type="number" id="b1_oth2" value="0" onchange="calcC()" placeholder="0"></td>
+                    </tr>
+                    <tr>
+                        <td>Depletion (Line 12)</td>
+                        <td class="sign-positive">+</td>
+                        <td><input type="number" id="b1_depl1" value="0" onchange="calcC()" placeholder="0"></td>
+                        <td><input type="number" id="b1_depl2" value="0" onchange="calcC()" placeholder="0"></td>
+                    </tr>
+                    <tr>
+                        <td>Depreciation (Line 13)</td>
+                        <td class="sign-positive">+</td>
+                        <td><input type="number" id="b1_depr1" value="0" onchange="calcC()" placeholder="0"></td>
+                        <td><input type="number" id="b1_depr2" value="0" onchange="calcC()" placeholder="0"></td>
+                    </tr>
+                    <tr>
+                        <td>Meal & Entertainment Exclusion (Line 24b)</td>
+                        <td class="sign-negative">–</td>
+                        <td><input type="number" id="b1_meals1" value="0" onchange="calcC()" placeholder="0"></td>
+                        <td><input type="number" id="b1_meals2" value="0" onchange="calcC()" placeholder="0"></td>
+                    </tr>
+                    <tr>
+                        <td>Business Use of Home (Line 30)</td>
+                        <td class="sign-positive">+</td>
+                        <td><input type="number" id="b1_home1" value="0" onchange="calcC()" placeholder="0"></td>
+                        <td><input type="number" id="b1_home2" value="0" onchange="calcC()" placeholder="0"></td>
+                    </tr>
+                    <tr>
+                        <td>Mileage Depreciation</td>
+                        <td class="sign-positive">+</td>
+                        <td><input type="number" id="b1_mile1" value="0" onchange="calcC()" placeholder="0"></td>
+                        <td><input type="number" id="b1_mile2" value="0" onchange="calcC()" placeholder="0"></td>
+                    </tr>
+                    <tr>
+                        <td>Amortization/Casualty Loss</td>
+                        <td class="sign-positive">+</td>
+                        <td><input type="number" id="b1_amort1" value="0" onchange="calcC()" placeholder="0"></td>
+                        <td><input type="number" id="b1_amort2" value="0" onchange="calcC()" placeholder="0"></td>
                     </tr>
                 </tbody>
             </table>
-            <p>
-                <span class="result-label">Monthly Income (policy):</span>
-                <span id="alimony_month" class="result">$0.00</span>
-            </p>
+            <div id="b1_totals">
+                <p>
+                    <span class="result-label">Total Current Year Income:</span>
+                    <span id="b1_year1" class="result">$0.00</span>
+                </p>
+                <p>
+                    <span class="result-label">Total Prior Year Income:</span>
+                    <span id="b1_year2" class="result">$0.00</span>
+                </p>
+                <p>
+                    <span class="result-label">Income To Be Used (monthly):</span>
+                    <span id="b1_final" class="result">$0.00</span>
+                </p>
+            </div>
         </section>
 
-        <!-- Section: IRA/Pension/Annuity Distributions -->
+        <!-- Business 2 -->
         <section class="section">
-            <h3>Pension/Annuity Distributions</h3>
-            <p>Use 15a/15b and 16a/16b lines for up to three pensions or annuities.</p>
+            <h3>Business 2</h3>
             <table>
                 <thead>
                     <tr>
-                        <th>Pension</th>
-                        <th>Line</th>
+                        <th>Description</th>
+                        <th>Sign</th>
                         <th>Current Year</th>
                         <th>Prior Year (optional)</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td rowspan="2">Pension 1</td>
-                        <td>15a/15b</td>
-                        <td><input type="number" id="pen1_15_y1" value="0" onchange="calc1040()" placeholder="0"></td>
-                        <td><input type="number" id="pen1_15_y2" value="0" onchange="calc1040()" placeholder="0"></td>
+                        <td>Net Profit or Loss (Line 31)</td>
+                        <td class="sign-positive">+</td>
+                        <td><input type="number" id="b2_np1" value="0" onchange="calcC()" placeholder="0"></td>
+                        <td><input type="number" id="b2_np2" value="0" onchange="calcC()" placeholder="0"></td>
                     </tr>
                     <tr>
-                        <td>16a/16b</td>
-                        <td><input type="number" id="pen1_16_y1" value="0" onchange="calc1040()" placeholder="0"></td>
-                        <td><input type="number" id="pen1_16_y2" value="0" onchange="calc1040()" placeholder="0"></td>
+                        <td>Other Income or Loss (Line 6 – non‑recurring)</td>
+                        <td class="sign-both">+/–</td>
+                        <td><input type="number" id="b2_oth1" value="0" onchange="calcC()" placeholder="0"></td>
+                        <td><input type="number" id="b2_oth2" value="0" onchange="calcC()" placeholder="0"></td>
                     </tr>
                     <tr>
-                        <td rowspan="2">Pension 2</td>
-                        <td>15a/15b</td>
-                        <td><input type="number" id="pen2_15_y1" value="0" onchange="calc1040()" placeholder="0"></td>
-                        <td><input type="number" id="pen2_15_y2" value="0" onchange="calc1040()" placeholder="0"></td>
+                        <td>Depletion (Line 12)</td>
+                        <td class="sign-positive">+</td>
+                        <td><input type="number" id="b2_depl1" value="0" onchange="calcC()" placeholder="0"></td>
+                        <td><input type="number" id="b2_depl2" value="0" onchange="calcC()" placeholder="0"></td>
                     </tr>
                     <tr>
-                        <td>16a/16b</td>
-                        <td><input type="number" id="pen2_16_y1" value="0" onchange="calc1040()" placeholder="0"></td>
-                        <td><input type="number" id="pen2_16_y2" value="0" onchange="calc1040()" placeholder="0"></td>
+                        <td>Depreciation (Line 13)</td>
+                        <td class="sign-positive">+</td>
+                        <td><input type="number" id="b2_depr1" value="0" onchange="calcC()" placeholder="0"></td>
+                        <td><input type="number" id="b2_depr2" value="0" onchange="calcC()" placeholder="0"></td>
                     </tr>
                     <tr>
-                        <td rowspan="2">Pension 3</td>
-                        <td>15a/15b</td>
-                        <td><input type="number" id="pen3_15_y1" value="0" onchange="calc1040()" placeholder="0"></td>
-                        <td><input type="number" id="pen3_15_y2" value="0" onchange="calc1040()" placeholder="0"></td>
+                        <td>Meal & Entertainment Exclusion (Line 24b)</td>
+                        <td class="sign-negative">–</td>
+                        <td><input type="number" id="b2_meals1" value="0" onchange="calcC()" placeholder="0"></td>
+                        <td><input type="number" id="b2_meals2" value="0" onchange="calcC()" placeholder="0"></td>
                     </tr>
                     <tr>
-                        <td>16a/16b</td>
-                        <td><input type="number" id="pen3_16_y1" value="0" onchange="calc1040()" placeholder="0"></td>
-                        <td><input type="number" id="pen3_16_y2" value="0" onchange="calc1040()" placeholder="0"></td>
+                        <td>Business Use of Home (Line 30)</td>
+                        <td class="sign-positive">+</td>
+                        <td><input type="number" id="b2_home1" value="0" onchange="calcC()" placeholder="0"></td>
+                        <td><input type="number" id="b2_home2" value="0" onchange="calcC()" placeholder="0"></td>
+                    </tr>
+                    <tr>
+                        <td>Mileage Depreciation</td>
+                        <td class="sign-positive">+</td>
+                        <td><input type="number" id="b2_mile1" value="0" onchange="calcC()" placeholder="0"></td>
+                        <td><input type="number" id="b2_mile2" value="0" onchange="calcC()" placeholder="0"></td>
+                    </tr>
+                    <tr>
+                        <td>Amortization/Casualty Loss</td>
+                        <td class="sign-positive">+</td>
+                        <td><input type="number" id="b2_amort1" value="0" onchange="calcC()" placeholder="0"></td>
+                        <td><input type="number" id="b2_amort2" value="0" onchange="calcC()" placeholder="0"></td>
                     </tr>
                 </tbody>
             </table>
-            <p>
-                <span class="result-label">Monthly Income (policy):</span>
-                <span id="pension_month" class="result">$0.00</span>
-            </p>
+            <div id="b2_totals">
+                <p>
+                    <span class="result-label">Total Current Year Income:</span>
+                    <span id="b2_year1" class="result">$0.00</span>
+                </p>
+                <p>
+                    <span class="result-label">Total Prior Year Income:</span>
+                    <span id="b2_year2" class="result">$0.00</span>
+                </p>
+                <p>
+                    <span class="result-label">Income To Be Used (monthly):</span>
+                    <span id="b2_final" class="result">$0.00</span>
+                </p>
+            </div>
         </section>
 
-        <!-- Section: Unemployment Compensation -->
-        <section class="section">
-            <h3>Unemployment Compensation (Line 19)</h3>
-            <p>Enter unemployment compensation amounts from Form 1040 Line 19.</p>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Current Year</th>
-                        <th>Prior Year (optional)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><input type="number" id="unemp1" value="0" onchange="calc1040()" placeholder="0"></td>
-                        <td><input type="number" id="unemp2" value="0" onchange="calc1040()" placeholder="0"></td>
-                    </tr>
-                </tbody>
-            </table>
-            <p>
-                <span class="result-label">Monthly Income (policy):</span>
-                <span id="unemp_month" class="result">$0.00</span>
-            </p>
-        </section>
-
-        <!-- Section: Social Security Benefits -->
-        <section class="section">
-            <h3>Social Security Benefits (Line 20a)</h3>
-            <p>Enter Social Security benefits from Form 1040 Line 20a.</p>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Current Year</th>
-                        <th>Prior Year (optional)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><input type="number" id="ss1" value="0" onchange="calc1040()" placeholder="0"></td>
-                        <td><input type="number" id="ss2" value="0" onchange="calc1040()" placeholder="0"></td>
-                    </tr>
-                </tbody>
-            </table>
-            <p>
-                <span class="result-label">Monthly Income (policy):</span>
-                <span id="ss_month" class="result">$0.00</span>
-            </p>
-        </section>
-
-        <!-- Combined total -->
+        <!-- Combined totals -->
         <section class="combined-total">
-            <h3>Combined Monthly Income</h3>
+            <h3>Combined Schedule C Income</h3>
             <p>
-                <span class="result-label">Total Monthly Income:</span>
-                <span id="combined1040" class="result">$0.00</span>
+                <span class="result-label">Combined Monthly Income:</span>
+                <span id="combined_c" class="result">$0.00</span>
             </p>
         </section>
 
@@ -569,27 +578,16 @@
         </div>
 
         <div class="footer">
-            <strong>Calculation Policy:</strong> Each section calculates its own monthly income using the same policy:
-            if two years are provided and the most recent year exceeds the prior year, the average of the two years is divided by 24 months; 
-            otherwise the most recent year is divided by 12. Combined monthly income is the sum of all sections. 
-            Pension/annuity distributions use line 15a/15b and 16a/16b entries for up to three pensions. 
-            Only enter amounts that you want to use for qualification.
+                    <strong>Calculation Policy:</strong> Income to be used is calculated as follows: the total Current Year income is divided by 12 to determine a monthly amount.
+        If at least one Prior Year figure is provided and Current Year income exceeds Prior Year income, the average of the two year totals is divided by 24 months instead. 
+            Meal and entertainment exclusions are subtracted from income. Results are provided for each business and combined.
         </div>
     </main>
 
     <script>
-        function parseNum(val) {
-            const n = parseFloat(val);
+        function parseNum(v) {
+            const n = parseFloat(v);
             return isNaN(n) ? 0 : n;
-        }
-
-        // Generic policy calculator
-        function policyCalc(year1, year2) {
-            const hasYr2 = year2 !== 0;
-            if (hasYr2 && year1 > year2) {
-                return (year1 + year2) / 24;
-            }
-            return year1 / 12;
         }
 
         function formatCurrency(amount) {
@@ -601,92 +599,74 @@
             }).format(amount);
         }
 
-        function calc1040() {
-            // W-2 section
-            const w2_y1 = parseNum(document.getElementById('w2_1_y1').value) +
-                parseNum(document.getElementById('w2_2_y1').value) +
-                parseNum(document.getElementById('w2_3_y1').value) +
-                parseNum(document.getElementById('w2_4_y1').value);
-            const w2_y2 = parseNum(document.getElementById('w2_1_y2').value) +
-                parseNum(document.getElementById('w2_2_y2').value) +
-                parseNum(document.getElementById('w2_3_y2').value) +
-                parseNum(document.getElementById('w2_4_y2').value);
-            const w2_month = policyCalc(w2_y1, w2_y2);
-            document.getElementById('w2_month').textContent = formatCurrency(w2_month);
+        function computeSection(prefix) {
+            // Fetch values using element IDs built from prefix
+            const np1 = parseNum(document.getElementById(prefix + '_np1').value);
+            const np2 = parseNum(document.getElementById(prefix + '_np2').value);
+            const oth1 = parseNum(document.getElementById(prefix + '_oth1').value);
+            const oth2 = parseNum(document.getElementById(prefix + '_oth2').value);
+            const depl1 = parseNum(document.getElementById(prefix + '_depl1').value);
+            const depl2 = parseNum(document.getElementById(prefix + '_depl2').value);
+            const depr1 = parseNum(document.getElementById(prefix + '_depr1').value);
+            const depr2 = parseNum(document.getElementById(prefix + '_depr2').value);
+            const meals1 = parseNum(document.getElementById(prefix + '_meals1').value);
+            const meals2 = parseNum(document.getElementById(prefix + '_meals2').value);
+            const home1 = parseNum(document.getElementById(prefix + '_home1').value);
+            const home2 = parseNum(document.getElementById(prefix + '_home2').value);
+            const mile1 = parseNum(document.getElementById(prefix + '_mile1').value);
+            const mile2 = parseNum(document.getElementById(prefix + '_mile2').value);
+            const amort1 = parseNum(document.getElementById(prefix + '_amort1').value);
+            const amort2 = parseNum(document.getElementById(prefix + '_amort2').value);
 
-            // Alimony
-            const al_y1 = parseNum(document.getElementById('alimony1').value);
-            const al_y2 = parseNum(document.getElementById('alimony2').value);
-            const al_month = policyCalc(al_y1, al_y2);
-            document.getElementById('alimony_month').textContent = formatCurrency(al_month);
+            // Sum Year1: add plus values, subtract meals (neg sign) but treat input positive
+            const year1 = np1 + oth1 + depl1 + depr1 + home1 + mile1 + amort1 - meals1;
+            const year2 = np2 + oth2 + depl2 + depr2 + home2 + mile2 + amort2 - meals2;
 
-            // Pension/annuity distributions
-            const pensions_y1 =
-                parseNum(document.getElementById('pen1_15_y1').value) +
-                parseNum(document.getElementById('pen1_16_y1').value) +
-                parseNum(document.getElementById('pen2_15_y1').value) +
-                parseNum(document.getElementById('pen2_16_y1').value) +
-                parseNum(document.getElementById('pen3_15_y1').value) +
-                parseNum(document.getElementById('pen3_16_y1').value);
-            const pensions_y2 =
-                parseNum(document.getElementById('pen1_15_y2').value) +
-                parseNum(document.getElementById('pen1_16_y2').value) +
-                parseNum(document.getElementById('pen2_15_y2').value) +
-                parseNum(document.getElementById('pen2_16_y2').value) +
-                parseNum(document.getElementById('pen3_15_y2').value) +
-                parseNum(document.getElementById('pen3_16_y2').value);
-            const pension_month = policyCalc(pensions_y1, pensions_y2);
-            document.getElementById('pension_month').textContent = formatCurrency(pension_month);
+            // Determine if there is at least one year2 value
+            const year2vals = [np2, oth2, depl2, depr2, home2, mile2, amort2, meals2];
+            const hasYr2 = year2vals.some((v) => v !== 0);
 
-            // Unemployment
-            const un_y1 = parseNum(document.getElementById('unemp1').value);
-            const un_y2 = parseNum(document.getElementById('unemp2').value);
-            const un_month = policyCalc(un_y1, un_y2);
-            document.getElementById('unemp_month').textContent = formatCurrency(un_month);
+            // Compute monthly income to be used
+            let monthly;
+            if (hasYr2 && year1 > year2) {
+                monthly = (year1 + year2) / 24;
+            } else {
+                monthly = year1 / 12;
+            }
 
-            // Social Security
-            const ss_y1 = parseNum(document.getElementById('ss1').value);
-            const ss_y2 = parseNum(document.getElementById('ss2').value);
-            const ss_month = policyCalc(ss_y1, ss_y2);
-            document.getElementById('ss_month').textContent = formatCurrency(ss_month);
+            return { year1, year2, monthly };
+        }
 
-            // Combined
-            const combined = w2_month + al_month + pension_month + un_month + ss_month;
-            document.getElementById('combined1040').textContent = formatCurrency(combined);
+        function calcC() {
+            // Compute each business section
+            const s1 = computeSection('b1');
+            document.getElementById('b1_year1').textContent = formatCurrency(s1.year1);
+            document.getElementById('b1_year2').textContent = formatCurrency(s1.year2);
+            document.getElementById('b1_final').textContent = formatCurrency(s1.monthly);
+
+            const s2 = computeSection('b2');
+            document.getElementById('b2_year1').textContent = formatCurrency(s2.year1);
+            document.getElementById('b2_year2').textContent = formatCurrency(s2.year2);
+            document.getElementById('b2_final').textContent = formatCurrency(s2.monthly);
+
+            // Combined monthly income
+            const combined = s1.monthly + s2.monthly;
+            document.getElementById('combined_c').textContent = formatCurrency(combined);
         }
 
         function exportCSV() {
+            const s1 = computeSection('b1');
+            const s2 = computeSection('b2');
+            const combined = s1.monthly + s2.monthly;
+
             const data = [
-                ['Form 1040 Page 1 Income Calculator'],
+                ['Schedule C Income Calculator'],
                 [''],
-                ['Section', 'Current Year', 'Prior Year', 'Monthly Income'],
-                ['W-2 Income', 
-                    parseNum(document.getElementById('w2_1_y1').value) + parseNum(document.getElementById('w2_2_y1').value) + parseNum(document.getElementById('w2_3_y1').value) + parseNum(document.getElementById('w2_4_y1').value),
-                    parseNum(document.getElementById('w2_1_y2').value) + parseNum(document.getElementById('w2_2_y2').value) + parseNum(document.getElementById('w2_3_y2').value) + parseNum(document.getElementById('w2_4_y2').value),
-                    document.getElementById('w2_month').textContent
-                ],
-                ['Alimony Received', 
-                    parseNum(document.getElementById('alimony1').value),
-                    parseNum(document.getElementById('alimony2').value),
-                    document.getElementById('alimony_month').textContent
-                ],
-                ['Pension/Annuity', 
-                    parseNum(document.getElementById('pen1_15_y1').value) + parseNum(document.getElementById('pen1_16_y1').value) + parseNum(document.getElementById('pen2_15_y1').value) + parseNum(document.getElementById('pen2_16_y1').value) + parseNum(document.getElementById('pen3_15_y1').value) + parseNum(document.getElementById('pen3_16_y1').value),
-                    parseNum(document.getElementById('pen1_15_y2').value) + parseNum(document.getElementById('pen1_16_y2').value) + parseNum(document.getElementById('pen2_15_y2').value) + parseNum(document.getElementById('pen2_16_y2').value) + parseNum(document.getElementById('pen3_15_y2').value) + parseNum(document.getElementById('pen3_16_y2').value),
-                    document.getElementById('pension_month').textContent
-                ],
-                ['Unemployment', 
-                    parseNum(document.getElementById('unemp1').value),
-                    parseNum(document.getElementById('unemp2').value),
-                    document.getElementById('unemp_month').textContent
-                ],
-                ['Social Security', 
-                    parseNum(document.getElementById('ss1').value),
-                    parseNum(document.getElementById('ss2').value),
-                    document.getElementById('ss_month').textContent
-                ],
+                ['Business', 'Current Year', 'Prior Year', 'Monthly Income'],
+                ['Business 1', s1.year1, s1.year2, s1.monthly],
+                ['Business 2', s2.year1, s2.year2, s2.monthly],
                 [''],
-                ['Total Monthly Income', '', '', document.getElementById('combined1040').textContent]
+                ['Combined Monthly Income', '', '', combined]
             ];
 
             const csvContent = data.map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
@@ -694,7 +674,7 @@
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'form1040_income_calculator.csv';
+            a.download = 'schedule_c_income_calculator.csv';
             a.click();
             window.URL.revokeObjectURL(url);
         }
@@ -708,22 +688,29 @@
             inputs.forEach(input => {
                 input.value = '0';
             });
-            calc1040();
+            calcC();
         }
 
         // Initialize
-        calc1040();
+        calcC();
 
         // Expose debug function
-        window.IncomeCalculator1040 = {
+        window.IncomeCalculatorScheduleC = {
             debug: function() {
+                const s1 = computeSection('b1');
+                const s2 = computeSection('b2');
                 return {
-                    w2_month: document.getElementById('w2_month').textContent,
-                    alimony_month: document.getElementById('alimony_month').textContent,
-                    pension_month: document.getElementById('pension_month').textContent,
-                    unemp_month: document.getElementById('unemp_month').textContent,
-                    ss_month: document.getElementById('ss_month').textContent,
-                    combined: document.getElementById('combined1040').textContent,
+                    business1: {
+                        year1: s1.year1,
+                        year2: s1.year2,
+                        monthly: s1.monthly
+                    },
+                    business2: {
+                        year1: s2.year1,
+                        year2: s2.year2,
+                        monthly: s2.monthly
+                    },
+                    combined: s1.monthly + s2.monthly,
                     version: '1.0.0'
                 };
             }

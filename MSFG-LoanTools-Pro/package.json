@@ -1,0 +1,85 @@
+{
+  "name": "msfg-loan-tools-pro",
+  "version": "2.0.0",
+  "description": "Professional mortgage calculation tools with PDF parsing capabilities",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "build": "electron-builder",
+    "build:mac": "electron-builder --mac",
+    "build:win": "electron-builder --win",
+    "dist": "npm run build:mac && npm run build:win",
+    "serve": "http-server public -p 3000 -c-1",
+    "watch": "nodemon --watch src --watch public --ext html,css,js --exec 'npm run serve'"
+  },
+  "keywords": [
+    "mortgage",
+    "loan",
+    "calculator",
+    "apr",
+    "buydown",
+    "llpm",
+    "income",
+    "pdf-parser",
+    "drag-drop"
+  ],
+  "author": "MSFG",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^37.3.1",
+    "electron-builder": "^24.13.3",
+    "http-server": "^14.1.1",
+    "nodemon": "^3.0.2"
+  },
+  "dependencies": {
+    "pdf-parse": "^1.1.1",
+    "pdfjs-dist": "^4.0.379",
+    "file-saver": "^2.0.5"
+  },
+  "build": {
+    "appId": "com.msfg.loantools.pro",
+    "productName": "MSFG Loan Tools Pro",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "src/**/*",
+      "public/**/*",
+      "main.js",
+      "package.json"
+    ],
+    "mac": {
+      "category": "public.app-category.finance",
+      "icon": "src/assets/icons/icon.icns",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ]
+    },
+    "win": {
+      "icon": "src/assets/icons/icon.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
+  }
+}
+
+

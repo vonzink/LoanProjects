@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MSFG • Schedule B Income Calculator</title>
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #1a1a1a;
+            --bg-card: rgba(255, 255, 255, 0.05);
+            --bg-card-hover: rgba(255, 255, 255, 0.08);
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --text-muted: #808080;
+            --accent-primary: #3b82f6;
+            --accent-secondary: #1d4ed8;
+            --accent-success: #10b981;
+            --accent-warning: #f59e0b;
+            --accent-danger: #ef4444;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --border-hover: rgba(255, 255, 255, 0.2);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.4);
+            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-success: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-warning: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            --gradient-danger: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo img {
+            width: 80px;
+            height: auto;
+            border-radius: 8px;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+        }
+
+
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .hero h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .notes {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        .section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            border-color: var(--border-hover);
+            background: var(--bg-card-hover);
+        }
+
+        .section h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section h3::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        th {
+            background: var(--accent-primary);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .result {
+            font-weight: bold;
+            background: var(--gradient-success);
+            color: white;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            display: inline-block;
+            min-width: 140px;
+            text-align: right;
+            font-size: 1rem;
+        }
+
+        .result-label {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-right: 1rem;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .result-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .result-item h4 {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .result-item .result {
+            font-size: 1.25rem;
+            padding: 1rem 1.5rem;
+            min-width: 180px;
+        }
+
+        .footer {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        .actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            justify-content: center;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--accent-primary);
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 0.875rem;
+        }
+
+        .btn:hover {
+            background: var(--accent-secondary);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn.secondary {
+            background: var(--accent-warning);
+        }
+
+        .btn.secondary:hover {
+            background: #d97706;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .section {
+                padding: 1.5rem;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+            
+            table {
+                font-size: 0.875rem;
+            }
+            
+            th, td {
+                padding: 0.75rem;
+            }
+            
+            .actions {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-left: 0.5rem;
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--accent-success);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <img src="https://msfg-media.s3.us-west-2.amazonaws.com/Assets/LOGOS/MSFG+Home+Loans/MSFG-Color-Transparent.png" alt="MSFG Logo">
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <h2>Schedule B Income Calculator</h2>
+            <p>Calculate monthly income from Schedule B (Interest & Dividend Income) tax returns. Enter figures for up to five financial institutions and get policy-based monthly calculations.</p>
+        </section>
+
+        <div class="notes">
+            <strong>Instructions:</strong> Enter interest and dividend income for up to five financial institutions. Use negative values to indicate losses. 
+            The calculator sums all interest, tax‑exempt interest and dividends to produce annual totals for each year, then applies the standard averaging rule.
+        </div>
+
+        <section class="section">
+            <h3>Schedule B – Interest & Dividend Income <span class="status-badge">Live</span></h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Institution</th>
+                        <th>Interest Y1</th>
+                        <th>Interest Y2</th>
+                        <th>Tax‑exempt Interest Y1</th>
+                        <th>Tax‑exempt Interest Y2</th>
+                        <th>Dividend Y1</th>
+                        <th>Dividend Y2</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td><input type="number" id="b1_int1" value="0" onchange="calcB()" placeholder="0"></td>
+                        <td><input type="number" id="b1_int2" value="0" onchange="calcB()" placeholder="0"></td>
+                        <td><input type="number" id="b1_tax1" value="0" onchange="calcB()" placeholder="0"></td>
+                        <td><input type="number" id="b1_tax2" value="0" onchange="calcB()" placeholder="0"></td>
+                        <td><input type="number" id="b1_div1" value="0" onchange="calcB()" placeholder="0"></td>
+                        <td><input type="number" id="b1_div2" value="0" onchange="calcB()" placeholder="0"></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td><input type="number" id="b2_int1" value="0" onchange="calcB()" placeholder="0"></td>
+                        <td><input type="number" id="b2_int2" value="0" onchange="calcB()" placeholder="0"></td>
+                        <td><input type="number" id="b2_tax1" value="0" onchange="calcB()" placeholder="0"></td>
+                        <td><input type="number" id="b2_tax2" value="0" onchange="calcB()" placeholder="0"></td>
+                        <td><input type="number" id="b2_div1" value="0" onchange="calcB()" placeholder="0"></td>
+                        <td><input type="number" id="b2_div2" value="0" onchange="calcB()" placeholder="0"></td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td><input type="number" id="b3_int1" value="0" onchange="calcB()" placeholder="0"></td>
+                        <td><input type="number" id="b3_int2" value="0" onchange="calcB()" placeholder="0"></td>
+                        <td><input type="number" id="b3_tax1" value="0" onchange="calcB()" placeholder="0"></td>
+                        <td><input type="number" id="b3_tax2" value="0" onchange="calcB()" placeholder="0"></td>
+                        <td><input type="number" id="b3_div1" value="0" onchange="calcB()" placeholder="0"></td>
+                        <td><input type="number" id="b3_div2" value="0" onchange="calcB()" placeholder="0"></td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td><input type="number" id="b4_int1" value="0" onchange="calcB()" placeholder="0"></td>
+                        <td><input type="number" id="b4_int2" value="0" onchange="calcB()" placeholder="0"></td>
+                        <td><input type="number" id="b4_tax1" value="0" onchange="calcB()" placeholder="0"></td>
+                        <td><input type="number" id="b4_tax2" value="0" onchange="calcB()" placeholder="0"></td>
+                        <td><input type="number" id="b4_div1" value="0" onchange="calcB()" placeholder="0"></td>
+                        <td><input type="number" id="b4_div2" value="0" onchange="calcB()" placeholder="0"></td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td><input type="number" id="b5_int1" value="0" onchange="calcB()" placeholder="0"></td>
+                        <td><input type="number" id="b5_int2" value="0" onchange="calcB()" placeholder="0"></td>
+                        <td><input type="number" id="b5_tax1" value="0" onchange="calcB()" placeholder="0"></td>
+                        <td><input type="number" id="b5_tax2" value="0" onchange="calcB()" placeholder="0"></td>
+                        <td><input type="number" id="b5_div1" value="0" onchange="calcB()" placeholder="0"></td>
+                        <td><input type="number" id="b5_div2" value="0" onchange="calcB()" placeholder="0"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="results-grid">
+                <div class="result-item">
+                    <h4>Total Current Year Income</h4>
+                    <span id="b_total1" class="result">$0.00</span>
+                </div>
+                <div class="result-item">
+                    <h4>Total Prior Year Income</h4>
+                    <span id="b_total2" class="result">$0.00</span>
+                </div>
+                <div class="result-item">
+                    <h4>Monthly Income (Policy)</h4>
+                    <span id="b_monthly" class="result">$0.00</span>
+                </div>
+            </div>
+        </section>
+
+        <div class="actions">
+            <button class="btn" onclick="exportCSV()">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                Export CSV
+            </button>
+            <button class="btn secondary" onclick="printView()">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+                </svg>
+                Print View
+            </button>
+            <button class="btn secondary" onclick="clearAll()">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                </svg>
+                Clear All
+            </button>
+        </div>
+
+        <div class="footer">
+                    <strong>Calculation Policy:</strong> The totals include interest, tax‑exempt interest and dividends. At least one non‑zero Prior Year entry triggers the averaging rule:
+        if Current Year total exceeds Prior Year total, the sum of both years is divided by 24 months; otherwise the Current Year total is divided by 12. Results are rounded to two decimal places.
+        </div>
+    </main>
+
+    <script>
+        function parseNum(val) {
+            const n = parseFloat(val);
+            return isNaN(n) ? 0 : n;
+        }
+
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }).format(amount);
+        }
+
+        function calcB() {
+            let total1 = 0;
+            let total2 = 0;
+            
+            // loop through five institutions
+            for (let i = 1; i <= 5; i++) {
+                const int1 = parseNum(document.getElementById('b' + i + '_int1').value);
+                const int2 = parseNum(document.getElementById('b' + i + '_int2').value);
+                const tax1 = parseNum(document.getElementById('b' + i + '_tax1').value);
+                const tax2 = parseNum(document.getElementById('b' + i + '_tax2').value);
+                const div1 = parseNum(document.getElementById('b' + i + '_div1').value);
+                const div2 = parseNum(document.getElementById('b' + i + '_div2').value);
+                
+                total1 += int1 + tax1 + div1;
+                total2 += int2 + tax2 + div2;
+            }
+            
+            document.getElementById('b_total1').textContent = formatCurrency(total1);
+            document.getElementById('b_total2').textContent = formatCurrency(total2);
+            
+            // Determine if any Year2 value exists
+            let hasYr2 = false;
+            for (let i = 1; i <= 5; i++) {
+                if (
+                    parseNum(document.getElementById('b' + i + '_int2').value) !== 0 ||
+                    parseNum(document.getElementById('b' + i + '_tax2').value) !== 0 ||
+                    parseNum(document.getElementById('b' + i + '_div2').value) !== 0
+                ) {
+                    hasYr2 = true;
+                    break;
+                }
+            }
+            
+            let monthly;
+            if (hasYr2 && total1 > total2) {
+                monthly = (total1 + total2) / 24;
+            } else {
+                monthly = total1 / 12;
+            }
+            
+            document.getElementById('b_monthly').textContent = formatCurrency(monthly);
+        }
+
+        function exportCSV() {
+            let total1 = 0;
+            let total2 = 0;
+            const institutions = [];
+            
+            // loop through five institutions
+            for (let i = 1; i <= 5; i++) {
+                const int1 = parseNum(document.getElementById('b' + i + '_int1').value);
+                const int2 = parseNum(document.getElementById('b' + i + '_int2').value);
+                const tax1 = parseNum(document.getElementById('b' + i + '_tax1').value);
+                const tax2 = parseNum(document.getElementById('b' + i + '_tax2').value);
+                const div1 = parseNum(document.getElementById('b' + i + '_div1').value);
+                const div2 = parseNum(document.getElementById('b' + i + '_div2').value);
+                
+                const instTotal1 = int1 + tax1 + div1;
+                const instTotal2 = int2 + tax2 + div2;
+                
+                total1 += instTotal1;
+                total2 += instTotal2;
+                
+                institutions.push({
+                    number: i,
+                    int1: int1,
+                    int2: int2,
+                    tax1: tax1,
+                    tax2: tax2,
+                    div1: div1,
+                    div2: div2,
+                    total1: instTotal1,
+                    total2: instTotal2
+                });
+            }
+            
+            let hasYr2 = false;
+            for (let i = 1; i <= 5; i++) {
+                if (
+                    parseNum(document.getElementById('b' + i + '_int2').value) !== 0 ||
+                    parseNum(document.getElementById('b' + i + '_tax2').value) !== 0 ||
+                    parseNum(document.getElementById('b' + i + '_div2').value) !== 0
+                ) {
+                    hasYr2 = true;
+                    break;
+                }
+            }
+            
+            let monthly;
+            if (hasYr2 && total1 > total2) {
+                monthly = (total1 + total2) / 24;
+            } else {
+                monthly = total1 / 12;
+            }
+
+            const data = [
+                ['Schedule B Income Calculator'],
+                [''],
+                ['Institution', 'Interest Y1', 'Interest Y2', 'Tax-exempt Interest Y1', 'Tax-exempt Interest Y2', 'Dividend Y1', 'Dividend Y2', 'Total Y1', 'Total Y2']
+            ];
+            
+            institutions.forEach(inst => {
+                data.push([
+                    inst.number,
+                    inst.int1,
+                    inst.int2,
+                    inst.tax1,
+                    inst.tax2,
+                    inst.div1,
+                    inst.div2,
+                    inst.total1,
+                    inst.total2
+                ]);
+            });
+            
+            data.push(['']);
+            data.push(['Results', 'Amount']);
+            data.push(['Total Current Year Income', total1]);
+            data.push(['Total Prior Year Income', total2]);
+            data.push(['Monthly Income (Policy)', monthly]);
+
+            const csvContent = data.map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'schedule_b_income_calculator.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        function printView() {
+            window.print();
+        }
+
+        function clearAll() {
+            const inputs = document.querySelectorAll('input[type="number"]');
+            inputs.forEach(input => {
+                input.value = '0';
+            });
+            calcB();
+        }
+
+        // Initialize
+        calcB();
+
+        // Expose debug function
+        window.IncomeCalculatorScheduleB = {
+            debug: function() {
+                let total1 = 0;
+                let total2 = 0;
+                const institutions = [];
+                
+                for (let i = 1; i <= 5; i++) {
+                    const int1 = parseNum(document.getElementById('b' + i + '_int1').value);
+                    const int2 = parseNum(document.getElementById('b' + i + '_int2').value);
+                    const tax1 = parseNum(document.getElementById('b' + i + '_tax1').value);
+                    const tax2 = parseNum(document.getElementById('b' + i + '_tax2').value);
+                    const div1 = parseNum(document.getElementById('b' + i + '_div1').value);
+                    const div2 = parseNum(document.getElementById('b' + i + '_div2').value);
+                    
+                    const instTotal1 = int1 + tax1 + div1;
+                    const instTotal2 = int2 + tax2 + div2;
+                    
+                    total1 += instTotal1;
+                    total2 += instTotal2;
+                    
+                    institutions.push({
+                        number: i,
+                        interest: { year1: int1, year2: int2 },
+                        taxExempt: { year1: tax1, year2: tax2 },
+                        dividends: { year1: div1, year2: div2 },
+                        total: { year1: instTotal1, year2: instTotal2 }
+                    });
+                }
+                
+                let hasYr2 = false;
+                for (let i = 1; i <= 5; i++) {
+                    if (
+                        parseNum(document.getElementById('b' + i + '_int2').value) !== 0 ||
+                        parseNum(document.getElementById('b' + i + '_tax2').value) !== 0 ||
+                        parseNum(document.getElementById('b' + i + '_div2').value) !== 0
+                    ) {
+                        hasYr2 = true;
+                        break;
+                    }
+                }
+                
+                let monthly;
+                if (hasYr2 && total1 > total2) {
+                    monthly = (total1 + total2) / 24;
+                } else {
+                    monthly = total1 / 12;
+                }
+
+                return {
+                    institutions: institutions,
+                    calculations: {
+                        totalYear1: total1,
+                        totalYear2: total2,
+                        monthlyIncome: monthly,
+                        hasYear2: hasYr2
+                    },
+                    version: '1.0.0'
+                };
+            }
+        };
+    </script>
+    
+    <!-- Theme Switcher -->
+    <script src="theme-switcher.js"></script>
+    
+    <!-- ZZ Signature -->
+    <div style="position: fixed; bottom: 20px; right: 20px; font-size: 12px; color: var(--text-muted); font-family: monospace; z-index: 1000;">
+        ZZ
+    </div>
+</body>
+</html>
+

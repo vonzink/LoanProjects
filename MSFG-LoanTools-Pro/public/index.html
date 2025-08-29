@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MSFG Loan Tools Pro</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="description" content="Professional mortgage calculation tools with PDF parsing capabilities">
+    <meta name="theme-color" content="#3b82f6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Loan Tools Pro">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="assets/icon.svg">
+    <link rel="icon" type="image/png" href="assets/icon-192.png">
+    
+    <!-- Master CSS -->
+    <link rel="stylesheet" href="css/master.css">
+    
+    <!-- Custom Styles -->
+    <style>
+        .hero-section {
+            text-align: center;
+            padding: var(--space-16) 0;
+            background: var(--gradient-dark);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.5;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero-title {
+            font-size: var(--font-size-5xl);
+            font-weight: var(--font-weight-extrabold);
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: var(--space-6);
+        }
+        
+        .hero-subtitle {
+            font-size: var(--font-size-xl);
+            color: var(--text-secondary);
+            margin-bottom: var(--space-8);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-6);
+            margin-top: var(--space-12);
+        }
+        
+        .tool-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: var(--radius-xl);
+            padding: var(--space-6);
+            text-decoration: none;
+            transition: all var(--transition-normal);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+            transform: scaleX(0);
+            transition: transform var(--transition-normal);
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-dark-hover);
+            border-color: var(--border-hover);
+        }
+        
+        .tool-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .tool-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: var(--space-4);
+            font-size: var(--font-size-2xl);
+        }
+        
+        .tool-title {
+            font-size: var(--font-size-xl);
+            font-weight: var(--font-weight-semibold);
+            color: var(--text-primary);
+            margin-bottom: var(--space-2);
+        }
+        
+        .tool-description {
+            color: var(--text-secondary);
+            font-size: var(--font-size-sm);
+            line-height: var(--line-height-relaxed);
+        }
+        
+        .feature-badge {
+            display: inline-block;
+            background: var(--gradient-success);
+            color: var(--text-primary);
+            padding: var(--space-1) var(--space-3);
+            border-radius: var(--radius-full);
+            font-size: var(--font-size-xs);
+            font-weight: var(--font-weight-medium);
+            margin-top: var(--space-3);
+        }
+        
+        .pdf-feature {
+            background: var(--gradient-warning);
+        }
+        
+        .stats-section {
+            background: var(--bg-secondary);
+            padding: var(--space-12) 0;
+            margin-top: var(--space-12);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-8);
+            text-align: center;
+        }
+        
+        .stat-item {
+            padding: var(--space-4);
+        }
+        
+        .stat-number {
+            font-size: var(--font-size-4xl);
+            font-weight: var(--font-weight-bold);
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: var(--space-2);
+        }
+        
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-medium);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <img src="assets/icon.svg" alt="MSFG Logo">
+            <div>
+                <h2 style="margin: 0; color: var(--text-primary);">MSFG</h2>
+                <p style="margin: 0; color: var(--text-secondary); font-size: var(--font-size-sm);">Loan Tools Pro</p>
+            </div>
+        </div>
+        
+        <nav class="nav">
+            <a href="#tools" class="nav-link">Tools</a>
+            <a href="#about" class="nav-link">About</a>
+            <a href="#contact" class="nav-link">Contact</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Professional Loan Tools</h1>
+                <p class="hero-subtitle">
+                    Advanced mortgage calculation tools with intelligent PDF parsing. 
+                    Streamline your workflow with drag-and-drop functionality and comprehensive analysis.
+                </p>
+                
+                <div class="d-flex justify-center items-center gap-4">
+                    <button class="btn btn-primary btn-lg" onclick="scrollToTools()">
+                        Explore Tools
+                    </button>
+                    <button class="btn btn-secondary btn-lg" onclick="showPDFDemo()">
+                        PDF Demo
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tools Section -->
+    <section id="tools" class="container" style="padding: var(--space-12) 0;">
+        <div class="text-center mb-8">
+            <h2>Calculation Tools</h2>
+            <p class="text-secondary">Comprehensive suite of mortgage and loan calculation tools</p>
+        </div>
+        
+        <div class="tools-grid">
+            <!-- APR Calculator -->
+            <a href="calculators/apr-calculator.html" class="tool-card">
+                <div class="tool-icon">📊</div>
+                <h3 class="tool-title">APR Calculator</h3>
+                <p class="tool-description">
+                    Calculate Annual Percentage Rate with detailed breakdown of all costs and fees.
+                    Perfect for comparing loan offers and understanding true borrowing costs.
+                </p>
+                <span class="feature-badge pdf-feature">PDF Import</span>
+            </a>
+            
+            <!-- Buydown Calculator -->
+            <a href="calculators/buydown-calculator.html" class="tool-card">
+                <div class="tool-icon">💰</div>
+                <h3 class="tool-title">Buydown Calculator</h3>
+                <p class="tool-description">
+                    Analyze temporary and permanent buydown scenarios. Calculate payment reductions
+                    and determine optimal buydown strategies for your clients.
+                </p>
+                <span class="feature-badge pdf-feature">PDF Import</span>
+            </a>
+            
+            <!-- LLPM Tool -->
+            <a href="calculators/llpm-tool.html" class="tool-card">
+                <div class="tool-icon">📈</div>
+                <h3 class="tool-title">LLPM Tool</h3>
+                <p class="tool-description">
+                    Loan Level Price Adjustment Matrix calculator. Determine pricing adjustments
+                    based on loan characteristics and borrower profile.
+                </p>
+                <span class="feature-badge pdf-feature">PDF Import</span>
+            </a>
+            
+            <!-- Income Calculator -->
+            <a href="calculators/income-calculator.html" class="tool-card">
+                <div class="tool-icon">💼</div>
+                <h3 class="tool-title">Income Calculator</h3>
+                <p class="tool-description">
+                    Comprehensive income analysis for various tax forms (1040, 1065, 1120, etc.).
+                    Calculate qualifying income with detailed breakdowns.
+                </p>
+                <span class="feature-badge pdf-feature">PDF Import</span>
+            </a>
+            
+            <!-- Schedule C Calculator -->
+            <a href="calculators/schedule-c-calculator.html" class="tool-card">
+                <div class="tool-icon">📋</div>
+                <h3 class="tool-title">Schedule C Calculator</h3>
+                <p class="tool-description">
+                    Self-employed income analysis using Schedule C data. Calculate net business
+                    income and determine qualifying income for mortgage applications.
+                </p>
+                <span class="feature-badge pdf-feature">PDF Import</span>
+            </a>
+            
+            <!-- Schedule E Calculator -->
+            <a href="calculators/schedule-e-calculator.html" class="tool-card">
+                <div class="tool-icon">🏠</div>
+                <h3 class="tool-title">Schedule E Calculator</h3>
+                <p class="tool-description">
+                    Rental income analysis and property cash flow calculations. Evaluate
+                    investment properties and determine rental income qualification.
+                </p>
+                <span class="feature-badge pdf-feature">PDF Import</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">6+</div>
+                    <div class="stat-label">Calculation Tools</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">PDF</div>
+                    <div class="stat-label">Drag & Drop Import</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Accuracy Guaranteed</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Available</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PDF Demo Modal -->
+    <div id="pdfDemoModal" class="d-none" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--bg-overlay); z-index: var(--z-modal); display: flex; align-items: center; justify-content: center;">
+        <div class="card" style="max-width: 600px; margin: var(--space-4);">
+            <div class="card-header">
+                <h3 class="card-title">PDF Import Demo</h3>
+            </div>
+            <div class="card-body">
+                <div id="dropZone" style="border: 2px dashed var(--border-primary); border-radius: var(--radius-lg); padding: var(--space-8); text-align: center; transition: all var(--transition-fast);">
+                    <div style="font-size: var(--font-size-4xl); margin-bottom: var(--space-4);">📄</div>
+                    <h4>Drag & Drop PDF Files</h4>
+                    <p class="text-secondary">Drop your tax forms, loan documents, or other PDFs here to automatically extract data</p>
+                    <button class="btn btn-primary mt-4" onclick="selectPDFFile()">Or Click to Browse</button>
+                </div>
+                
+                <div id="pdfPreview" class="d-none mt-4">
+                    <h4>Extracted Data Preview</h4>
+                    <div id="extractedData" class="bg-secondary p-4 rounded-lg" style="font-family: var(--font-family-mono); font-size: var(--font-size-sm);">
+                        <!-- Extracted data will appear here -->
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button class="btn btn-secondary" onclick="closePDFDemo()">Close</button>
+                <button id="useDataBtn" class="btn btn-primary d-none" onclick="useExtractedData()">Use This Data</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PDF.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    
+    <!-- Scripts -->
+    <script src="js/pdf-parser.js"></script>
+    <script src="js/app.js"></script>
+    
+    <!-- Initialize PDF parser immediately -->
+    <script>
+        console.log('=== PDF Parser Initialization Debug ===');
+        console.log('PDFParser class available:', !!window.PDFParser);
+        console.log('pdfjsLib available:', !!window.pdfjsLib);
+        
+        // Initialize PDF parser as soon as the script loads
+        if (window.PDFParser) {
+            console.log('✅ Initializing PDF parser immediately...');
+            window.pdfParser = new PDFParser();
+            console.log('✅ PDF parser initialized immediately');
+        } else {
+            console.error('❌ PDFParser class not found during immediate initialization');
+            console.log('Available window properties:', Object.keys(window).filter(key => key.toLowerCase().includes('pdf')));
+        }
+    </script>
+    
+    <script>
+        function scrollToTools() {
+            document.getElementById('tools').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function showPDFDemo() {
+            document.getElementById('pdfDemoModal').classList.remove('d-none');
+            document.getElementById('pdfDemoModal').style.display = 'flex';
+        }
+        
+        function closePDFDemo() {
+            document.getElementById('pdfDemoModal').classList.add('d-none');
+            document.getElementById('pdfDemoModal').style.display = 'none';
+        }
+        
+        function selectPDFFile() {
+            // Ensure PDF parser is available
+            if (!ensurePDFParser()) {
+                alert('PDF parser not available. Please refresh the page.');
+                return;
+            }
+            
+            // Create a file input element
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = '.pdf';
+            fileInput.multiple = true;
+            
+            fileInput.addEventListener('change', async (e) => {
+                const files = Array.from(e.target.files);
+                
+                // Process files using the PDF parser
+                if (window.pdfParser) {
+                    await window.pdfParser.handleFileSelection(files);
+                } else {
+                    console.error('PDF parser not available');
+                    alert('PDF parser not available. Please refresh the page.');
+                }
+            });
+            
+            // Trigger file selection
+            fileInput.click();
+        }
+        
+        function useExtractedData() {
+            console.log('Use extracted data button clicked');
+            
+            // Get the last processed PDF data
+            const lastProcessedFile = Object.keys(window.pdfParser.extractedData).pop();
+            
+            if (!lastProcessedFile) {
+                alert('No extracted data available. Please process a PDF file first.');
+                return;
+            }
+            
+            const data = window.pdfParser.extractedData[lastProcessedFile];
+            console.log('Using extracted data:', data);
+            
+            // Populate calculator forms with the extracted data
+            const success = window.pdfParser.populateCalculatorForms(data);
+            
+            if (success) {
+                // Close the modal
+                closePDFDemo();
+            } else {
+                alert('Unable to determine which calculator to populate. Please try a different PDF file.');
+            }
+        }
+        
+        // Global function to ensure PDF parser is available
+        function ensurePDFParser() {
+            console.log('=== ensurePDFParser called ===');
+            console.log('window.pdfParser exists:', !!window.pdfParser);
+            console.log('window.PDFParser class exists:', !!window.PDFParser);
+            
+            if (!window.pdfParser) {
+                if (window.PDFParser) {
+                    console.log('✅ Creating PDF parser instance...');
+                    window.pdfParser = new PDFParser();
+                    console.log('✅ PDF parser instance created successfully');
+                    return true;
+                } else {
+                    console.error('❌ PDFParser class not available');
+                    console.log('Available window properties:', Object.keys(window).filter(key => key.toLowerCase().includes('pdf')));
+                    return false;
+                }
+            }
+            console.log('✅ PDF parser already exists');
+            return true;
+        }
+        
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('MSFG Loan Tools Pro loaded');
+            
+            // Ensure PDF parser is initialized
+            if (!window.pdfParser && window.PDFParser) {
+                console.log('Initializing PDF parser on DOM ready...');
+                window.pdfParser = new PDFParser();
+                console.log('PDF parser initialized on DOM ready');
+            } else if (window.pdfParser) {
+                console.log('PDF parser already initialized');
+            } else {
+                console.error('PDFParser class not found');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MSFG • Income Calculator Questionnaire</title>
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #1a1a1a;
+            --bg-card: rgba(255, 255, 255, 0.05);
+            --bg-card-hover: rgba(255, 255, 255, 0.08);
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --text-muted: #808080;
+            --accent-primary: #3b82f6;
+            --accent-secondary: #1d4ed8;
+            --accent-success: #10b981;
+            --accent-warning: #f59e0b;
+            --accent-danger: #ef4444;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --border-hover: rgba(255, 255, 255, 0.2);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.4);
+            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-success: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-warning: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            --gradient-danger: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .back-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.875rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .back-link:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent-primary);
+            transform: translateX(-2px);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            width: 80px;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .hero h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .question-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+            display: none;
+        }
+
+        .question-section.active {
+            display: block;
+        }
+
+        .question-section:hover {
+            border-color: var(--border-hover);
+            background: var(--bg-card-hover);
+        }
+
+        .question-section h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .question-section h3::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+        }
+
+        .question {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .option {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .option:hover {
+            border-color: var(--accent-primary);
+            background: rgba(59, 130, 246, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .option.selected {
+            border-color: var(--accent-primary);
+            background: rgba(59, 130, 246, 0.2);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .option.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--accent-primary);
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .option h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .option p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .navigation {
+            display: flex;
+            gap: 1rem;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--accent-primary);
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 0.875rem;
+        }
+
+        .btn:hover {
+            background: var(--accent-secondary);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn.secondary {
+            background: var(--accent-warning);
+        }
+
+        .btn.secondary:hover {
+            background: #d97706;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .progress-bar {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .progress-bar-inner {
+            background: var(--border-color);
+            border-radius: 8px;
+            height: 8px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: var(--gradient-primary);
+            height: 100%;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .results-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(20px);
+            display: none;
+        }
+
+        .results-section.active {
+            display: block;
+        }
+
+        .results-section h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .results-section h3::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: var(--gradient-success);
+            border-radius: 2px;
+        }
+
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .calculator-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .calculator-card:hover {
+            border-color: var(--border-hover);
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .calculator-card h4 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .calculator-card p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .calculator-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--accent-success);
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+
+        .calculator-link:hover {
+            background: #059669;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-left: 0.5rem;
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--accent-success);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .question-section {
+                padding: 1.5rem;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+            
+            .options {
+                grid-template-columns: 1fr;
+            }
+            
+            .navigation {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .calculator-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="http://loan-tools-hub.s3-website-us-west-1.amazonaws.com" class="back-link">
+            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+            </svg>
+            Back to Hub
+        </a>
+        <div class="logo">
+            <img src="https://msfg-media.s3.us-west-2.amazonaws.com/Assets/LOGOS/MSFG+Home+Loans/MSFG-Color-Transparent.png" alt="MSFG Logo">
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <h2>Income Calculator Questionnaire</h2>
+            <p>Answer a few questions about your income situation to get personalized recommendations for the right income calculators.</p>
+        </section>
+
+        <div class="progress-bar">
+            <div class="progress-text">
+                <span>Progress</span>
+                <span id="progress-text">Question 1 of 7</span>
+            </div>
+            <div class="progress-bar-inner">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+        </div>
+
+        <!-- Question 1: Employment Type -->
+        <div class="question-section active" id="question-1">
+            <h3>Employment Type <span class="status-badge">Live</span></h3>
+            <div class="question">What is your employment type? (Select all that apply)</div>
+            <div class="options">
+                <div class="option" data-value="w2" onclick="selectOption(this, 'employment')">
+                    <h4>W-2 Employee</h4>
+                    <p>Traditional employment with a company</p>
+                </div>
+                <div class="option" data-value="self-employed" onclick="selectOption(this, 'employment')">
+                    <h4>Self-Employed</h4>
+                    <p>Business owner, contractor, or freelancer</p>
+                </div>
+                <div class="option" data-value="retired" onclick="selectOption(this, 'employment')">
+                    <h4>Retired</h4>
+                    <p>Receiving retirement income</p>
+                </div>
+                <div class="option" data-value="investor" onclick="selectOption(this, 'employment')">
+                    <h4>Investor</h4>
+                    <p>Living off investment income</p>
+                </div>
+            </div>
+            <div class="navigation">
+                <button class="btn secondary" onclick="previousQuestion()" disabled>Previous</button>
+                <button class="btn" onclick="nextQuestion()" disabled>Next</button>
+            </div>
+        </div>
+
+        <!-- Question 2: Business Structure (if self-employed) -->
+        <div class="question-section" id="question-2">
+            <h3>Business Structure <span class="status-badge">Live</span></h3>
+            <div class="question">What is your business structure? (Select all that apply)</div>
+            <div class="options">
+                <div class="option" data-value="sole-prop" onclick="selectOption(this, 'business')">
+                    <h4>Sole Proprietorship</h4>
+                    <p>Individual business owner (Schedule C)</p>
+                </div>
+                <div class="option" data-value="llc" onclick="selectOption(this, 'business')">
+                    <h4>LLC</h4>
+                    <p>Limited Liability Company</p>
+                </div>
+                <div class="option" data-value="partnership" onclick="selectOption(this, 'business')">
+                    <h4>Partnership</h4>
+                    <p>Form 1065 or Partnership K-1</p>
+                </div>
+                <div class="option" data-value="corporation" onclick="selectOption(this, 'business')">
+                    <h4>Corporation</h4>
+                    <p>S-Corp (1120S) or C-Corp (1120)</p>
+                </div>
+            </div>
+            <div class="navigation">
+                <button class="btn secondary" onclick="previousQuestion()">Previous</button>
+                <button class="btn" onclick="nextQuestion()" disabled>Next</button>
+            </div>
+        </div>
+
+        <!-- Question 3: Business Ownership Percentage -->
+        <div class="question-section" id="question-3">
+            <h3>Business Ownership <span class="status-badge">Live</span></h3>
+            <div class="question">Do you own 25% or more of the business? (Select one)</div>
+            <div class="options">
+                <div class="option" data-value="yes" onclick="selectOption(this, 'ownership')">
+                    <h4>Yes</h4>
+                    <p>I own 25% or more of the business</p>
+                </div>
+                <div class="option" data-value="no" onclick="selectOption(this, 'ownership')">
+                    <h4>No</h4>
+                    <p>I own less than 25% of the business</p>
+                </div>
+            </div>
+            <div class="navigation">
+                <button class="btn secondary" onclick="previousQuestion()">Previous</button>
+                <button class="btn" onclick="nextQuestion()" disabled>Next</button>
+            </div>
+        </div>
+
+
+
+        <!-- Question 4: Income Sources -->
+        <div class="question-section" id="question-4">
+            <h3>Additional Income Sources <span class="status-badge">Live</span></h3>
+            <div class="question">Do you have any of these additional income sources? (Select all that apply)</div>
+            <div class="options">
+                <div class="option" data-value="none" onclick="selectOption(this, 'income')">
+                    <h4>None</h4>
+                    <p>I don't have any additional income sources</p>
+                </div>
+                <div class="option" data-value="rental" onclick="selectOption(this, 'income')">
+                    <h4>Rental Properties</h4>
+                    <p>Investment properties or rental income</p>
+                </div>
+                <div class="option" data-value="farm" onclick="selectOption(this, 'income')">
+                    <h4>Farm Income</h4>
+                    <p>Agricultural or farming business</p>
+                </div>
+                <div class="option" data-value="investments" onclick="selectOption(this, 'income')">
+                    <h4>Investment Income</h4>
+                    <p>Interest, dividends, or capital gains</p>
+                </div>
+                <div class="option" data-value="other" onclick="selectOption(this, 'income')">
+                    <h4>Other Income</h4>
+                    <p>Alimony, unemployment, Social Security</p>
+                </div>
+                <div class="option" data-value="multiple-companies" onclick="selectOption(this, 'income')">
+                    <h4>Multiple Companies</h4>
+                    <p>Ownership in multiple businesses or companies</p>
+                </div>
+            </div>
+            <div class="navigation">
+                <button class="btn secondary" onclick="previousQuestion()">Previous</button>
+                <button class="btn" onclick="nextQuestion()">Next</button>
+            </div>
+        </div>
+
+        <!-- Question 5: Multiple Business Structure -->
+        <div class="question-section" id="question-5">
+            <h3>Multiple Business Structure <span class="status-badge">Live</span></h3>
+            <div class="question">What type of business structure do your multiple companies have? (Select all that apply)</div>
+            <div class="options">
+                <div class="option" data-value="sole-prop" onclick="selectOption(this, 'multipleBusinessStructure')">
+                    <h4>Sole Proprietorship</h4>
+                    <p>Individual business ownership</p>
+                </div>
+                <div class="option" data-value="llc" onclick="selectOption(this, 'multipleBusinessStructure')">
+                    <h4>LLC</h4>
+                    <p>Limited Liability Company</p>
+                </div>
+                <div class="option" data-value="partnership" onclick="selectOption(this, 'multipleBusinessStructure')">
+                    <h4>Partnership</h4>
+                    <p>Multiple owners sharing profits</p>
+                </div>
+                <div class="option" data-value="corporation" onclick="selectOption(this, 'multipleBusinessStructure')">
+                    <h4>Corporation</h4>
+                    <p>S-Corp or C-Corp structure</p>
+                </div>
+            </div>
+            <div class="navigation">
+                <button class="btn secondary" onclick="previousQuestion()">Previous</button>
+                <button class="btn" onclick="nextQuestion()" disabled>Next</button>
+            </div>
+        </div>
+
+        <!-- Question 6: Property Ownership -->
+        <div class="question-section" id="question-6">
+            <h3>Property Ownership <span class="status-badge">Live</span></h3>
+            <div class="question">Do you own any investment properties? (Select one)</div>
+            <div class="options">
+                <div class="option" data-value="yes" onclick="selectOption(this, 'properties')">
+                    <h4>Yes</h4>
+                    <p>I own rental or investment properties</p>
+                </div>
+                <div class="option" data-value="no" onclick="selectOption(this, 'properties')">
+                    <h4>No</h4>
+                    <p>I don't own any investment properties</p>
+                </div>
+            </div>
+            <div class="navigation">
+                <button class="btn secondary" onclick="previousQuestion()">Previous</button>
+                <button class="btn" onclick="nextQuestion()" disabled>Next</button>
+            </div>
+        </div>
+
+        <!-- Question 7: Subject Property -->
+        <div class="question-section" id="question-7">
+            <h3>Subject Property <span class="status-badge">Live</span></h3>
+            <div class="question">Is the property you're financing currently rented? (Select one)</div>
+            <div class="options">
+                <div class="option" data-value="yes" onclick="selectOption(this, 'subject')">
+                    <h4>Yes</h4>
+                    <p>The property generates rental income</p>
+                </div>
+                <div class="option" data-value="no" onclick="selectOption(this, 'subject')">
+                    <h4>No</h4>
+                    <p>It's my primary residence or vacant</p>
+                </div>
+            </div>
+            <div class="navigation">
+                <button class="btn secondary" onclick="previousQuestion()">Previous</button>
+                <button class="btn" onclick="showResults()" disabled>Get Recommendations</button>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="results-section" id="results">
+            <h3>Recommended Income Calculators <span class="status-badge">Live</span></h3>
+            <p>Based on your answers, here are the income calculators you'll need:</p>
+            <div class="calculator-grid" id="calculator-recommendations">
+                <!-- Calculator recommendations will be populated here -->
+            </div>
+            <div class="navigation">
+                <button class="btn secondary" onclick="restartQuestionnaire()">Start Over</button>
+                <button class="btn" onclick="exportRecommendations()">Export Recommendations</button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let currentQuestion = 1;
+        let totalQuestions = 7;
+        let answers = {
+            employment: [],
+            business: [],
+            ownership: null,
+            multipleBusinessStructure: [],
+            income: [],
+            properties: null,
+            subject: null
+        };
+
+        const calculatorUrls = {
+            '1040': 'http://msfg-income-calculator.s3-website-us-west-1.amazonaws.com/IncomeCalculator1040.html',
+            'schedule-c': 'http://msfg-income-calculator.s3-website-us-west-1.amazonaws.com/IncomeCalculatorScheduleC.html',
+            'schedule-e': 'http://msfg-income-calculator.s3-website-us-west-1.amazonaws.com/IncomeCalculatorScheduleE.html',
+            'schedule-e-subject': 'http://msfg-income-calculator.s3-website-us-west-1.amazonaws.com/IncomeCalculatorScheduleESubject.html',
+            'schedule-b': 'http://msfg-income-calculator.s3-website-us-west-1.amazonaws.com/IncomeCalculatorScheduleB.html',
+            'schedule-d': 'http://msfg-income-calculator.s3-website-us-west-1.amazonaws.com/IncomeCalculatorScheduleD.html',
+            'schedule-f': 'http://msfg-income-calculator.s3-website-us-west-1.amazonaws.com/IncomeCalculatorScheduleF.html',
+            'form-1065': 'http://msfg-income-calculator.s3-website-us-west-1.amazonaws.com/IncomeCalculator1065.html',
+            '1065-k1': 'http://msfg-income-calculator.s3-website-us-west-1.amazonaws.com/IncomeCalculatorK1.html',
+            'form-1120': 'http://msfg-income-calculator.s3-website-us-west-1.amazonaws.com/IncomeCalculator1120.html',
+            'form-1120s': 'http://msfg-income-calculator.s3-website-us-west-1.amazonaws.com/IncomeCalculator1120S.html',
+            '1120s-k1': 'http://msfg-income-calculator.s3-website-us-west-1.amazonaws.com/IncomeCalculator1120SK1.html',
+            'rental-1038': 'http://msfg-income-calculator.s3-website-us-west-1.amazonaws.com/IncomeCalculatorRental1038.html'
+        };
+
+        const calculatorInfo = {
+            '1040': {
+                title: 'Form 1040 Page 1',
+                description: 'W-2 income, pensions, alimony, unemployment, Social Security'
+            },
+            'schedule-c': {
+                title: 'Schedule C',
+                description: 'Sole proprietorship business income and expenses'
+            },
+            'schedule-e': {
+                title: 'Schedule E',
+                description: 'Rental income and investment property calculations'
+            },
+            'schedule-e-subject': {
+                title: 'Schedule E Subject Property',
+                description: 'Income from the property being financed'
+            },
+            'schedule-b': {
+                title: 'Schedule B',
+                description: 'Interest and dividend income from investments'
+            },
+            'schedule-d': {
+                title: 'Schedule D',
+                description: 'Capital gains and losses from investments'
+            },
+            'schedule-f': {
+                title: 'Schedule F',
+                description: 'Farm income and agricultural business'
+            },
+            'form-1065': {
+                title: 'Form 1065',
+                description: 'Partnership income and business calculations'
+            },
+            '1065-k1': {
+                title: '1065 K-1',
+                description: 'Partnership distributions and allocations'
+            },
+            'form-1120': {
+                title: 'Form 1120',
+                description: 'C-corporation income and business calculations'
+            },
+            'form-1120s': {
+                title: 'Form 1120S',
+                description: 'S-corporation income and business calculations'
+            },
+            '1120s-k1': {
+                title: '1120S K-1',
+                description: 'S-corporation distributions and allocations'
+            },
+            'rental-1038': {
+                title: 'Rental Income Worksheet (1038)',
+                description: 'Investment property income with time-in-service adjustments'
+            }
+        };
+
+        function updateProgress() {
+            const progress = (currentQuestion / totalQuestions) * 100;
+            document.getElementById('progress-fill').style.width = progress + '%';
+            document.getElementById('progress-text').textContent = `Question ${currentQuestion} of ${totalQuestions}`;
+        }
+
+        function selectOption(element, questionType) {
+            // Define which questions are single-select vs multi-select
+            const singleSelectQuestions = ['properties', 'subject', 'ownership'];
+            
+            if (singleSelectQuestions.includes(questionType)) {
+                // Single select - clear others and select this one
+                const options = element.parentElement.querySelectorAll('.option');
+                options.forEach(opt => opt.classList.remove('selected'));
+                element.classList.add('selected');
+                answers[questionType] = element.dataset.value;
+            } else {
+                // Multi-select logic with special handling for "none" options
+                const isNoneOption = element.dataset.value === 'none';
+                const options = element.parentElement.querySelectorAll('.option');
+                
+                if (isNoneOption) {
+                    // If selecting "none", clear all other selections
+                    options.forEach(opt => opt.classList.remove('selected'));
+                    element.classList.add('selected');
+                    answers[questionType] = ['none'];
+                } else {
+                    // If selecting any other option, clear "none" if it's selected
+                    const noneOption = element.parentElement.querySelector('.option[data-value="none"]');
+                    if (noneOption && noneOption.classList.contains('selected')) {
+                        noneOption.classList.remove('selected');
+                    }
+                    
+                    // Toggle this option
+                    element.classList.toggle('selected');
+                    
+                    // Get all selected options and store as array
+                    const selectedOptions = element.parentElement.querySelectorAll('.option.selected');
+                    answers[questionType] = Array.from(selectedOptions).map(opt => opt.dataset.value);
+                }
+            }
+            
+            // Get selected options for button state
+            const selectedOptions = element.parentElement.querySelectorAll('.option.selected');
+            
+            // Enable next button if at least one option is selected
+            const nextBtn = element.closest('.question-section').querySelector('.btn:not(.secondary)');
+            nextBtn.disabled = selectedOptions.length === 0;
+        }
+
+        function selectMultiple(element, questionType) {
+            // Toggle selection
+            element.classList.toggle('selected');
+            
+            // Update answers array
+            const selectedOptions = element.parentElement.querySelectorAll('.option.selected');
+            answers[questionType] = Array.from(selectedOptions).map(opt => opt.dataset.value);
+            
+            // Enable next button (always enabled for multiple choice)
+            const nextBtn = element.closest('.question-section').querySelector('.btn:not(.secondary)');
+            nextBtn.disabled = false;
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < totalQuestions) {
+                document.getElementById(`question-${currentQuestion}`).classList.remove('active');
+                currentQuestion++;
+                document.getElementById(`question-${currentQuestion}`).classList.add('active');
+                updateProgress();
+                
+                // Handle conditional questions
+                if (currentQuestion === 2 && !answers.employment.includes('self-employed')) {
+                    // Skip business structure question if not self-employed
+                    answers.business = [];
+                    answers.ownership = [];
+                    nextQuestion();
+                    return;
+                }
+                
+                // Skip ownership question if no business selected
+                if (currentQuestion === 3 && (!Array.isArray(answers.business) || answers.business.length === 0)) {
+                    answers.ownership = null;
+                    nextQuestion();
+                    return;
+                }
+                
+                // Skip multiple business structure question if not selected
+                if (currentQuestion === 5 && (!answers.income.includes('multiple-companies') || answers.income.includes('none'))) {
+                    answers.multipleBusinessStructure = [];
+                    nextQuestion();
+                    return;
+                }
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 1) {
+                document.getElementById(`question-${currentQuestion}`).classList.remove('active');
+                currentQuestion--;
+                document.getElementById(`question-${currentQuestion}`).classList.add('active');
+                updateProgress();
+            }
+        }
+
+        function showResults() {
+            document.getElementById(`question-${currentQuestion}`).classList.remove('active');
+            document.getElementById('results').classList.add('active');
+            
+            const recommendations = generateRecommendations();
+            displayRecommendations(recommendations);
+        }
+
+        function generateRecommendations() {
+            const recommendations = [];
+            
+            // Always include Form 1040 for basic income
+            recommendations.push('1040');
+            
+            // Employment-based recommendations
+            if (answers.employment === 'self-employed') {
+                if (Array.isArray(answers.business) && answers.business.length > 0) {
+                    answers.business.forEach(businessType => {
+                        if (businessType === 'sole-prop') {
+                            recommendations.push('schedule-c');
+                        } else if (businessType === 'llc') {
+                            recommendations.push('schedule-c'); // LLC taxed as sole prop
+                        } else if (businessType === 'partnership') {
+                            if (answers.ownership === 'yes') {
+                                recommendations.push('form-1065');
+                                recommendations.push('1065-k1');
+                            }
+                        } else if (businessType === 'corporation') {
+                            if (answers.ownership === 'yes') {
+                                recommendations.push('form-1120s'); // Assume S-Corp for lending
+                                recommendations.push('1120s-k1');
+                            }
+                        }
+                    });
+                }
+            }
+            
+            // Business ownership for W-2 employees who also own businesses
+            if (answers.employment.includes('w2') && Array.isArray(answers.business) && answers.business.length > 0) {
+                answers.business.forEach(businessType => {
+                    if (businessType === 'sole-prop') {
+                        recommendations.push('schedule-c');
+                    } else if (businessType === 'llc') {
+                        recommendations.push('schedule-c');
+                                            } else if (businessType === 'partnership') {
+                            if (answers.ownership === 'yes') {
+                                recommendations.push('form-1065');
+                                recommendations.push('1065-k1');
+                            }
+                        } else if (businessType === 'corporation') {
+                            if (answers.ownership === 'yes') {
+                                recommendations.push('form-1120s');
+                                recommendations.push('1120s-k1');
+                            }
+                        }
+                });
+            }
+            
+            // Additional income sources (only if not "none")
+            if (!answers.income.includes('none')) {
+                if (answers.income.includes('rental')) {
+                    recommendations.push('schedule-e');
+                    // Only recommend 1038 if self-employed
+                    if (answers.employment.includes('self-employed')) {
+                        recommendations.push('rental-1038');
+                    }
+                }
+                if (answers.income.includes('farm')) {
+                    recommendations.push('schedule-f');
+                }
+                if (answers.income.includes('investments')) {
+                    recommendations.push('schedule-b');
+                    recommendations.push('schedule-d');
+                }
+            }
+            
+            // Multiple companies logic (only if not "none")
+            if (answers.income.includes('multiple-companies') && !answers.income.includes('none')) {
+                if (Array.isArray(answers.multipleBusinessStructure) && answers.multipleBusinessStructure.length > 0) {
+                    answers.multipleBusinessStructure.forEach(structure => {
+                        if (structure === 'sole-prop' || structure === 'llc') {
+                            recommendations.push('schedule-c'); // Schedule C supports multiple businesses
+                        } else if (structure === 'partnership') {
+                            recommendations.push('form-1065');
+                            recommendations.push('1065-k1');
+                        } else if (structure === 'corporation') {
+                            recommendations.push('form-1120s');
+                            recommendations.push('1120s-k1');
+                        }
+                    });
+                }
+            }
+            
+            // Property-specific recommendations
+            if (answers.properties === 'yes') {
+                recommendations.push('schedule-e');
+                // Only recommend 1038 if self-employed
+                if (answers.employment.includes('self-employed')) {
+                    recommendations.push('rental-1038');
+                }
+            }
+            
+            if (answers.subject === 'yes') {
+                recommendations.push('schedule-e-subject');
+            }
+            
+            // Remove duplicates
+            return [...new Set(recommendations)];
+        }
+
+        function displayRecommendations(recommendations) {
+            const container = document.getElementById('calculator-recommendations');
+            container.innerHTML = '';
+            
+            recommendations.forEach(calcKey => {
+                const info = calculatorInfo[calcKey];
+                const url = calculatorUrls[calcKey];
+                
+                const card = document.createElement('div');
+                card.className = 'calculator-card';
+                card.innerHTML = `
+                    <h4>${info.title}</h4>
+                    <p>${info.description}</p>
+                    <a href="${url}" class="calculator-link" target="_blank">
+                        Open Calculator
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                    </a>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function restartQuestionnaire() {
+            currentQuestion = 1;
+            answers = {
+                employment: [],
+                business: [],
+                ownership: null,
+                multipleBusinessStructure: [],
+                income: [],
+                properties: null,
+                subject: null
+            };
+            
+            // Reset all selections
+            document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+            
+            // Hide results, show first question
+            document.getElementById('results').classList.remove('active');
+            document.querySelectorAll('.question-section').forEach(section => section.classList.remove('active'));
+            document.getElementById('question-1').classList.add('active');
+            
+            // Reset buttons
+            document.querySelectorAll('.btn:not(.secondary)').forEach(btn => btn.disabled = true);
+            
+            updateProgress();
+        }
+
+        function exportRecommendations() {
+            const recommendations = generateRecommendations();
+            const data = [
+                ['Income Calculator Recommendations'],
+                [''],
+                ['Employment Type', answers.employment || 'Not specified'],
+                ['Business Structure', Array.isArray(answers.business) ? answers.business.join(', ') : (answers.business || 'Not applicable')],
+                ['Business Ownership (25%+)', Array.isArray(answers.ownership) ? answers.ownership.join(', ') : (answers.ownership || 'Not applicable')],
+                ['Business Ownership (W-2)', Array.isArray(answers.businessOwnership) ? answers.businessOwnership.join(', ') : (answers.businessOwnership || 'Not applicable')],
+                ['Multiple Business Structure', Array.isArray(answers.multipleBusinessStructure) ? answers.multipleBusinessStructure.join(', ') : (answers.multipleBusinessStructure || 'Not applicable')],
+                ['Additional Income Sources', answers.income.join(', ') || 'None'],
+                ['Investment Properties', answers.properties || 'Not specified'],
+                ['Subject Property Rented', answers.subject || 'Not specified'],
+                [''],
+                ['Recommended Calculators', 'Description', 'URL']
+            ];
+            
+            recommendations.forEach(calcKey => {
+                const info = calculatorInfo[calcKey];
+                const url = calculatorUrls[calcKey];
+                data.push([info.title, info.description, url]);
+            });
+            
+            const csvContent = data.map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'income_calculator_recommendations.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Initialize
+        updateProgress();
+
+        // Expose debug function
+        window.IncomeCalculatorQuestionnaire = {
+            debug: function() {
+                return {
+                    currentQuestion: currentQuestion,
+                    totalQuestions: totalQuestions,
+                    answers: answers,
+                    recommendations: generateRecommendations(),
+                    version: '1.0.0'
+                };
+            }
+        };
+    </script>
+    
+    <!-- Theme Switcher -->
+    <script src="theme-switcher.js"></script>
+
+    <!-- ZZ Signature -->
+    <div style="position: fixed; bottom: 20px; right: 20px; font-size: 12px; color: var(--text-muted); font-family: monospace; z-index: 1000;">
+        ZZ
+    </div>
+</body>
+</html>

@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MSFG • Form 1040 Page 1 Income Calculator</title>
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #1a1a1a;
+            --bg-card: rgba(255, 255, 255, 0.05);
+            --bg-card-hover: rgba(255, 255, 255, 0.08);
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --text-muted: #808080;
+            --accent-primary: #3b82f6;
+            --accent-secondary: #1d4ed8;
+            --accent-success: #10b981;
+            --accent-warning: #f59e0b;
+            --accent-danger: #ef4444;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --border-hover: rgba(255, 255, 255, 0.2);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.4);
+            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-success: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-warning: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            --gradient-danger: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .back-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.875rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .back-link:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent-primary);
+            transform: translateX(-2px);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo img {
+            width: 80px;
+            height: auto;
+            border-radius: 8px;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+        }
+
+
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .hero h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            border-color: var(--border-hover);
+            background: var(--bg-card-hover);
+        }
+
+        .section h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section h3::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+        }
+
+        .section p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        th {
+            background: var(--accent-primary);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .result {
+            font-weight: bold;
+            background: var(--gradient-success);
+            color: white;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            display: inline-block;
+            min-width: 140px;
+            text-align: right;
+            font-size: 1rem;
+        }
+
+        .result-label {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-right: 1rem;
+        }
+
+        .combined-total {
+            background: var(--gradient-primary);
+            border: 1px solid var(--accent-primary);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .combined-total h3 {
+            color: white;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .combined-total .result {
+            font-size: 1.5rem;
+            padding: 1rem 2rem;
+            min-width: 200px;
+        }
+
+        .footer {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        .actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            justify-content: center;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--accent-primary);
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 0.875rem;
+        }
+
+        .btn:hover {
+            background: var(--accent-secondary);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn.secondary {
+            background: var(--accent-warning);
+        }
+
+        .btn.secondary:hover {
+            background: #d97706;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .section {
+                padding: 1.5rem;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+            
+            table {
+                font-size: 0.875rem;
+            }
+            
+            th, td {
+                padding: 0.75rem;
+            }
+            
+            .actions {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-left: 0.5rem;
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--accent-success);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="http://loan-tools-hub.s3-website-us-west-1.amazonaws.com" class="back-link">
+            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+            </svg>
+            Back to Hub
+        </a>
+        <div class="logo">
+            <img src="https://msfg-media.s3.us-west-2.amazonaws.com/Assets/LOGOS/MSFG+Home+Loans/MSFG-Color-Transparent.png" alt="MSFG Logo">
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <h2>Form 1040 Page 1 Income Calculator</h2>
+            <p>Calculate monthly income from Form 1040 Page 1 sources. Enter annual amounts and get policy-based monthly calculations.</p>
+        </section>
+
+        <!-- Section: Self-Employed W-2s -->
+        <!-- PDF Drop Zone -->
+        <div id="pdfDropZone" style="display: block;"></div>
+        
+        <!-- Target Location Selector -->
+        <div style="text-align: center; margin: 20px 0;">
+            <label for="targetLocation" style="margin-right: 10px; font-weight: bold;">Target Location:</label>
+            <select id="targetLocation" style="
+                padding: 8px 12px;
+                border: 1px solid var(--border-color);
+                border-radius: 6px;
+                background: var(--bg-primary);
+                color: var(--text-primary);
+                margin-right: 20px;
+            ">
+                <option value="current_year">Current Year</option>
+                <option value="prior_year">Prior Year</option>
+            </select>
+            
+            <button onclick="testAPI()" style="
+                padding: 8px 16px;
+                background: var(--accent-primary);
+                color: white;
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+                margin-right: 10px;
+            ">Test API Connection</button>
+            <button onclick="showLastExtractedText()" style="
+                padding: 8px 16px;
+                background: var(--accent-secondary);
+                color: var(--text-primary);
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+            ">Show Last Extracted Text</button>
+        </div>
+
+        <section class="section">
+            <h3>W-2 Income <span class="status-badge">Live</span></h3>
+            <p>Enter Box 1 amounts from up to four W-2 forms. Use Prior Year for comparison if available.</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Box 1 W-2 Income</th>
+                        <th>Current Year</th>
+                        <th>Prior Year (optional)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>W-2 Income</td>
+                        <td><input type="number" id="w2_1_y1" value="0" onchange="calc1040()" placeholder="0"></td>
+                        <td><input type="number" id="w2_1_y2" value="0" onchange="calc1040()" placeholder="0"></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>W-2 Income</td>
+                        <td><input type="number" id="w2_2_y1" value="0" onchange="calc1040()" placeholder="0"></td>
+                        <td><input type="number" id="w2_2_y2" value="0" onchange="calc1040()" placeholder="0"></td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>W-2 Income</td>
+                        <td><input type="number" id="w2_3_y1" value="0" onchange="calc1040()" placeholder="0"></td>
+                        <td><input type="number" id="w2_3_y2" value="0" onchange="calc1040()" placeholder="0"></td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>W-2 Income</td>
+                        <td><input type="number" id="w2_4_y1" value="0" onchange="calc1040()" placeholder="0"></td>
+                        <td><input type="number" id="w2_4_y2" value="0" onchange="calc1040()" placeholder="0"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                <span class="result-label">Monthly Income (policy):</span>
+                <span id="w2_month" class="result">$0.00</span>
+            </p>
+        </section>
+
+        <!-- Section: Alimony Received -->
+        <section class="section">
+            <h3>Alimony Received (Line 11)</h3>
+            <p>Enter alimony received amounts from Form 1040 Line 11.</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Current Year</th>
+                        <th>Prior Year (optional)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Alimony Received</td>
+                        <td><input type="number" id="alimony1" value="0" onchange="calc1040()" placeholder="0"></td>
+                        <td><input type="number" id="alimony2" value="0" onchange="calc1040()" placeholder="0"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                <span class="result-label">Monthly Income (policy):</span>
+                <span id="alimony_month" class="result">$0.00</span>
+            </p>
+        </section>
+
+        <!-- Section: IRA/Pension/Annuity Distributions -->
+        <section class="section">
+            <h3>Pension/Annuity Distributions</h3>
+            <p>Use 15a/15b and 16a/16b lines for up to three pensions or annuities.</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Pension</th>
+                        <th>Line</th>
+                        <th>Current Year</th>
+                        <th>Prior Year (optional)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td rowspan="2">Pension 1</td>
+                        <td>15a/15b</td>
+                        <td><input type="number" id="pen1_15_y1" value="0" onchange="calc1040()" placeholder="0"></td>
+                        <td><input type="number" id="pen1_15_y2" value="0" onchange="calc1040()" placeholder="0"></td>
+                    </tr>
+                    <tr>
+                        <td>16a/16b</td>
+                        <td><input type="number" id="pen1_16_y1" value="0" onchange="calc1040()" placeholder="0"></td>
+                        <td><input type="number" id="pen1_16_y2" value="0" onchange="calc1040()" placeholder="0"></td>
+                    </tr>
+                    <tr>
+                        <td rowspan="2">Pension 2</td>
+                        <td>15a/15b</td>
+                        <td><input type="number" id="pen2_15_y1" value="0" onchange="calc1040()" placeholder="0"></td>
+                        <td><input type="number" id="pen2_15_y2" value="0" onchange="calc1040()" placeholder="0"></td>
+                    </tr>
+                    <tr>
+                        <td>16a/16b</td>
+                        <td><input type="number" id="pen2_16_y1" value="0" onchange="calc1040()" placeholder="0"></td>
+                        <td><input type="number" id="pen2_16_y2" value="0" onchange="calc1040()" placeholder="0"></td>
+                    </tr>
+                    <tr>
+                        <td rowspan="2">Pension 3</td>
+                        <td>15a/15b</td>
+                        <td><input type="number" id="pen3_15_y1" value="0" onchange="calc1040()" placeholder="0"></td>
+                        <td><input type="number" id="pen3_15_y2" value="0" onchange="calc1040()" placeholder="0"></td>
+                    </tr>
+                    <tr>
+                        <td>16a/16b</td>
+                        <td><input type="number" id="pen3_16_y1" value="0" onchange="calc1040()" placeholder="0"></td>
+                        <td><input type="number" id="pen3_16_y2" value="0" onchange="calc1040()" placeholder="0"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                <span class="result-label">Monthly Income (policy):</span>
+                <span id="pension_month" class="result">$0.00</span>
+            </p>
+        </section>
+
+        <!-- Section: Unemployment Compensation -->
+        <section class="section">
+            <h3>Unemployment Compensation (Line 19)</h3>
+            <p>Enter unemployment compensation amounts from Form 1040 Line 19.</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Current Year</th>
+                        <th>Prior Year (optional)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="number" id="unemp1" value="0" onchange="calc1040()" placeholder="0"></td>
+                        <td><input type="number" id="unemp2" value="0" onchange="calc1040()" placeholder="0"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                <span class="result-label">Monthly Income (policy):</span>
+                <span id="unemp_month" class="result">$0.00</span>
+            </p>
+        </section>
+
+        <!-- Section: Social Security Benefits -->
+        <section class="section">
+            <h3>Social Security Benefits (Line 20a)</h3>
+            <p>Enter Social Security benefits from Form 1040 Line 20a.</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Current Year</th>
+                        <th>Prior Year (optional)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="number" id="ss1" value="0" onchange="calc1040()" placeholder="0"></td>
+                        <td><input type="number" id="ss2" value="0" onchange="calc1040()" placeholder="0"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                <span class="result-label">Monthly Income (policy):</span>
+                <span id="ss_month" class="result">$0.00</span>
+            </p>
+        </section>
+
+        <!-- Combined total -->
+        <section class="combined-total">
+            <h3>Combined Monthly Income</h3>
+            <p>
+                <span class="result-label">Total Monthly Income:</span>
+                <span id="combined1040" class="result">$0.00</span>
+            </p>
+        </section>
+
+        <div class="actions">
+            <button class="btn" onclick="exportCSV()">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                Export CSV
+            </button>
+            <button class="btn secondary" onclick="printView()">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+                </svg>
+                Print View
+            </button>
+            <button class="btn secondary" onclick="clearAll()">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                </svg>
+                Clear All
+            </button>
+        </div>
+
+        <div class="footer">
+            <strong>Calculation Policy:</strong> Each section calculates its own monthly income using the same policy:
+            if two years are provided and the most recent year exceeds the prior year, the average of the two years is divided by 24 months; 
+            otherwise the most recent year is divided by 12. Combined monthly income is the sum of all sections. 
+            Pension/annuity distributions use line 15a/15b and 16a/16b entries for up to three pensions. 
+            Only enter amounts that you want to use for qualification.
+        </div>
+    </main>
+
+    <script>
+        function parseNum(val) {
+            const n = parseFloat(val);
+            return isNaN(n) ? 0 : n;
+        }
+
+        // Generic policy calculator
+        function policyCalc(year1, year2) {
+            const hasYr2 = year2 !== 0;
+            if (hasYr2 && year1 > year2) {
+                return (year1 + year2) / 24;
+            }
+            return year1 / 12;
+        }
+
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }).format(amount);
+        }
+
+        function calc1040() {
+            // W-2 section
+            const w2_y1 = parseNum(document.getElementById('w2_1_y1').value) +
+                parseNum(document.getElementById('w2_2_y1').value) +
+                parseNum(document.getElementById('w2_3_y1').value) +
+                parseNum(document.getElementById('w2_4_y1').value);
+            const w2_y2 = parseNum(document.getElementById('w2_1_y2').value) +
+                parseNum(document.getElementById('w2_2_y2').value) +
+                parseNum(document.getElementById('w2_3_y2').value) +
+                parseNum(document.getElementById('w2_4_y2').value);
+            const w2_month = policyCalc(w2_y1, w2_y2);
+            document.getElementById('w2_month').textContent = formatCurrency(w2_month);
+
+            // Alimony
+            const al_y1 = parseNum(document.getElementById('alimony1').value);
+            const al_y2 = parseNum(document.getElementById('alimony2').value);
+            const al_month = policyCalc(al_y1, al_y2);
+            document.getElementById('alimony_month').textContent = formatCurrency(al_month);
+
+            // Pension/annuity distributions
+            const pensions_y1 =
+                parseNum(document.getElementById('pen1_15_y1').value) +
+                parseNum(document.getElementById('pen1_16_y1').value) +
+                parseNum(document.getElementById('pen2_15_y1').value) +
+                parseNum(document.getElementById('pen2_16_y1').value) +
+                parseNum(document.getElementById('pen3_15_y1').value) +
+                parseNum(document.getElementById('pen3_16_y1').value);
+            const pensions_y2 =
+                parseNum(document.getElementById('pen1_15_y2').value) +
+                parseNum(document.getElementById('pen1_16_y2').value) +
+                parseNum(document.getElementById('pen2_15_y2').value) +
+                parseNum(document.getElementById('pen2_16_y2').value) +
+                parseNum(document.getElementById('pen3_15_y2').value) +
+                parseNum(document.getElementById('pen3_16_y2').value);
+            const pension_month = policyCalc(pensions_y1, pensions_y2);
+            document.getElementById('pension_month').textContent = formatCurrency(pension_month);
+
+            // Unemployment
+            const un_y1 = parseNum(document.getElementById('unemp1').value);
+            const un_y2 = parseNum(document.getElementById('unemp2').value);
+            const un_month = policyCalc(un_y1, un_y2);
+            document.getElementById('unemp_month').textContent = formatCurrency(un_month);
+
+            // Social Security
+            const ss_y1 = parseNum(document.getElementById('ss1').value);
+            const ss_y2 = parseNum(document.getElementById('ss2').value);
+            const ss_month = policyCalc(ss_y1, ss_y2);
+            document.getElementById('ss_month').textContent = formatCurrency(ss_month);
+
+            // Combined
+            const combined = w2_month + al_month + pension_month + un_month + ss_month;
+            document.getElementById('combined1040').textContent = formatCurrency(combined);
+        }
+
+        function exportCSV() {
+            const data = [
+                ['Form 1040 Page 1 Income Calculator'],
+                [''],
+                ['Section', 'Current Year', 'Prior Year', 'Monthly Income'],
+                ['W-2 Income', 
+                    parseNum(document.getElementById('w2_1_y1').value) + parseNum(document.getElementById('w2_2_y1').value) + parseNum(document.getElementById('w2_3_y1').value) + parseNum(document.getElementById('w2_4_y1').value),
+                    parseNum(document.getElementById('w2_1_y2').value) + parseNum(document.getElementById('w2_2_y2').value) + parseNum(document.getElementById('w2_3_y2').value) + parseNum(document.getElementById('w2_4_y2').value),
+                    document.getElementById('w2_month').textContent
+                ],
+                ['Alimony Received', 
+                    parseNum(document.getElementById('alimony1').value),
+                    parseNum(document.getElementById('alimony2').value),
+                    document.getElementById('alimony_month').textContent
+                ],
+                ['Pension/Annuity', 
+                    parseNum(document.getElementById('pen1_15_y1').value) + parseNum(document.getElementById('pen1_16_y1').value) + parseNum(document.getElementById('pen2_15_y1').value) + parseNum(document.getElementById('pen2_16_y1').value) + parseNum(document.getElementById('pen3_15_y1').value) + parseNum(document.getElementById('pen3_16_y1').value),
+                    parseNum(document.getElementById('pen1_15_y2').value) + parseNum(document.getElementById('pen1_16_y2').value) + parseNum(document.getElementById('pen2_15_y2').value) + parseNum(document.getElementById('pen2_16_y2').value) + parseNum(document.getElementById('pen3_15_y2').value) + parseNum(document.getElementById('pen3_16_y2').value),
+                    document.getElementById('pension_month').textContent
+                ],
+                ['Unemployment', 
+                    parseNum(document.getElementById('unemp1').value),
+                    parseNum(document.getElementById('unemp2').value),
+                    document.getElementById('unemp_month').textContent
+                ],
+                ['Social Security', 
+                    parseNum(document.getElementById('ss1').value),
+                    parseNum(document.getElementById('ss2').value),
+                    document.getElementById('ss_month').textContent
+                ],
+                [''],
+                ['Total Monthly Income', '', '', document.getElementById('combined1040').textContent]
+            ];
+
+            const csvContent = data.map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'form1040_income_calculator.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        function printView() {
+            window.print();
+        }
+
+        function clearAll() {
+            const inputs = document.querySelectorAll('input[type="number"]');
+            inputs.forEach(input => {
+                input.value = '0';
+            });
+            calc1040();
+        }
+
+        // Initialize
+        calc1040();
+
+        // PDF Parser Class
+        class Form1040PDFParser {
+            constructor() {
+                this.initializeDropZone();
+            }
+            
+            initializeDropZone() {
+                this.createDropZone('pdfDropZone', 'Form 1040');
+                document.addEventListener('dragover', this.handleDragOver.bind(this));
+                document.addEventListener('dragleave', this.handleDragLeave.bind(this));
+                document.addEventListener('drop', this.handleDrop.bind(this));
+            }
+            
+            createDropZone(containerId, documentType) {
+                console.log(`Creating dropzone for ${documentType} in container: ${containerId}`);
+                const dropZone = document.createElement('div');
+                dropZone.id = `dropZone_form1040`;
+                dropZone.style.cssText = `
+                    width: 100%;
+                    max-width: 600px;
+                    height: 200px;
+                    border: 3px dashed var(--accent-primary);
+                    border-radius: 12px;
+                    background: rgba(59, 130, 246, 0.1);
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    margin: 20px auto;
+                    transition: all 0.3s ease;
+                    cursor: pointer;
+                `;
+                
+                dropZone.innerHTML = `
+                    <div style="font-size: 48px; margin-bottom: 16px;">📄</div>
+                    <h3 style="margin-bottom: 8px; color: var(--text-primary);">Drop Form 1040 PDF or Image</h3>
+                    <p style="color: var(--text-secondary); text-align: center; font-size: 14px;">
+                        Drop your Form 1040 PDF or image (JPG, PNG) to automatically populate form fields
+                    </p>
+                `;
+                
+                const dropZoneContainer = document.getElementById(containerId);
+                if (dropZoneContainer) {
+                    dropZoneContainer.appendChild(dropZone);
+                    dropZoneContainer.style.display = 'block';
+                } else {
+                    document.body.appendChild(dropZone);
+                }
+                
+                dropZone.addEventListener('dragover', this.handleDragOver.bind(this));
+                dropZone.addEventListener('dragleave', this.handleDragLeave.bind(this));
+                dropZone.addEventListener('drop', this.handleDrop.bind(this));
+            }
+            
+            handleDragOver(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                e.dataTransfer.dropEffect = 'copy';
+                
+                const dropZone = document.getElementById('dropZone_form1040');
+                if (dropZone) {
+                    dropZone.style.borderColor = 'var(--accent-success)';
+                    dropZone.style.background = 'rgba(16, 185, 129, 0.2)';
+                }
+            }
+            
+            handleDragLeave(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const dropZone = document.getElementById('dropZone_form1040');
+                if (dropZone) {
+                    dropZone.style.borderColor = 'var(--accent-primary)';
+                    dropZone.style.background = 'rgba(59, 130, 246, 0.1)';
+                }
+            }
+            
+            async handleDrop(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const dropZone = document.getElementById('dropZone_form1040');
+                if (dropZone) {
+                    dropZone.style.borderColor = 'var(--accent-primary)';
+                    dropZone.style.background = 'rgba(59, 130, 246, 0.1)';
+                }
+                
+                const files = Array.from(e.dataTransfer.files);
+                const pdfFiles = files.filter(file => file.type === 'application/pdf');
+                const imageFiles = files.filter(file => file.type.startsWith('image/'));
+                
+                if (pdfFiles.length === 0 && imageFiles.length === 0) {
+                    this.showNotification('Please drop PDF files or images (JPG, PNG) only', 'warning');
+                    return;
+                }
+                
+                const allFiles = [...pdfFiles, ...imageFiles];
+                for (const file of allFiles) {
+                    await this.processFile(file);
+                }
+            }
+            
+            async processFile(file) {
+                try {
+                    this.showNotification(`Processing ${file.name}...`, 'info');
+                    
+                    const targetLocation = document.getElementById('targetLocation').value;
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    formData.append('target_location', targetLocation);
+                    
+                    const response = await fetch('http://localhost:5001/parse-form-1040', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (!result.success) {
+                        throw new Error(result.error);
+                    }
+                    
+                    console.log('API Response:', result);
+                    window.lastExtractedText = result.raw_text || '';
+                    this.populateFormFromAPI(result.data, targetLocation);
+                    this.showNotification(`Successfully processed ${file.name}`, 'success');
+                    
+                } catch (error) {
+                    console.error('Error processing file:', error);
+                    this.showNotification(`Error processing ${file.name}: ${error.message}`, 'error');
+                }
+            }
+            
+            populateFormFromAPI(data, targetLocation) {
+                console.log(`Populating Form 1040 with data for ${targetLocation}:`, data);
+                
+                // Map extracted data to form fields
+                const fieldMappings = {
+                    'wages': 'w2_1_y1', // Default to first W-2 field
+                    'total_income': 'w2_1_y1'
+                };
+                
+                Object.entries(fieldMappings).forEach(([apiKey, formId]) => {
+                    const input = document.getElementById(formId);
+                    if (input && data[apiKey] !== undefined) {
+                        input.value = data[apiKey];
+                        input.dispatchEvent(new Event('input', { bubbles: true }));
+                    }
+                });
+                
+                calc1040();
+            }
+            
+            showNotification(message, type = 'info') {
+                console.log(`[${type.toUpperCase()}] ${message}`);
+                
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    padding: 12px 20px;
+                    border-radius: 8px;
+                    color: white;
+                    font-weight: 500;
+                    z-index: 10001;
+                    max-width: 300px;
+                    word-wrap: break-word;
+                `;
+                
+                switch (type) {
+                    case 'success':
+                        notification.style.background = '#10b981';
+                        break;
+                    case 'error':
+                        notification.style.background = '#ef4444';
+                        break;
+                    case 'warning':
+                        notification.style.background = '#f59e0b';
+                        break;
+                    default:
+                        notification.style.background = '#3b82f6';
+                }
+                
+                notification.textContent = message;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 5000);
+            }
+        }
+
+        // API Test Function
+        async function testAPI() {
+            try {
+                console.log('Testing API connection...');
+                const response = await fetch('http://localhost:5001/health');
+                const result = await response.json();
+                
+                if (result.status === 'healthy') {
+                    alert('API connection successful! Python server is running.');
+                } else {
+                    alert('API connection failed. Server response: ' + JSON.stringify(result));
+                }
+            } catch (error) {
+                console.error('API test error:', error);
+                alert('API connection failed. Make sure the Python server is running on localhost:5001');
+            }
+        }
+
+        // Show Last Extracted Text Function
+        function showLastExtractedText() {
+            if (window.lastExtractedText) {
+                const modal = document.createElement('div');
+                modal.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: rgba(0, 0, 0, 0.8);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 10000;
+                `;
+                
+                const content = document.createElement('div');
+                content.style.cssText = `
+                    background: var(--bg-secondary);
+                    border: 1px solid var(--border-color);
+                    border-radius: 12px;
+                    padding: 24px;
+                    max-width: 800px;
+                    max-height: 80vh;
+                    overflow-y: auto;
+                    color: var(--text-primary);
+                `;
+                
+                content.innerHTML = `
+                    <h3 style="margin-bottom: 16px; color: var(--accent-primary);">Last Extracted PDF Text</h3>
+                    <pre style="background: var(--bg-secondary); padding: 12px; border-radius: 6px; font-size: 12px; overflow-x: auto; white-space: pre-wrap;">${window.lastExtractedText}</pre>
+                    <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 16px;">
+                        <button onclick="this.closest('.modal').remove()" style="
+                            padding: 8px 16px;
+                            background: var(--accent-secondary);
+                            color: var(--text-primary);
+                            border: none;
+                            border-radius: 6px;
+                            cursor: pointer;
+                        ">Close</button>
+                    </div>
+                `;
+                
+                modal.appendChild(content);
+                document.body.appendChild(modal);
+            } else {
+                alert('No extracted text available. Please upload a Form 1040 document first.');
+            }
+        }
+
+        // Initialize PDF parser when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM Content Loaded - Initializing Form1040PDFParser');
+            window.form1040PDFParser = new Form1040PDFParser();
+            console.log('Form1040PDFParser initialized');
+        });
+
+        // Expose debug function
+        window.IncomeCalculator1040 = {
+            debug: function() {
+                return {
+                    w2_month: document.getElementById('w2_month').textContent,
+                    alimony_month: document.getElementById('alimony_month').textContent,
+                    pension_month: document.getElementById('pension_month').textContent,
+                    unemp_month: document.getElementById('unemp_month').textContent,
+                    ss_month: document.getElementById('ss_month').textContent,
+                    combined: document.getElementById('combined1040').textContent,
+                    version: '1.0.0'
+                };
+            }
+        };
+    </script>
+    
+    <!-- Theme Switcher -->
+    <script src="theme-switcher.js"></script>
+    
+    <!-- ZZ Signature -->
+    <div style="position: fixed; bottom: 20px; right: 20px; font-size: 12px; color: var(--text-muted); font-family: monospace; z-index: 1000;">
+        ZZ
+    </div>
+</body>
+</html>

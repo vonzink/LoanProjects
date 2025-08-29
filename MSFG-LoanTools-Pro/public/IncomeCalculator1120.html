@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MSFG • Form 1120 Corporation Income Calculator</title>
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #1a1a1a;
+            --bg-card: rgba(255, 255, 255, 0.05);
+            --bg-card-hover: rgba(255, 255, 255, 0.08);
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --text-muted: #808080;
+            --accent-primary: #3b82f6;
+            --accent-secondary: #1d4ed8;
+            --accent-success: #10b981;
+            --accent-warning: #f59e0b;
+            --accent-danger: #ef4444;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --border-hover: rgba(255, 255, 255, 0.2);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.4);
+            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-success: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-warning: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            --gradient-danger: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo img {
+            width: 80px;
+            height: auto;
+            border-radius: 8px;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+        }
+
+
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .hero h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .notes {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        .section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            border-color: var(--border-hover);
+            background: var(--bg-card-hover);
+        }
+
+        .section h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section h3::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        th {
+            background: var(--accent-primary);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .ownership-section {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .ownership-section label {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-right: 1rem;
+        }
+
+        .ownership-section input {
+            width: 120px;
+            margin-right: 1rem;
+        }
+
+        .ownership-note {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        .result {
+            font-weight: bold;
+            background: var(--gradient-success);
+            color: white;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            display: inline-block;
+            min-width: 140px;
+            text-align: right;
+            font-size: 1rem;
+        }
+
+        .result-label {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-right: 1rem;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .result-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .result-item h4 {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .result-item .result {
+            font-size: 1.25rem;
+            padding: 1rem 1.5rem;
+            min-width: 180px;
+        }
+
+        .footer {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        .actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            justify-content: center;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--accent-primary);
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 0.875rem;
+        }
+
+        .btn:hover {
+            background: var(--accent-secondary);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn.secondary {
+            background: var(--accent-warning);
+        }
+
+        .btn.secondary:hover {
+            background: #d97706;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .section {
+                padding: 1.5rem;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+            
+            table {
+                font-size: 0.875rem;
+            }
+            
+            th, td {
+                padding: 0.75rem;
+            }
+            
+            .actions {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .ownership-section {
+                padding: 1rem;
+            }
+
+            .ownership-section input {
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: 0.5rem;
+            }
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-left: 0.5rem;
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--accent-success);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <img src="https://msfg-media.s3.us-west-2.amazonaws.com/Assets/LOGOS/MSFG+Home+Loans/MSFG-Color-Transparent.png" alt="MSFG Logo">
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <h2>Form 1120 Corporation Income Calculator</h2>
+            <p>Calculate monthly income from C-corporation (Form 1120) returns with ownership percentages and comprehensive add-backs.</p>
+        </section>
+
+        <div class="notes">
+            <strong>Instructions:</strong> This calculator derives the qualifying income for a C‑corporation (Form 1120) by summing the listed lines, 
+            subtracting certain expenses, multiplying by your ownership percentage and deducting dividends received. For lines labelled "+/–" please 
+            enter a negative value if the item represents a loss. The final income used will follow the standard averaging rule: if two years are 
+            entered and the most recent year shows higher income, the two years are averaged over 24 months; otherwise the most recent year is divided by 12.
+        </div>
+
+        <section class="section">
+            <h3>Form 1120 Income Items <span class="status-badge">Live</span></h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Line #</th>
+                        <th>Sign</th>
+                        <th>Current Year</th>
+                        <th>Prior Year (optional)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Capital Gain Net Income or Loss (non‑recurring)</td>
+                        <td>8</td>
+                        <td>+/–</td>
+                        <td><input type="number" id="cap1" value="0" onchange="calc1120()" placeholder="0"></td>
+                        <td><input type="number" id="cap2" value="0" onchange="calc1120()" placeholder="0"></td>
+                    </tr>
+                    <tr>
+                        <td>Net Gain or Loss (non‑recurring)</td>
+                        <td>9</td>
+                        <td>+/–</td>
+                        <td><input type="number" id="net1" value="0" onchange="calc1120()" placeholder="0"></td>
+                        <td><input type="number" id="net2" value="0" onchange="calc1120()" placeholder="0"></td>
+                    </tr>
+                    <tr>
+                        <td>Other Income or Loss (non‑recurring)</td>
+                        <td>10</td>
+                        <td>+/–</td>
+                        <td><input type="number" id="oth1" value="0" onchange="calc1120()" placeholder="0"></td>
+                        <td><input type="number" id="oth2" value="0" onchange="calc1120()" placeholder="0"></td>
+                    </tr>
+                    <tr>
+                        <td>Depreciation</td>
+                        <td>20</td>
+                        <td>+</td>
+                        <td><input type="number" id="dep1" value="0" onchange="calc1120()" placeholder="0"></td>
+                        <td><input type="number" id="dep2" value="0" onchange="calc1120()" placeholder="0"></td>
+                    </tr>
+                    <tr>
+                        <td>Depletion</td>
+                        <td>21</td>
+                        <td>+</td>
+                        <td><input type="number" id="depl1" value="0" onchange="calc1120()" placeholder="0"></td>
+                        <td><input type="number" id="depl2" value="0" onchange="calc1120()" placeholder="0"></td>
+                    </tr>
+                    <tr>
+                        <td>Domestic Production Activities Deduction</td>
+                        <td>25</td>
+                        <td>+</td>
+                        <td><input type="number" id="dpd1" value="0" onchange="calc1120()" placeholder="0"></td>
+                        <td><input type="number" id="dpd2" value="0" onchange="calc1120()" placeholder="0"></td>
+                    </tr>
+                    <tr>
+                        <td>Amortization/Casualty Loss</td>
+                        <td>26</td>
+                        <td>+</td>
+                        <td><input type="number" id="amort1" value="0" onchange="calc1120()" placeholder="0"></td>
+                        <td><input type="number" id="amort2" value="0" onchange="calc1120()" placeholder="0"></td>
+                    </tr>
+                    <tr>
+                        <td>Net Operating Loss & Special Deductions</td>
+                        <td>29</td>
+                        <td>+</td>
+                        <td><input type="number" id="nol1" value="0" onchange="calc1120()" placeholder="0"></td>
+                        <td><input type="number" id="nol2" value="0" onchange="calc1120()" placeholder="0"></td>
+                    </tr>
+                    <tr>
+                        <td>Taxable Income (positive or negative)</td>
+                        <td>30</td>
+                        <td>+/–</td>
+                        <td><input type="number" id="taxable1" value="0" onchange="calc1120()" placeholder="0"></td>
+                        <td><input type="number" id="taxable2" value="0" onchange="calc1120()" placeholder="0"></td>
+                    </tr>
+                    <tr>
+                        <td>Total Tax</td>
+                        <td>31</td>
+                        <td>–</td>
+                        <td><input type="number" id="totaltax1" value="0" onchange="calc1120()" placeholder="0"></td>
+                        <td><input type="number" id="totaltax2" value="0" onchange="calc1120()" placeholder="0"></td>
+                    </tr>
+                    <tr>
+                        <td>Mortgages/Notes Payable &lt; 1 Year</td>
+                        <td>Schedule L line 17, col D</td>
+                        <td>–</td>
+                        <td><input type="number" id="mort1" value="0" onchange="calc1120()" placeholder="0"></td>
+                        <td><input type="number" id="mort2" value="0" onchange="calc1120()" placeholder="0"></td>
+                    </tr>
+                    <tr>
+                        <td>Meal & Entertainment Exclusion</td>
+                        <td>Schedule M‑1 line 5c</td>
+                        <td>–</td>
+                        <td><input type="number" id="meals1" value="0" onchange="calc1120()" placeholder="0"></td>
+                        <td><input type="number" id="meals2" value="0" onchange="calc1120()" placeholder="0"></td>
+                    </tr>
+                    <tr>
+                        <td>Dividends Paid to Borrower</td>
+                        <td>Sch B line 5</td>
+                        <td>–</td>
+                        <td><input type="number" id="dividend1" value="0" onchange="calc1120()" placeholder="0"></td>
+                        <td><input type="number" id="dividend2" value="0" onchange="calc1120()" placeholder="0"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="ownership-section">
+                <label for="ownership">Ownership Percentage (0–100):</label>
+                <input type="number" id="ownership" value="100" min="0" max="100" onchange="calc1120()" placeholder="100">
+                <div class="ownership-note">
+                    Enter your percentage ownership in the corporation. For conforming loans income cannot be used unless ownership is 100%.
+                </div>
+            </div>
+
+            <div class="results-grid">
+                <div class="result-item">
+                    <h4>Total Current Year Income</h4>
+                    <span id="yr1_total" class="result">$0.00</span>
+                </div>
+                <div class="result-item">
+                    <h4>Total Prior Year Income</h4>
+                    <span id="yr2_total" class="result">$0.00</span>
+                </div>
+                <div class="result-item">
+                    <h4>Monthly Income (Policy)</h4>
+                    <span id="monthly_income" class="result">$0.00</span>
+                </div>
+            </div>
+        </section>
+
+        <div class="actions">
+            <button class="btn" onclick="exportCSV()">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                Export CSV
+            </button>
+            <button class="btn secondary" onclick="printView()">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+                </svg>
+                Print View
+            </button>
+            <button class="btn secondary" onclick="clearAll()">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                </svg>
+                Clear All
+            </button>
+        </div>
+
+        <div class="footer">
+            <strong>Calculation Policy:</strong> This calculator replicates the 1120 worksheet logic. It sums the selected lines for each year, 
+            subtracts total tax, short‑term debt and meal & entertainment exclusions, multiplies by your ownership percentage and reduces dividends 
+            paid to you. If a second year is entered and Current Year income exceeds Prior Year, the two years are averaged over 24 months; otherwise the 
+            most recent year is divided by 12. Results are rounded to two decimal places.
+        </div>
+    </main>
+
+    <script>
+        function parseNum(val) {
+            const n = parseFloat(val);
+            return isNaN(n) ? 0 : n;
+        }
+
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }).format(amount);
+        }
+
+        function calc1120() {
+            // Gather inputs for each line
+            const cap1 = parseNum(document.getElementById('cap1').value);
+            const cap2 = parseNum(document.getElementById('cap2').value);
+            const net1 = parseNum(document.getElementById('net1').value);
+            const net2 = parseNum(document.getElementById('net2').value);
+            const oth1 = parseNum(document.getElementById('oth1').value);
+            const oth2 = parseNum(document.getElementById('oth2').value);
+            const dep1 = parseNum(document.getElementById('dep1').value);
+            const dep2 = parseNum(document.getElementById('dep2').value);
+            const depl1 = parseNum(document.getElementById('depl1').value);
+            const depl2 = parseNum(document.getElementById('depl2').value);
+            const dpd1 = parseNum(document.getElementById('dpd1').value);
+            const dpd2 = parseNum(document.getElementById('dpd2').value);
+            const amort1 = parseNum(document.getElementById('amort1').value);
+            const amort2 = parseNum(document.getElementById('amort2').value);
+            const nol1 = parseNum(document.getElementById('nol1').value);
+            const nol2 = parseNum(document.getElementById('nol2').value);
+            const taxable1 = parseNum(document.getElementById('taxable1').value);
+            const taxable2 = parseNum(document.getElementById('taxable2').value);
+            const tax1 = parseNum(document.getElementById('totaltax1').value);
+            const tax2 = parseNum(document.getElementById('totaltax2').value);
+            const mort1 = parseNum(document.getElementById('mort1').value);
+            const mort2 = parseNum(document.getElementById('mort2').value);
+            const meals1 = parseNum(document.getElementById('meals1').value);
+            const meals2 = parseNum(document.getElementById('meals2').value);
+            const div1 = parseNum(document.getElementById('dividend1').value);
+            const div2 = parseNum(document.getElementById('dividend2').value);
+            const ownership = parseNum(document.getElementById('ownership').value) / 100;
+
+            // Sum the income lines (cap, net, oth, dep, depl, dpd, amort, nol, taxable)
+            const sum1 = cap1 + net1 + oth1 + dep1 + depl1 + dpd1 + amort1 + nol1 + taxable1;
+            const sum2 = cap2 + net2 + oth2 + dep2 + depl2 + dpd2 + amort2 + nol2 + taxable2;
+
+            // Subtract expenses: total tax, mortgages/notes, meal & entertainment
+            let total1 = (sum1 - tax1 - mort1 - meals1) * ownership - div1;
+            let total2 = (sum2 - tax2 - mort2 - meals2) * ownership - div2;
+
+            // Determine if any Year2 values entered
+            const year2vals = [cap2, net2, oth2, dep2, depl2, dpd2, amort2, nol2, taxable2, tax2, mort2, meals2, div2];
+            const hasYr2 = year2vals.some((v) => v !== 0);
+
+            // Calculate monthly income per policy
+            let monthly;
+            if (hasYr2 && total1 > total2) {
+                monthly = (total1 + total2) / 24;
+            } else {
+                monthly = total1 / 12;
+            }
+
+            // Update UI
+            document.getElementById('yr1_total').textContent = formatCurrency(total1);
+            document.getElementById('yr2_total').textContent = formatCurrency(total2);
+            document.getElementById('monthly_income').textContent = formatCurrency(monthly);
+        }
+
+        function exportCSV() {
+            const data = [
+                ['Form 1120 Corporation Income Calculator'],
+                ['']
+            ];
+
+            // Add input data
+            data.push(['Description', 'Line #', 'Sign', 'Current Year', 'Prior Year']);
+            data.push(['Capital Gain Net Income or Loss (non‑recurring)', '8', '+/–', parseNum(document.getElementById('cap1').value), parseNum(document.getElementById('cap2').value)]);
+            data.push(['Net Gain or Loss (non‑recurring)', '9', '+/–', parseNum(document.getElementById('net1').value), parseNum(document.getElementById('net2').value)]);
+            data.push(['Other Income or Loss (non‑recurring)', '10', '+/–', parseNum(document.getElementById('oth1').value), parseNum(document.getElementById('oth2').value)]);
+            data.push(['Depreciation', '20', '+', parseNum(document.getElementById('dep1').value), parseNum(document.getElementById('dep2').value)]);
+            data.push(['Depletion', '21', '+', parseNum(document.getElementById('depl1').value), parseNum(document.getElementById('depl2').value)]);
+            data.push(['Domestic Production Activities Deduction', '25', '+', parseNum(document.getElementById('dpd1').value), parseNum(document.getElementById('dpd2').value)]);
+            data.push(['Amortization/Casualty Loss', '26', '+', parseNum(document.getElementById('amort1').value), parseNum(document.getElementById('amort2').value)]);
+            data.push(['Net Operating Loss & Special Deductions', '29', '+', parseNum(document.getElementById('nol1').value), parseNum(document.getElementById('nol2').value)]);
+            data.push(['Taxable Income (positive or negative)', '30', '+/–', parseNum(document.getElementById('taxable1').value), parseNum(document.getElementById('taxable2').value)]);
+            data.push(['Total Tax', '31', '–', parseNum(document.getElementById('totaltax1').value), parseNum(document.getElementById('totaltax2').value)]);
+            data.push(['Mortgages/Notes Payable < 1 Year', 'Schedule L line 17, col D', '–', parseNum(document.getElementById('mort1').value), parseNum(document.getElementById('mort2').value)]);
+            data.push(['Meal & Entertainment Exclusion', 'Schedule M‑1 line 5c', '–', parseNum(document.getElementById('meals1').value), parseNum(document.getElementById('meals2').value)]);
+            data.push(['Dividends Paid to Borrower', 'Sch B line 5', '–', parseNum(document.getElementById('dividend1').value), parseNum(document.getElementById('dividend2').value)]);
+            data.push(['', '', '', '', '']);
+            data.push(['Ownership Percentage', '', '', parseNum(document.getElementById('ownership').value) + '%', '']);
+            data.push(['', '', '', '', '']);
+
+            // Calculate results
+            const cap1 = parseNum(document.getElementById('cap1').value);
+            const cap2 = parseNum(document.getElementById('cap2').value);
+            const net1 = parseNum(document.getElementById('net1').value);
+            const net2 = parseNum(document.getElementById('net2').value);
+            const oth1 = parseNum(document.getElementById('oth1').value);
+            const oth2 = parseNum(document.getElementById('oth2').value);
+            const dep1 = parseNum(document.getElementById('dep1').value);
+            const dep2 = parseNum(document.getElementById('dep2').value);
+            const depl1 = parseNum(document.getElementById('depl1').value);
+            const depl2 = parseNum(document.getElementById('depl2').value);
+            const dpd1 = parseNum(document.getElementById('dpd1').value);
+            const dpd2 = parseNum(document.getElementById('dpd2').value);
+            const amort1 = parseNum(document.getElementById('amort1').value);
+            const amort2 = parseNum(document.getElementById('amort2').value);
+            const nol1 = parseNum(document.getElementById('nol1').value);
+            const nol2 = parseNum(document.getElementById('nol2').value);
+            const taxable1 = parseNum(document.getElementById('taxable1').value);
+            const taxable2 = parseNum(document.getElementById('taxable2').value);
+            const tax1 = parseNum(document.getElementById('totaltax1').value);
+            const tax2 = parseNum(document.getElementById('totaltax2').value);
+            const mort1 = parseNum(document.getElementById('mort1').value);
+            const mort2 = parseNum(document.getElementById('mort2').value);
+            const meals1 = parseNum(document.getElementById('meals1').value);
+            const meals2 = parseNum(document.getElementById('meals2').value);
+            const div1 = parseNum(document.getElementById('dividend1').value);
+            const div2 = parseNum(document.getElementById('dividend2').value);
+            const ownership = parseNum(document.getElementById('ownership').value) / 100;
+
+            const sum1 = cap1 + net1 + oth1 + dep1 + depl1 + dpd1 + amort1 + nol1 + taxable1;
+            const sum2 = cap2 + net2 + oth2 + dep2 + depl2 + dpd2 + amort2 + nol2 + taxable2;
+            let total1 = (sum1 - tax1 - mort1 - meals1) * ownership - div1;
+            let total2 = (sum2 - tax2 - mort2 - meals2) * ownership - div2;
+
+            const year2vals = [cap2, net2, oth2, dep2, depl2, dpd2, amort2, nol2, taxable2, tax2, mort2, meals2, div2];
+            const hasYr2 = year2vals.some((v) => v !== 0);
+            let monthly;
+            if (hasYr2 && total1 > total2) {
+                monthly = (total1 + total2) / 24;
+            } else {
+                monthly = total1 / 12;
+            }
+
+            data.push(['Results', 'Amount']);
+            data.push(['Total Current Year Income', total1]);
+            data.push(['Total Prior Year Income', total2]);
+            data.push(['Monthly Income (Policy)', monthly]);
+
+            const csvContent = data.map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'form_1120_corporation_income_calculator.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        function printView() {
+            window.print();
+        }
+
+        function clearAll() {
+            const inputs = document.querySelectorAll('input[type="number"]');
+            inputs.forEach(input => {
+                input.value = input.id === 'ownership' ? '100' : '0';
+            });
+            calc1120();
+        }
+
+        // Initialize
+        calc1120();
+
+        // Expose debug function
+        window.IncomeCalculator1120 = {
+            debug: function() {
+                const cap1 = parseNum(document.getElementById('cap1').value);
+                const cap2 = parseNum(document.getElementById('cap2').value);
+                const net1 = parseNum(document.getElementById('net1').value);
+                const net2 = parseNum(document.getElementById('net2').value);
+                const oth1 = parseNum(document.getElementById('oth1').value);
+                const oth2 = parseNum(document.getElementById('oth2').value);
+                const dep1 = parseNum(document.getElementById('dep1').value);
+                const dep2 = parseNum(document.getElementById('dep2').value);
+                const depl1 = parseNum(document.getElementById('depl1').value);
+                const depl2 = parseNum(document.getElementById('depl2').value);
+                const dpd1 = parseNum(document.getElementById('dpd1').value);
+                const dpd2 = parseNum(document.getElementById('dpd2').value);
+                const amort1 = parseNum(document.getElementById('amort1').value);
+                const amort2 = parseNum(document.getElementById('amort2').value);
+                const nol1 = parseNum(document.getElementById('nol1').value);
+                const nol2 = parseNum(document.getElementById('nol2').value);
+                const taxable1 = parseNum(document.getElementById('taxable1').value);
+                const taxable2 = parseNum(document.getElementById('taxable2').value);
+                const tax1 = parseNum(document.getElementById('totaltax1').value);
+                const tax2 = parseNum(document.getElementById('totaltax2').value);
+                const mort1 = parseNum(document.getElementById('mort1').value);
+                const mort2 = parseNum(document.getElementById('mort2').value);
+                const meals1 = parseNum(document.getElementById('meals1').value);
+                const meals2 = parseNum(document.getElementById('meals2').value);
+                const div1 = parseNum(document.getElementById('dividend1').value);
+                const div2 = parseNum(document.getElementById('dividend2').value);
+                const ownership = parseNum(document.getElementById('ownership').value) / 100;
+
+                const sum1 = cap1 + net1 + oth1 + dep1 + depl1 + dpd1 + amort1 + nol1 + taxable1;
+                const sum2 = cap2 + net2 + oth2 + dep2 + depl2 + dpd2 + amort2 + nol2 + taxable2;
+                let total1 = (sum1 - tax1 - mort1 - meals1) * ownership - div1;
+                let total2 = (sum2 - tax2 - mort2 - meals2) * ownership - div2;
+
+                const year2vals = [cap2, net2, oth2, dep2, depl2, dpd2, amort2, nol2, taxable2, tax2, mort2, meals2, div2];
+                const hasYr2 = year2vals.some((v) => v !== 0);
+                let monthly;
+                if (hasYr2 && total1 > total2) {
+                    monthly = (total1 + total2) / 24;
+                } else {
+                    monthly = total1 / 12;
+                }
+
+                return {
+                    inputs: {
+                        year1: {
+                            capitalGain: cap1,
+                            netGain: net1,
+                            otherIncome: oth1,
+                            depreciation: dep1,
+                            depletion: depl1,
+                            domesticProduction: dpd1,
+                            amortization: amort1,
+                            netOperatingLoss: nol1,
+                            taxableIncome: taxable1,
+                            totalTax: tax1,
+                            mortgages: mort1,
+                            mealsEntertainment: meals1,
+                            dividends: div1
+                        },
+                        year2: {
+                            capitalGain: cap2,
+                            netGain: net2,
+                            otherIncome: oth2,
+                            depreciation: dep2,
+                            depletion: depl2,
+                            domesticProduction: dpd2,
+                            amortization: amort2,
+                            netOperatingLoss: nol2,
+                            taxableIncome: taxable2,
+                            totalTax: tax2,
+                            mortgages: mort2,
+                            mealsEntertainment: meals2,
+                            dividends: div2
+                        },
+                        ownership: ownership * 100
+                    },
+                    calculations: {
+                        year1Sum: sum1,
+                        year2Sum: sum2,
+                        totalYear1: total1,
+                        totalYear2: total2,
+                        monthlyIncome: monthly,
+                        hasYear2: hasYr2
+                    },
+                    version: '1.0.0'
+                };
+            }
+        };
+    </script>
+    
+    <!-- Theme Switcher -->
+    <script src="theme-switcher.js"></script>
+    
+    <!-- ZZ Signature -->
+    <div style="position: fixed; bottom: 20px; right: 20px; font-size: 12px; color: var(--text-muted); font-family: monospace; z-index: 1000;">
+        ZZ
+    </div>
+</body>
+</html>
+
