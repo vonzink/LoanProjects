@@ -13,7 +13,7 @@ from pathlib import Path
 
 # Import the new Advanced Tax Processor
 try:
-    from advanced_processor import AdvancedTaxProcessor
+    from advanced_processor.core.processor import AdvancedTaxProcessor
     ADVANCED_PROCESSOR_AVAILABLE = True
     logger = logging.getLogger(__name__)
     logger.info("Advanced Tax Processor imported successfully")
