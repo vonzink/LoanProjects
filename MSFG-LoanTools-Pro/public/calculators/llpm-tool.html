@@ -4,227 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LLPM Tool - MSFG Loan Tools Pro</title>
-    
+
     <!-- PWA Meta Tags -->
     <meta name="description" content="Calculate Loan Level Price Adjustments for mortgage pricing">
     <meta name="theme-color" content="#3b82f6">
-    
+
     <!-- Master CSS -->
     <link rel="stylesheet" href="../css/master.css">
-    
+
     <!-- Custom Styles -->
-    <style>
-        .calculator-header {
-            background: var(--gradient-info);
-            padding: var(--space-8) 0;
-            margin-bottom: var(--space-8);
-        }
-        
-        .calculator-title {
-            color: var(--text-primary);
-            text-align: center;
-            margin-bottom: var(--space-4);
-        }
-        
-        .calculator-subtitle {
-            color: var(--text-secondary);
-            text-align: center;
-            font-size: var(--font-size-lg);
-        }
-        
-        .pdf-drop-zone {
-            border: 2px dashed var(--border-primary);
-            border-radius: var(--radius-lg);
-            padding: var(--space-8);
-            text-align: center;
-            transition: all var(--transition-fast);
-            margin-bottom: var(--space-6);
-        }
-        
-        .pdf-drop-zone:hover {
-            border-color: var(--primary-500);
-            background: rgba(59, 130, 246, 0.05);
-        }
-        
-        .pdf-drop-zone.dragover {
-            border-color: var(--primary-500);
-            background: rgba(59, 130, 246, 0.1);
-        }
-        
-        .results-section {
-            background: var(--bg-card);
-            border: 1px solid var(--border-primary);
-            border-radius: var(--radius-xl);
-            padding: var(--space-6);
-            margin-top: var(--space-6);
-        }
-        
-        .result-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: var(--space-3) 0;
-            border-bottom: 1px solid var(--border-primary);
-        }
-        
-        .result-item:last-child {
-            border-bottom: none;
-            font-weight: var(--font-weight-bold);
-            font-size: var(--font-size-lg);
-        }
-        
-        .result-label {
-            color: var(--text-secondary);
-        }
-        
-        .result-value {
-            color: var(--text-primary);
-            font-weight: var(--font-weight-medium);
-        }
-        
-        .form-section {
-            background: var(--bg-card);
-            border: 1px solid var(--border-primary);
-            border-radius: var(--radius-xl);
-            padding: var(--space-6);
-            margin-bottom: var(--space-6);
-        }
-        
-        .section-title {
-            font-size: var(--font-size-xl);
-            font-weight: var(--font-weight-semibold);
-            color: var(--text-primary);
-            margin-bottom: var(--space-4);
-            display: flex;
-            align-items: center;
-            gap: var(--space-2);
-        }
-        
-        .adjustment-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: var(--space-4);
-            margin-top: var(--space-4);
-        }
-        
-        .adjustment-card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-primary);
-            border-radius: var(--radius-lg);
-            padding: var(--space-4);
-        }
-        
-        .adjustment-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: var(--space-3);
-        }
-        
-        .adjustment-card-title {
-            font-weight: var(--font-weight-semibold);
-            color: var(--text-primary);
-        }
-        
-        .adjustment-value {
-            font-size: var(--font-size-lg);
-            font-weight: var(--font-weight-bold);
-            color: var(--primary-500);
-        }
-        
-        .positive-adjustment {
-            color: var(--accent-success);
-        }
-        
-        .negative-adjustment {
-            color: var(--accent-danger);
-        }
-        
-        .tabs {
-            display: flex;
-            border-bottom: 1px solid var(--border-primary);
-            margin-bottom: var(--space-6);
-        }
-        
-        .tab {
-            padding: var(--space-3) var(--space-6);
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            cursor: pointer;
-            border-bottom: 2px solid transparent;
-            transition: all var(--transition-fast);
-        }
-        
-        .tab.active {
-            color: var(--text-primary);
-            border-bottom-color: var(--primary-500);
-        }
-        
-        .tab-content {
-            display: none;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        .pricing-summary {
-            background: var(--bg-secondary);
-            border-radius: var(--radius-lg);
-            padding: var(--space-4);
-            margin-top: var(--space-4);
-        }
-        
-        .summary-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: var(--space-2);
-        }
-        
-        .summary-item:last-child {
-            margin-bottom: 0;
-            padding-top: var(--space-2);
-            border-top: 1px solid var(--border-primary);
-            font-weight: var(--font-weight-semibold);
-        }
-        
-        .matrix-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: var(--space-4);
-            font-size: var(--font-size-sm);
-        }
-        
-        .matrix-table th,
-        .matrix-table td {
-            padding: var(--space-2);
-            text-align: center;
-            border: 1px solid var(--border-primary);
-        }
-        
-        .matrix-table th {
-            background: var(--bg-secondary);
-            font-weight: var(--font-weight-semibold);
-            color: var(--text-primary);
-        }
-        
-        .matrix-table td {
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: all var(--transition-fast);
-        }
-        
-        .matrix-table td:hover {
-            background: var(--bg-card);
-            color: var(--text-primary);
-        }
-        
-        .matrix-table td.selected {
-            background: var(--primary-500);
-            color: var(--text-primary);
-        }
-    </style>
+
 </head>
 <body>
     <!-- Header -->
@@ -236,7 +25,7 @@
                 <p style="margin: 0; color: var(--text-secondary); font-size: var(--font-size-sm);">Loan Tools Pro</p>
             </div>
         </div>
-        
+
         <nav class="nav">
             <a href="../index.html" class="nav-link">Home</a>
             <a href="#" class="nav-link active">LLPM Tool</a>
@@ -273,14 +62,14 @@
                 <!-- Loan Information -->
                 <div class="form-section">
                     <h3 class="section-title">📋 Loan Information</h3>
-                    
+
                     <div class="tabs">
                         <button class="tab active" onclick="switchTab('basic')">Basic Info</button>
                         <button class="tab" onclick="switchTab('credit')">Credit Score</button>
                         <button class="tab" onclick="switchTab('property')">Property Type</button>
                         <button class="tab" onclick="switchTab('matrix')">LLPM Matrix</button>
                     </div>
-                    
+
                     <!-- Basic Information Tab -->
                     <div id="basic" class="tab-content active">
                         <div class="grid grid-cols-2 gap-4">
@@ -318,7 +107,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- Credit Score Tab -->
                     <div id="credit" class="tab-content">
                         <div class="grid grid-cols-2 gap-4">
@@ -345,7 +134,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- Property Type Tab -->
                     <div id="property" class="tab-content">
                         <div class="grid grid-cols-2 gap-4">
@@ -435,7 +224,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- LLPM Matrix Tab -->
                     <div id="matrix" class="tab-content">
                         <div class="grid grid-cols-2 gap-4">
@@ -448,11 +237,11 @@
                                 <input type="number" id="margin" class="form-input" placeholder="2.5" step="0.125">
                             </div>
                         </div>
-                        
+
                         <div class="mt-4">
                             <h4>LLPM Matrix Preview</h4>
                             <p class="text-secondary">Click on cells in the matrix below to see adjustments</p>
-                            
+
                             <table class="matrix-table">
                                 <thead>
                                     <tr>
@@ -555,7 +344,7 @@
             <div class="col">
                 <div class="results-section">
                     <h3 class="section-title">📊 LLPM Results</h3>
-                    
+
                     <div id="resultsContent">
                         <div class="text-center text-secondary">
                             <div style="font-size: var(--font-size-4xl); margin-bottom: var(--space-4);">📈</div>
@@ -585,76 +374,76 @@
 
     <!-- PDF.js Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    
+
     <!-- Scripts -->
     <script src="../js/pdf-parser.js"></script>
     <script src="../js/app.js"></script>
-    
+
     <script>
         let currentTab = 'basic';
         let selectedAdjustment = 0;
-        
+
         function switchTab(tabName) {
             // Update tab buttons
             document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
             event.target.classList.add('active');
-            
+
             // Update tab content
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
             document.getElementById(tabName).classList.add('active');
-            
+
             currentTab = tabName;
         }
-        
+
         function selectMatrixCell(cell, adjustment) {
             // Remove previous selection
             document.querySelectorAll('.matrix-table td.selected').forEach(td => {
                 td.classList.remove('selected');
             });
-            
+
             // Select new cell
             cell.classList.add('selected');
             selectedAdjustment = adjustment;
         }
-        
+
         function calculateLLPM() {
             // Get basic loan information
             const loanAmount = parseFloat(document.getElementById('loanAmount').value) || 0;
             const loanPurpose = document.getElementById('loanPurpose').value;
             const occupancy = document.getElementById('occupancy').value;
             const loanType = document.getElementById('loanType').value;
-            
+
             // Get credit information
             const creditScore = parseInt(document.getElementById('creditScore').value) || 750;
             const ltv = parseFloat(document.getElementById('ltv').value) || 80;
             const dti = parseFloat(document.getElementById('dti').value) || 43;
-            
+
             // Get property information
             const propertyType = document.getElementById('propertyType').value;
             const propertyState = document.getElementById('propertyState').value;
             const loanTerm = parseInt(document.getElementById('loanTerm').value) || 30;
             const rateLock = parseInt(document.getElementById('rateLock').value) || 30;
-            
+
             // Get pricing information
             const baseRate = parseFloat(document.getElementById('baseRate').value) || 5.5;
             const margin = parseFloat(document.getElementById('margin').value) || 2.5;
-            
+
             // Calculate adjustments
             const adjustments = calculateAdjustments(creditScore, ltv, dti, loanPurpose, occupancy, propertyType, rateLock);
-            
+
             // Calculate final rate
             const totalAdjustment = adjustments.total;
             const finalRate = baseRate + totalAdjustment;
-            
+
             // Calculate monthly payment
             const monthlyPayment = calculateMonthlyPayment(loanAmount, finalRate, loanTerm);
-            
+
             // Display results
             displayResults(loanAmount, baseRate, finalRate, monthlyPayment, loanTerm);
             displayAdjustments(adjustments);
             displayPricingSummary(baseRate, totalAdjustment, finalRate, monthlyPayment, loanAmount);
         }
-        
+
         function calculateAdjustments(creditScore, ltv, dti, loanPurpose, occupancy, propertyType, rateLock) {
             const adjustments = {
                 creditScore: 0,
@@ -664,7 +453,7 @@
                 rateLock: 0,
                 total: 0
             };
-            
+
             // Credit Score Adjustment (simplified)
             if (creditScore < 660) adjustments.creditScore = 1.0;
             else if (creditScore < 680) adjustments.creditScore = 0.75;
@@ -672,30 +461,30 @@
             else if (creditScore < 720) adjustments.creditScore = 0.25;
             else if (creditScore < 740) adjustments.creditScore = 0.125;
             else adjustments.creditScore = 0;
-            
+
             // LTV Adjustment (use selected matrix value or calculate)
             adjustments.ltv = selectedAdjustment || calculateLTVAdjustment(ltv, creditScore);
-            
+
             // Occupancy Adjustment
             if (occupancy === 'secondary') adjustments.occupancy = 0.375;
             else if (occupancy === 'investment') adjustments.occupancy = 0.75;
-            
+
             // Property Type Adjustment
             if (propertyType === 'condo') adjustments.propertyType = 0.25;
             else if (propertyType === 'multi-family') adjustments.propertyType = 0.5;
             else if (propertyType === 'manufactured') adjustments.propertyType = 0.75;
-            
+
             // Rate Lock Adjustment
             if (rateLock > 60) adjustments.rateLock = 0.125;
             else if (rateLock > 45) adjustments.rateLock = 0.0625;
-            
+
             // Calculate total
             adjustments.total = adjustments.creditScore + adjustments.ltv + adjustments.occupancy + 
                               adjustments.propertyType + adjustments.rateLock;
-            
+
             return adjustments;
         }
-        
+
         function calculateLTVAdjustment(ltv, creditScore) {
             // Simplified LTV adjustment calculation
             if (ltv <= 60) return 0;
@@ -706,18 +495,18 @@
             if (ltv <= 95) return 1.0;
             return 1.5;
         }
-        
+
         function calculateMonthlyPayment(principal, rate, years) {
             const monthlyRate = rate / 100 / 12;
             const numberOfPayments = years * 12;
-            
+
             return principal * (monthlyRate * Math.pow(1 + monthlyRate, numberOfPayments)) / 
                    (Math.pow(1 + monthlyRate, numberOfPayments) - 1);
         }
-        
+
         function displayResults(loanAmount, baseRate, finalRate, monthlyPayment, loanTerm) {
             const resultsContent = document.getElementById('resultsContent');
-            
+
             resultsContent.innerHTML = `
                 <div class="result-item">
                     <span class="result-label">Loan Amount</span>
@@ -737,10 +526,10 @@
                 </div>
             `;
         }
-        
+
         function displayAdjustments(adjustments) {
             const summaryDiv = document.getElementById('adjustmentsSummary');
-            
+
             summaryDiv.innerHTML = `
                 <div class="adjustment-grid">
                     <div class="adjustment-card">
@@ -782,14 +571,14 @@
                 </div>
             `;
         }
-        
+
         function displayPricingSummary(baseRate, totalAdjustment, finalRate, monthlyPayment, loanAmount) {
             const summaryDiv = document.getElementById('pricingSummary');
-            
+
             const annualPayment = monthlyPayment * 12;
             const totalPayments = annualPayment * 30; // Assuming 30-year term
             const totalInterest = totalPayments - loanAmount;
-            
+
             summaryDiv.innerHTML = `
                 <div class="pricing-summary">
                     <div class="summary-item">
@@ -815,45 +604,45 @@
                 </div>
             `;
         }
-        
+
         function clearForm() {
             const inputs = document.querySelectorAll('input, select');
             inputs.forEach(input => {
                 input.value = '';
             });
-            
+
             // Reset defaults
             document.getElementById('loanTerm').value = '30';
             document.getElementById('rateLock').value = '30';
             document.getElementById('creditBureau').value = 'middle';
             document.getElementById('propertyType').value = 'single-family';
-            
+
             // Clear matrix selection
             document.querySelectorAll('.matrix-table td.selected').forEach(td => {
                 td.classList.remove('selected');
             });
             selectedAdjustment = 0;
-            
+
             document.getElementById('resultsContent').innerHTML = `
                 <div class="text-center text-secondary">
                     <div style="font-size: var(--font-size-4xl); margin-bottom: var(--space-4);">📈</div>
                     <p>Enter loan information and click "Calculate LLPM" to see results</p>
                 </div>
             `;
-            
+
             document.getElementById('adjustmentsSummary').innerHTML = `
                 <p class="text-secondary">Price adjustments will appear here after calculation</p>
             `;
-            
+
             document.getElementById('pricingSummary').innerHTML = `
                 <p class="text-secondary">Final pricing will appear here after calculation</p>
             `;
         }
-        
+
         function selectPDFFile() {
             console.log('PDF file selection triggered');
         }
-        
+
         // Initialize calculator
         document.addEventListener('DOMContentLoaded', function() {
             console.log('LLPM Tool loaded');

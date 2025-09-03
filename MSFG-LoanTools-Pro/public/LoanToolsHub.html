@@ -1,515 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="css/master.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MSFG • Loan Tools Hub</title>
-    <style>
-        :root {
-            --bg-primary: #0a0a0a;
-            --bg-secondary: #1a1a1a;
-            --bg-card: rgba(255, 255, 255, 0.05);
-            --bg-card-hover: rgba(255, 255, 255, 0.08);
-            --text-primary: #ffffff;
-            --text-secondary: #b0b0b0;
-            --text-muted: #808080;
-            --accent-primary: #3b82f6;
-            --accent-secondary: #1d4ed8;
-            --accent-success: #10b981;
-            --accent-warning: #f59e0b;
-            --accent-danger: #ef4444;
-            --border-color: rgba(255, 255, 255, 0.1);
-            --border-hover: rgba(255, 255, 255, 0.2);
-            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.4);
-            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --gradient-success: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            --gradient-warning: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-            --gradient-danger: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
-        }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
-        }
-
-        .header {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-color);
-            padding: 1rem 2rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .logo img {
-            width: 80px;
-            height: auto;
-            border-radius: 8px;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        .hero {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .hero h2 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero p {
-            font-size: 1.125rem;
-            color: var(--text-secondary);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .tools-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        .tool-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 2rem;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(20px);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .tool-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--gradient-primary);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .tool-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--border-hover);
-            background: var(--bg-card-hover);
-            box-shadow: var(--shadow-hover);
-        }
-
-        .tool-card:hover::before {
-            opacity: 1;
-        }
-
-        .tool-card.msfg-tool::before {
-            background: var(--gradient-primary);
-        }
-
-        .tool-card.external-tool::before {
-            background: var(--gradient-secondary);
-        }
-
-        .tool-card.external-tool:hover {
-            border-color: rgba(240, 87, 108, 0.3);
-        }
-
-        .tool-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .tool-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: white;
-        }
-
-        .tool-icon.llpm {
-            background: var(--gradient-primary);
-        }
-
-        .tool-icon.buydown {
-            background: var(--gradient-success);
-        }
-
-        .tool-icon.xml {
-            background: var(--gradient-warning);
-        }
-
-        .tool-icon.calculator {
-            background: var(--gradient-danger);
-        }
-
-        .tool-icon.income {
-            background: var(--gradient-warning);
-        }
-
-        .tool-icon.questionnaire {
-            background: var(--gradient-primary);
-        }
-
-        .tool-icon.apr {
-            background: var(--gradient-success);
-        }
-
-        /* Collapsible Sections */
-        .category-section {
-            position: relative;
-        }
-
-        .category-title {
-            cursor: pointer;
-            user-select: none;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 1rem 0;
-            transition: all 0.3s ease;
-        }
-
-        .category-title:hover {
-            color: var(--accent-primary);
-        }
-
-        .category-title::after {
-            content: '▼';
-            font-size: 0.875rem;
-            transition: transform 0.3s ease;
-            color: var(--text-secondary);
-        }
-
-        .category-section.collapsed .category-title::after {
-            transform: rotate(-90deg);
-        }
-
-        .category-section.collapsed .tools-grid {
-            display: none;
-        }
-
-        .tools-grid {
-            transition: all 0.3s ease;
-        }
-
-        /* Income Calculator Series Section */
-        .income-section {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: 1px solid rgba(102, 126, 234, 0.3);
-            border-radius: 20px;
-            padding: 2rem;
-            margin: 3rem 0;
-        }
-
-        .income-section .category-title {
-            font-size: 2rem;
-            font-weight: 700;
-            color: white;
-            margin-bottom: 0.5rem;
-            text-align: center;
-        }
-
-        .income-section p {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 1.125rem;
-            max-width: 600px;
-            margin: 0 auto 2rem auto;
-            text-align: center;
-        }
-
-        .income-tool-card {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 16px;
-            padding: 1.5rem;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(20px);
-        }
-
-        .income-tool-card:hover {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-        }
-
-        .income-tool-card .tool-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .income-tool-card .tool-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 0.875rem;
-            color: white;
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .income-tool-card .tool-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: white;
-            margin-bottom: 0.25rem;
-        }
-
-        .income-tool-card .tool-subtitle {
-            font-size: 0.875rem;
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .income-tool-card .tool-description {
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 1rem;
-            line-height: 1.6;
-        }
-
-        .income-tool-card .tool-features {
-            list-style: none;
-            margin-bottom: 1.5rem;
-        }
-
-        .income-tool-card .tool-features li {
-            color: rgba(255, 255, 255, 0.8);
-            margin-bottom: 0.5rem;
-            padding-left: 1.5rem;
-            position: relative;
-        }
-
-        .income-tool-card .tool-features li::before {
-            content: '✓';
-            position: absolute;
-            left: 0;
-            color: #10b981;
-            font-weight: bold;
-        }
-
-        .income-tool-card .tool-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            text-decoration: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .income-tool-card .tool-link:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        }
-
-        .income-tool-card .tool-link svg {
-            width: 16px;
-            height: 16px;
-        }
-
-        .tool-icon.external {
-            background: var(--gradient-secondary);
-        }
-
-        .tool-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-        }
-
-        .tool-subtitle {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-        }
-
-        .tool-description {
-            color: var(--text-secondary);
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
-        }
-
-        .tool-features {
-            list-style: none;
-            margin-bottom: 1.5rem;
-        }
-
-        .tool-features li {
-            padding: 0.25rem 0;
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .tool-features li::before {
-            content: '✓';
-            color: var(--accent-success);
-            font-weight: bold;
-        }
-
-        .tool-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: var(--accent-primary);
-            color: white;
-            text-decoration: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-            font-size: 0.875rem;
-        }
-
-        .tool-link:hover {
-            background: var(--accent-secondary);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-        }
-
-        .tool-link.external {
-            background: var(--accent-warning);
-        }
-
-        .tool-link.external:hover {
-            background: #d97706;
-            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
-        }
-
-        .tool-link svg {
-            width: 16px;
-            height: 16px;
-        }
-
-        .category-section {
-            margin-bottom: 3rem;
-        }
-
-        .category-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .category-title::before {
-            content: '';
-            width: 4px;
-            height: 24px;
-            background: var(--gradient-primary);
-            border-radius: 2px;
-        }
-
-        .footer {
-            text-align: center;
-            padding: 2rem;
-            color: var(--text-muted);
-            border-top: 1px solid var(--border-color);
-            margin-top: 3rem;
-        }
-
-        .footer p {
-            font-size: 0.875rem;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
-            }
-            
-            .tools-grid {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-            
-            .hero h2 {
-                font-size: 2rem;
-            }
-            
-            .tool-card {
-                padding: 1.5rem;
-            }
-        }
-
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.25rem;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 500;
-            margin-left: 0.5rem;
-        }
-
-        .status-badge.live {
-            background: rgba(16, 185, 129, 0.2);
-            color: var(--accent-success);
-        }
-
-        .status-badge.external {
-            background: rgba(245, 158, 11, 0.2);
-            color: var(--accent-warning);
-        }
-    </style>
 </head>
 <body>
     <header class="header">
@@ -682,7 +178,6 @@
                         </svg>
                     </a>
                 </div>
-
 
             </div>
         </section>
@@ -1151,12 +646,12 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Add click tracking for analytics (if needed)
             const toolLinks = document.querySelectorAll('.tool-link');
-            
+
             toolLinks.forEach(link => {
                 link.addEventListener('click', function(e) {
                     const toolName = this.closest('.tool-card').querySelector('.tool-title').textContent.trim();
                     console.log(`Tool accessed: ${toolName}`);
-                    
+
                     // You can add analytics tracking here
                     // Example: gtag('event', 'tool_access', { tool_name: toolName });
                 });
@@ -1164,12 +659,12 @@
 
             // Add smooth hover effects
             const toolCards = document.querySelectorAll('.tool-card');
-            
+
             toolCards.forEach(card => {
                 card.addEventListener('mouseenter', function() {
                     this.style.transform = 'translateY(-4px) scale(1.02)';
                 });
-                
+
                 card.addEventListener('mouseleave', function() {
                     this.style.transform = 'translateY(0) scale(1)';
                 });
@@ -1188,7 +683,7 @@
         // Collapsible sections functionality
         document.addEventListener('DOMContentLoaded', function() {
             const categoryTitles = document.querySelectorAll('.category-title');
-            
+
             categoryTitles.forEach(title => {
                 title.addEventListener('click', function() {
                     const section = this.closest('.category-section');
@@ -1237,7 +732,7 @@
             }
         };
     </script>
-    
+
     <!-- Theme Switcher -->
     <script src="theme-switcher.js"></script>
 

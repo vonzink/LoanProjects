@@ -1,75 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="css/master.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PDF Parser Debug</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background: #1a1a1a;
-            color: #ffffff;
-        }
-        .status {
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 8px;
-            font-family: monospace;
-        }
-        .success { background: #065f46; border: 1px solid #10b981; }
-        .error { background: #7f1d1d; border: 1px solid #ef4444; }
-        .warning { background: #92400e; border: 1px solid #f59e0b; }
-        .info { background: #1e3a8a; border: 1px solid #3b82f6; }
-        .btn {
-            background: #3b82f6;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            margin: 5px;
-        }
-        .btn:hover { background: #2563eb; }
-    </style>
+
 </head>
 <body>
     <h1>🔧 PDF Parser Debug</h1>
-    
+
     <div id="status"></div>
-    
+
     <div>
         <button class="btn" onclick="testPDFParser()">Test PDF Parser</button>
         <button class="btn" onclick="testPDFJS()">Test PDF.js</button>
         <button class="btn" onclick="testFileSelection()">Test File Selection</button>
         <button class="btn" onclick="refreshPage()">Refresh Page</button>
     </div>
-    
+
     <!-- PDF.js Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    
+
     <!-- Scripts -->
     <script src="js/pdf-parser.js"></script>
     <script src="js/app.js"></script>
-    
+
     <script>
         const statusDiv = document.getElementById('status');
-        
+
         function addStatus(message, type = 'info') {
             const div = document.createElement('div');
             div.className = `status ${type}`;
             div.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
             statusDiv.appendChild(div);
         }
-        
+
         function testPDFParser() {
             addStatus('Testing PDF Parser...', 'info');
-            
+
             if (window.PDFParser) {
                 addStatus('✅ PDFParser class found', 'success');
-                
+
                 if (window.pdfParser) {
                     addStatus('✅ PDF parser instance exists', 'success');
                 } else {
@@ -81,10 +53,10 @@
                 addStatus('❌ PDFParser class not found', 'error');
             }
         }
-        
+
         function testPDFJS() {
             addStatus('Testing PDF.js...', 'info');
-            
+
             if (window.pdfjsLib) {
                 addStatus('✅ PDF.js library loaded', 'success');
                 addStatus(`📄 PDF.js version: ${window.pdfjsLib.version || 'unknown'}`, 'info');
@@ -92,27 +64,27 @@
                 addStatus('❌ PDF.js library not found', 'error');
             }
         }
-        
+
         function testFileSelection() {
             addStatus('Testing file selection...', 'info');
-            
+
             if (!window.pdfParser) {
                 addStatus('❌ PDF parser not available', 'error');
                 return;
             }
-            
+
             const fileInput = document.createElement('input');
             fileInput.type = 'file';
             fileInput.accept = '.pdf';
-            
+
             fileInput.addEventListener('change', async (e) => {
                 const files = Array.from(e.target.files);
                 addStatus(`📁 Selected ${files.length} file(s)`, 'info');
-                
+
                 if (files.length > 0) {
                     addStatus(`📄 First file: ${files[0].name}`, 'info');
                     addStatus(`📏 File size: ${(files[0].size / 1024).toFixed(2)} KB`, 'info');
-                    
+
                     try {
                         await window.pdfParser.handleFileSelection(files);
                         addStatus('✅ File processing completed', 'success');
@@ -121,14 +93,14 @@
                     }
                 }
             });
-            
+
             fileInput.click();
         }
-        
+
         function refreshPage() {
             location.reload();
         }
-        
+
         // Auto-test on page load
         window.addEventListener('load', () => {
             addStatus('Page loaded, running auto-tests...', 'info');
@@ -140,10 +112,4 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
 

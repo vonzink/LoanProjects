@@ -1,426 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="css/master.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MSFG • Income Calculator Questionnaire</title>
-    <style>
-        :root {
-            --bg-primary: #0a0a0a;
-            --bg-secondary: #1a1a1a;
-            --bg-card: rgba(255, 255, 255, 0.05);
-            --bg-card-hover: rgba(255, 255, 255, 0.08);
-            --text-primary: #ffffff;
-            --text-secondary: #b0b0b0;
-            --text-muted: #808080;
-            --accent-primary: #3b82f6;
-            --accent-secondary: #1d4ed8;
-            --accent-success: #10b981;
-            --accent-warning: #f59e0b;
-            --accent-danger: #ef4444;
-            --border-color: rgba(255, 255, 255, 0.1);
-            --border-hover: rgba(255, 255, 255, 0.2);
-            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.4);
-            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --gradient-success: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            --gradient-warning: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-            --gradient-danger: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
-        }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
-        }
-
-        .header {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-color);
-            padding: 1rem 2rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .back-link {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.875rem;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            border: 1px solid var(--border-color);
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .back-link:hover {
-            color: var(--text-primary);
-            background: rgba(255, 255, 255, 0.1);
-            border-color: var(--accent-primary);
-            transform: translateX(-2px);
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-        }
-
-        .logo img {
-            width: 80px;
-            height: auto;
-            border-radius: 8px;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        .hero {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .hero h2 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero p {
-            font-size: 1.125rem;
-            color: var(--text-secondary);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .question-section {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            backdrop-filter: blur(20px);
-            transition: all 0.3s ease;
-            display: none;
-        }
-
-        .question-section.active {
-            display: block;
-        }
-
-        .question-section:hover {
-            border-color: var(--border-hover);
-            background: var(--bg-card-hover);
-        }
-
-        .question-section h3 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .question-section h3::before {
-            content: '';
-            width: 4px;
-            height: 24px;
-            background: var(--gradient-primary);
-            border-radius: 2px;
-        }
-
-        .question {
-            font-size: 1.125rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: var(--text-primary);
-        }
-
-        .options {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .option {
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1.5rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
-        }
-
-        .option:hover {
-            border-color: var(--accent-primary);
-            background: rgba(59, 130, 246, 0.1);
-            transform: translateY(-2px);
-        }
-
-        .option.selected {
-            border-color: var(--accent-primary);
-            background: rgba(59, 130, 246, 0.2);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-        }
-
-        .option.selected::after {
-            content: '✓';
-            position: absolute;
-            top: 0.5rem;
-            right: 0.5rem;
-            background: var(--accent-primary);
-            color: white;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.75rem;
-            font-weight: bold;
-        }
-
-        .option h4 {
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--text-primary);
-        }
-
-        .option p {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-        }
-
-        .navigation {
-            display: flex;
-            gap: 1rem;
-            justify-content: space-between;
-            margin-top: 2rem;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: var(--accent-primary);
-            color: white;
-            text-decoration: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-            font-size: 0.875rem;
-        }
-
-        .btn:hover {
-            background: var(--accent-secondary);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-        }
-
-        .btn.secondary {
-            background: var(--accent-warning);
-        }
-
-        .btn.secondary:hover {
-            background: #d97706;
-            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
-        }
-
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .progress-bar {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .progress-text {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-        }
-
-        .progress-bar-inner {
-            background: var(--border-color);
-            border-radius: 8px;
-            height: 8px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            background: var(--gradient-primary);
-            height: 100%;
-            transition: width 0.3s ease;
-            width: 0%;
-        }
-
-        .results-section {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            backdrop-filter: blur(20px);
-            display: none;
-        }
-
-        .results-section.active {
-            display: block;
-        }
-
-        .results-section h3 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .results-section h3::before {
-            content: '';
-            width: 4px;
-            height: 24px;
-            background: var(--gradient-success);
-            border-radius: 2px;
-        }
-
-        .calculator-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-top: 1.5rem;
-        }
-
-        .calculator-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .calculator-card:hover {
-            border-color: var(--border-hover);
-            background: rgba(255, 255, 255, 0.08);
-            transform: translateY(-2px);
-        }
-
-        .calculator-card h4 {
-            font-size: 1.125rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--text-primary);
-        }
-
-        .calculator-card p {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-            margin-bottom: 1rem;
-        }
-
-        .calculator-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: var(--accent-success);
-            color: white;
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            font-weight: 500;
-            font-size: 0.875rem;
-            transition: all 0.3s ease;
-        }
-
-        .calculator-link:hover {
-            background: #059669;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-        }
-
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.25rem;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 500;
-            margin-left: 0.5rem;
-            background: rgba(16, 185, 129, 0.2);
-            color: var(--accent-success);
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
-            }
-            
-            .question-section {
-                padding: 1.5rem;
-            }
-            
-            .hero h2 {
-                font-size: 2rem;
-            }
-            
-            .options {
-                grid-template-columns: 1fr;
-            }
-            
-            .navigation {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .calculator-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
 </head>
 <body>
     <header class="header">
@@ -526,8 +111,6 @@
                 <button class="btn" onclick="nextQuestion()" disabled>Next</button>
             </div>
         </div>
-
-
 
         <!-- Question 4: Income Sources -->
         <div class="question-section" id="question-4">
@@ -740,7 +323,7 @@
         function selectOption(element, questionType) {
             // Define which questions are single-select vs multi-select
             const singleSelectQuestions = ['properties', 'subject', 'ownership'];
-            
+
             if (singleSelectQuestions.includes(questionType)) {
                 // Single select - clear others and select this one
                 const options = element.parentElement.querySelectorAll('.option');
@@ -751,7 +334,7 @@
                 // Multi-select logic with special handling for "none" options
                 const isNoneOption = element.dataset.value === 'none';
                 const options = element.parentElement.querySelectorAll('.option');
-                
+
                 if (isNoneOption) {
                     // If selecting "none", clear all other selections
                     options.forEach(opt => opt.classList.remove('selected'));
@@ -763,19 +346,19 @@
                     if (noneOption && noneOption.classList.contains('selected')) {
                         noneOption.classList.remove('selected');
                     }
-                    
+
                     // Toggle this option
                     element.classList.toggle('selected');
-                    
+
                     // Get all selected options and store as array
                     const selectedOptions = element.parentElement.querySelectorAll('.option.selected');
                     answers[questionType] = Array.from(selectedOptions).map(opt => opt.dataset.value);
                 }
             }
-            
+
             // Get selected options for button state
             const selectedOptions = element.parentElement.querySelectorAll('.option.selected');
-            
+
             // Enable next button if at least one option is selected
             const nextBtn = element.closest('.question-section').querySelector('.btn:not(.secondary)');
             nextBtn.disabled = selectedOptions.length === 0;
@@ -784,11 +367,11 @@
         function selectMultiple(element, questionType) {
             // Toggle selection
             element.classList.toggle('selected');
-            
+
             // Update answers array
             const selectedOptions = element.parentElement.querySelectorAll('.option.selected');
             answers[questionType] = Array.from(selectedOptions).map(opt => opt.dataset.value);
-            
+
             // Enable next button (always enabled for multiple choice)
             const nextBtn = element.closest('.question-section').querySelector('.btn:not(.secondary)');
             nextBtn.disabled = false;
@@ -800,7 +383,7 @@
                 currentQuestion++;
                 document.getElementById(`question-${currentQuestion}`).classList.add('active');
                 updateProgress();
-                
+
                 // Handle conditional questions
                 if (currentQuestion === 2 && !answers.employment.includes('self-employed')) {
                     // Skip business structure question if not self-employed
@@ -809,14 +392,14 @@
                     nextQuestion();
                     return;
                 }
-                
+
                 // Skip ownership question if no business selected
                 if (currentQuestion === 3 && (!Array.isArray(answers.business) || answers.business.length === 0)) {
                     answers.ownership = null;
                     nextQuestion();
                     return;
                 }
-                
+
                 // Skip multiple business structure question if not selected
                 if (currentQuestion === 5 && (!answers.income.includes('multiple-companies') || answers.income.includes('none'))) {
                     answers.multipleBusinessStructure = [];
@@ -838,17 +421,17 @@
         function showResults() {
             document.getElementById(`question-${currentQuestion}`).classList.remove('active');
             document.getElementById('results').classList.add('active');
-            
+
             const recommendations = generateRecommendations();
             displayRecommendations(recommendations);
         }
 
         function generateRecommendations() {
             const recommendations = [];
-            
+
             // Always include Form 1040 for basic income
             recommendations.push('1040');
-            
+
             // Employment-based recommendations
             if (answers.employment === 'self-employed') {
                 if (Array.isArray(answers.business) && answers.business.length > 0) {
@@ -871,7 +454,7 @@
                     });
                 }
             }
-            
+
             // Business ownership for W-2 employees who also own businesses
             if (answers.employment.includes('w2') && Array.isArray(answers.business) && answers.business.length > 0) {
                 answers.business.forEach(businessType => {
@@ -892,7 +475,7 @@
                         }
                 });
             }
-            
+
             // Additional income sources (only if not "none")
             if (!answers.income.includes('none')) {
                 if (answers.income.includes('rental')) {
@@ -910,7 +493,7 @@
                     recommendations.push('schedule-d');
                 }
             }
-            
+
             // Multiple companies logic (only if not "none")
             if (answers.income.includes('multiple-companies') && !answers.income.includes('none')) {
                 if (Array.isArray(answers.multipleBusinessStructure) && answers.multipleBusinessStructure.length > 0) {
@@ -927,7 +510,7 @@
                     });
                 }
             }
-            
+
             // Property-specific recommendations
             if (answers.properties === 'yes') {
                 recommendations.push('schedule-e');
@@ -936,11 +519,11 @@
                     recommendations.push('rental-1038');
                 }
             }
-            
+
             if (answers.subject === 'yes') {
                 recommendations.push('schedule-e-subject');
             }
-            
+
             // Remove duplicates
             return [...new Set(recommendations)];
         }
@@ -948,11 +531,11 @@
         function displayRecommendations(recommendations) {
             const container = document.getElementById('calculator-recommendations');
             container.innerHTML = '';
-            
+
             recommendations.forEach(calcKey => {
                 const info = calculatorInfo[calcKey];
                 const url = calculatorUrls[calcKey];
-                
+
                 const card = document.createElement('div');
                 card.className = 'calculator-card';
                 card.innerHTML = `
@@ -980,18 +563,18 @@
                 properties: null,
                 subject: null
             };
-            
+
             // Reset all selections
             document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
-            
+
             // Hide results, show first question
             document.getElementById('results').classList.remove('active');
             document.querySelectorAll('.question-section').forEach(section => section.classList.remove('active'));
             document.getElementById('question-1').classList.add('active');
-            
+
             // Reset buttons
             document.querySelectorAll('.btn:not(.secondary)').forEach(btn => btn.disabled = true);
-            
+
             updateProgress();
         }
 
@@ -1011,13 +594,13 @@
                 [''],
                 ['Recommended Calculators', 'Description', 'URL']
             ];
-            
+
             recommendations.forEach(calcKey => {
                 const info = calculatorInfo[calcKey];
                 const url = calculatorUrls[calcKey];
                 data.push([info.title, info.description, url]);
             });
-            
+
             const csvContent = data.map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
             const blob = new Blob([csvContent], { type: 'text/csv' });
             const url = window.URL.createObjectURL(blob);
@@ -1044,7 +627,7 @@
             }
         };
     </script>
-    
+
     <!-- Theme Switcher -->
     <script src="theme-switcher.js"></script>
 

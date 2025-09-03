@@ -1,56 +1,11 @@
 <!doctype html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="css/master.css">
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>MSFG • Loan Doc Checklist (Pro • MISMO 3.4)</title>
-  <style>
-    :root {
-      --bg: #0b0f14; --panel: #121821; --muted: #a4b1c2; --text: #e9eef5;
-      --ok: #2ecc71; --warn: #f39c12; --need: #e74c3c; --accent: #00d4ff; --border: #223042; --chip: #1a2230;
-    }
-    * { box-sizing: border-box; }
-    html, body { height: 100%; }
-    body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, sans-serif; background: radial-gradient(80vw 80vh at 75% -10%, #0f1724, var(--bg)); color: var(--text); }
-    header { padding: 24px 20px 8px; position: sticky; top: 0; background: linear-gradient(180deg, rgba(11,15,20,.95), rgba(11,15,20,.75) 60%, transparent); backdrop-filter: blur(4px); }
-    .brand { display:flex; align-items:center; gap:12px; }
-    .logo { width: 32px; height: 32px; border-radius: 10px; background: linear-gradient(135deg, var(--accent), #7c3aed); box-shadow: 0 0 24px #00d4ff33; }
-    h1 { font-size: 20px; margin: 0; letter-spacing: .3px; }
-    main { max-width: 1200px; margin: 0 auto; padding: 12px 20px 60px; }
-    .grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 16px; }
-    @media (max-width: 1000px) { .grid { grid-template-columns: 1fr; } }
-    .card { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 16px; box-shadow: 0 10px 30px rgba(0,0,0,.25); }
-    .card h2 { font-size: 16px; margin: 0 0 12px; font-weight: 650; letter-spacing: .2px; }
-    .subtle { color: var(--muted); font-size: 13px; }
-    .dropzone { border: 2px dashed #35506e; border-radius: 16px; padding: 28px; text-align: center; transition: .2s ease; background: #0f1520; }
-    .dropzone.dragover { border-color: var(--accent); box-shadow: 0 0 0 3px #00d4ff22 inset; }
-    .dropzone input { display:none; }
-    .dz-title { font-size: 15px; margin-bottom: 4px; }
-    .btn { display:inline-flex; gap:8px; align-items:center; background: linear-gradient(180deg, #0f2533, #0a1a25); border:1px solid #2a425b; color: var(--text); padding: 10px 14px; border-radius: 12px; cursor: pointer; text-decoration: none; font-weight:600; }
-    .btn:hover { border-color: var(--accent); box-shadow: 0 0 0 3px #00d4ff22 inset; }
-    .summary { display:grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 10px; }
-    @media (max-width: 700px){ .summary{ grid-template-columns: repeat(2, 1fr);} }
-    .kv { background: var(--chip); border: 1px solid var(--border); padding: 12px; border-radius: 12px; }
-    .kv .k { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .5px; }
-    .kv .v { font-size: 14px; margin-top: 6px; }
-    .chips { display:flex; flex-wrap: wrap; gap: 8px; }
-    .chip { background: var(--chip); border: 1px solid var(--border); padding: 8px 10px; border-radius: 999px; font-size: 12px; }
-    .chip.ok { border-color: #2d5d3a; } .chip.warn { border-color: #564214; } .chip.need { border-color: #5d2d2d; }
-    .section { margin-top: 8px; }
-    .section h3 { margin: 14px 0 8px; font-size: 14px; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; }
-    table { width: 100%; border-collapse: collapse; }
-    th, td { padding: 10px 8px; border-bottom: 1px solid #213046; text-align: left; font-size: 14px; vertical-align: top; }
-    tr:hover td { background: #0f1520; }
-    .status { display:inline-flex; align-items:center; gap:6px; padding: 4px 8px; border-radius: 999px; font-weight: 600; font-size: 12px; }
-    .status.required { background: #3a1c1c; color: #ffb3a8; border: 1px solid #5d2d2d; }
-    .status.conditional { background: #352a12; color: #ffd89a; border: 1px solid #564214; }
-    .status.review { background: #1c2e3a; color: #a7d9ff; border: 1px solid #29485e; }
-    .status.ok { background: #1d3323; color: #b6f0c8; border: 1px solid #2d5d3a; }
-    .actions { display:flex; gap: 8px; justify-content: flex-end; margin-top: 10px; }
-    .small { font-size: 12px; color: var(--muted); }
-    .hidden { display:none; }
-    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; color: #9fc4ff; }
-  </style>
+
 </head>
 <body>
   <header>
@@ -308,7 +263,7 @@
     const out = { general: [], income: [], assets: [], credit: [] };
 
     // General (application-level)
-    
+
     if((ctx.loanPurpose||'').toLowerCase()==='purchase'){
       out.general.push(item('Executed purchase contract','required','Loan purpose is Purchase.'));
       out.general.push(item('Earnest money proof (canceled check / statement)','required','Shows source of EMD.'));
@@ -502,5 +457,4 @@
   </script>
 </body>
 </html>
-
 

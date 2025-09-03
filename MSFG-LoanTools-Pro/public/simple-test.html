@@ -1,68 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="css/master.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simple PDF Test</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            background: #1a1a1a;
-            color: #ffffff;
-        }
-        .status {
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-            font-family: monospace;
-        }
-        .success { background: #065f46; }
-        .error { background: #7f1d1d; }
-        .info { background: #1e3a8a; }
-        .btn {
-            background: #3b82f6;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin: 5px;
-        }
-    </style>
+
 </head>
 <body>
     <h1>🔧 Simple PDF Parser Test</h1>
-    
+
     <div id="status"></div>
-    
+
     <button class="btn" onclick="testParser()">Test PDF Parser</button>
     <button class="btn" onclick="testFileSelect()">Test File Selection</button>
-    
+
     <!-- PDF.js Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    
+
     <!-- Scripts -->
     <script src="js/pdf-parser.js"></script>
-    
+
     <script>
         const statusDiv = document.getElementById('status');
-        
+
         function addStatus(message, type = 'info') {
             const div = document.createElement('div');
             div.className = `status ${type}`;
             div.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
             statusDiv.appendChild(div);
         }
-        
+
         function testParser() {
             addStatus('Testing PDF Parser...', 'info');
-            
+
             if (window.PDFParser) {
                 addStatus('✅ PDFParser class found', 'success');
-                
+
                 if (window.pdfParser) {
                     addStatus('✅ PDF parser instance exists', 'success');
                 } else {
@@ -74,26 +48,26 @@
                 addStatus('❌ PDFParser class not found', 'error');
             }
         }
-        
+
         function testFileSelect() {
             addStatus('Testing file selection...', 'info');
-            
+
             if (!window.pdfParser) {
                 addStatus('❌ PDF parser not available', 'error');
                 return;
             }
-            
+
             const fileInput = document.createElement('input');
             fileInput.type = 'file';
             fileInput.accept = '.pdf';
-            
+
             fileInput.addEventListener('change', async (e) => {
                 const files = Array.from(e.target.files);
                 addStatus(`📁 Selected ${files.length} file(s)`, 'info');
-                
+
                 if (files.length > 0) {
                     addStatus(`📄 File: ${files[0].name}`, 'info');
-                    
+
                     try {
                         await window.pdfParser.handleFileSelection(files);
                         addStatus('✅ File processing completed', 'success');
@@ -102,10 +76,10 @@
                     }
                 }
             });
-            
+
             fileInput.click();
         }
-        
+
         // Auto-test on load
         window.addEventListener('load', () => {
             addStatus('Page loaded, testing...', 'info');
@@ -114,10 +88,4 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
 

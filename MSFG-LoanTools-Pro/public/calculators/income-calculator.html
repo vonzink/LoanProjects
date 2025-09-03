@@ -4,181 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Income Calculator - MSFG Loan Tools Pro</title>
-    
+
     <!-- PWA Meta Tags -->
     <meta name="description" content="Calculate qualifying income from various tax forms and sources">
     <meta name="theme-color" content="#3b82f6">
-    
+
     <!-- Master CSS -->
     <link rel="stylesheet" href="../css/master.css">
-    
+
     <!-- Custom Styles -->
-    <style>
-        .calculator-header {
-            background: var(--gradient-success);
-            padding: var(--space-8) 0;
-            margin-bottom: var(--space-8);
-        }
-        
-        .calculator-title {
-            color: var(--text-primary);
-            text-align: center;
-            margin-bottom: var(--space-4);
-        }
-        
-        .calculator-subtitle {
-            color: var(--text-secondary);
-            text-align: center;
-            font-size: var(--font-size-lg);
-        }
-        
-        .pdf-drop-zone {
-            border: 2px dashed var(--border-primary);
-            border-radius: var(--radius-lg);
-            padding: var(--space-8);
-            text-align: center;
-            transition: all var(--transition-fast);
-            margin-bottom: var(--space-6);
-        }
-        
-        .pdf-drop-zone:hover {
-            border-color: var(--primary-500);
-            background: rgba(59, 130, 246, 0.05);
-        }
-        
-        .pdf-drop-zone.dragover {
-            border-color: var(--primary-500);
-            background: rgba(59, 130, 246, 0.1);
-        }
-        
-        .results-section {
-            background: var(--bg-card);
-            border: 1px solid var(--border-primary);
-            border-radius: var(--radius-xl);
-            padding: var(--space-6);
-            margin-top: var(--space-6);
-        }
-        
-        .result-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: var(--space-3) 0;
-            border-bottom: 1px solid var(--border-primary);
-        }
-        
-        .result-item:last-child {
-            border-bottom: none;
-            font-weight: var(--font-weight-bold);
-            font-size: var(--font-size-lg);
-        }
-        
-        .result-label {
-            color: var(--text-secondary);
-        }
-        
-        .result-value {
-            color: var(--text-primary);
-            font-weight: var(--font-weight-medium);
-        }
-        
-        .form-section {
-            background: var(--bg-card);
-            border: 1px solid var(--border-primary);
-            border-radius: var(--radius-xl);
-            padding: var(--space-6);
-            margin-bottom: var(--space-6);
-        }
-        
-        .section-title {
-            font-size: var(--font-size-xl);
-            font-weight: var(--font-weight-semibold);
-            color: var(--text-primary);
-            margin-bottom: var(--space-4);
-            display: flex;
-            align-items: center;
-            gap: var(--space-2);
-        }
-        
-        .income-source {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-primary);
-            border-radius: var(--radius-lg);
-            padding: var(--space-4);
-            margin-bottom: var(--space-4);
-        }
-        
-        .income-source-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: var(--space-3);
-        }
-        
-        .income-source-title {
-            font-weight: var(--font-weight-semibold);
-            color: var(--text-primary);
-        }
-        
-        .remove-source {
-            background: var(--accent-danger);
-            color: white;
-            border: none;
-            border-radius: var(--radius-sm);
-            padding: var(--space-1) var(--space-2);
-            cursor: pointer;
-            font-size: var(--font-size-xs);
-        }
-        
-        .tabs {
-            display: flex;
-            border-bottom: 1px solid var(--border-primary);
-            margin-bottom: var(--space-6);
-        }
-        
-        .tab {
-            padding: var(--space-3) var(--space-6);
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            cursor: pointer;
-            border-bottom: 2px solid transparent;
-            transition: all var(--transition-fast);
-        }
-        
-        .tab.active {
-            color: var(--text-primary);
-            border-bottom-color: var(--primary-500);
-        }
-        
-        .tab-content {
-            display: none;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        .qualification-summary {
-            background: var(--bg-secondary);
-            border-radius: var(--radius-lg);
-            padding: var(--space-4);
-            margin-top: var(--space-4);
-        }
-        
-        .qualification-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: var(--space-2);
-        }
-        
-        .qualification-item:last-child {
-            margin-bottom: 0;
-            padding-top: var(--space-2);
-            border-top: 1px solid var(--border-primary);
-            font-weight: var(--font-weight-semibold);
-        }
-    </style>
+
 </head>
 <body>
     <!-- Header -->
@@ -190,7 +25,7 @@
                 <p style="margin: 0; color: var(--text-secondary); font-size: var(--font-size-sm);">Loan Tools Pro</p>
             </div>
         </div>
-        
+
         <nav class="nav">
             <a href="../index.html" class="nav-link">Home</a>
             <a href="#" class="nav-link active">Income Calculator</a>
@@ -227,14 +62,14 @@
                 <!-- Income Sources -->
                 <div class="form-section">
                     <h3 class="section-title">💼 Income Sources</h3>
-                    
+
                     <div class="tabs">
                         <button class="tab active" onclick="switchTab('w2')">W-2 Income</button>
                         <button class="tab" onclick="switchTab('self-employed')">Self-Employed</button>
                         <button class="tab" onclick="switchTab('rental')">Rental Income</button>
                         <button class="tab" onclick="switchTab('other')">Other Income</button>
                     </div>
-                    
+
                     <!-- W-2 Income -->
                     <div id="w2" class="tab-content active">
                         <div class="grid grid-cols-2 gap-4">
@@ -257,7 +92,7 @@
                         </div>
                         <button class="btn btn-secondary mt-4" onclick="addIncomeSource('w2')">Add W-2 Income</button>
                     </div>
-                    
+
                     <!-- Self-Employed Income -->
                     <div id="self-employed" class="tab-content">
                         <div class="grid grid-cols-2 gap-4">
@@ -280,7 +115,7 @@
                         </div>
                         <button class="btn btn-secondary mt-4" onclick="addIncomeSource('self-employed')">Add Self-Employed Income</button>
                     </div>
-                    
+
                     <!-- Rental Income -->
                     <div id="rental" class="tab-content">
                         <div class="grid grid-cols-2 gap-4">
@@ -303,7 +138,7 @@
                         </div>
                         <button class="btn btn-secondary mt-4" onclick="addIncomeSource('rental')">Add Rental Income</button>
                     </div>
-                    
+
                     <!-- Other Income -->
                     <div id="other" class="tab-content">
                         <div class="grid grid-cols-2 gap-4">
@@ -362,11 +197,11 @@
             <div class="col">
                 <div class="results-section">
                     <h3 class="section-title">📊 Income Summary</h3>
-                    
+
                     <div id="incomeSources">
                         <p class="text-secondary">Income sources will appear here</p>
                     </div>
-                    
+
                     <div id="resultsContent">
                         <div class="text-center text-secondary">
                             <div style="font-size: var(--font-size-4xl); margin-bottom: var(--space-4);">💼</div>
@@ -388,34 +223,34 @@
 
     <!-- PDF.js Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    
+
     <!-- Scripts -->
     <script src="../js/pdf-parser.js"></script>
     <script src="../js/app.js"></script>
-    
+
     <script>
         let currentTab = 'w2';
         let incomeSources = [];
-        
+
         function switchTab(tabName) {
             // Update tab buttons
             document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
             event.target.classList.add('active');
-            
+
             // Update tab content
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
             document.getElementById(tabName).classList.add('active');
-            
+
             currentTab = tabName;
         }
-        
+
         function addIncomeSource(type) {
             let source = {
                 id: Date.now(),
                 type: type,
                 data: {}
             };
-            
+
             switch (type) {
                 case 'w2':
                     source.data = {
@@ -427,7 +262,7 @@
                     source.qualifyingIncome = source.data.wages;
                     source.description = `W-2 Income: $${source.data.wages.toLocaleString()}`;
                     break;
-                    
+
                 case 'self-employed':
                     source.data = {
                         grossReceipts: parseFloat(document.getElementById('scheduleCGrossReceipts').value) || 0,
@@ -439,7 +274,7 @@
                     source.qualifyingIncome = source.data.netProfit * 0.75; // 75% of net profit
                     source.description = `Self-Employed: $${source.qualifyingIncome.toLocaleString()}`;
                     break;
-                    
+
                 case 'rental':
                     source.data = {
                         rentalIncome: parseFloat(document.getElementById('scheduleERentalIncome').value) || 0,
@@ -450,7 +285,7 @@
                     source.qualifyingIncome = source.data.netRental * 0.75; // 75% of net rental income
                     source.description = `Rental Income: $${source.qualifyingIncome.toLocaleString()}`;
                     break;
-                    
+
                 case 'other':
                     source.data = {
                         type: document.getElementById('otherIncomeType').value,
@@ -460,27 +295,27 @@
                     source.description = `${source.data.type.charAt(0).toUpperCase() + source.data.type.slice(1)}: $${source.data.amount.toLocaleString()}`;
                     break;
             }
-            
+
             incomeSources.push(source);
             updateIncomeSources();
             clearIncomeForm();
         }
-        
+
         function removeIncomeSource(id) {
             incomeSources = incomeSources.filter(source => source.id !== id);
             updateIncomeSources();
         }
-        
+
         function updateIncomeSources() {
             const sourcesDiv = document.getElementById('incomeSources');
-            
+
             if (incomeSources.length === 0) {
                 sourcesDiv.innerHTML = '<p class="text-secondary">No income sources added</p>';
                 return;
             }
-            
+
             let html = '<h4>Income Sources:</h4>';
-            
+
             incomeSources.forEach(source => {
                 html += `
                     <div class="income-source">
@@ -495,43 +330,43 @@
                     </div>
                 `;
             });
-            
+
             sourcesDiv.innerHTML = html;
         }
-        
+
         function clearIncomeForm() {
             const inputs = document.querySelectorAll('#w2 input, #self-employed input, #rental input, #other input');
             inputs.forEach(input => {
                 input.value = '';
             });
-            
+
             // Reset defaults
             document.getElementById('scheduleCYears').value = '1';
             document.getElementById('scheduleEProperties').value = '1';
             document.getElementById('otherIncomeType').value = 'dividends';
         }
-        
+
         function calculateIncome() {
             const totalQualifyingIncome = incomeSources.reduce((sum, source) => sum + source.qualifyingIncome, 0);
             const monthlyIncome = totalQualifyingIncome / 12;
-            
+
             // Get debt information
             const autoPayment = parseFloat(document.getElementById('autoPayment').value) || 0;
             const creditCardPayment = parseFloat(document.getElementById('creditCardPayment').value) || 0;
             const studentLoanPayment = parseFloat(document.getElementById('studentLoanPayment').value) || 0;
             const otherDebtPayment = parseFloat(document.getElementById('otherDebtPayment').value) || 0;
-            
+
             const totalMonthlyDebt = autoPayment + creditCardPayment + studentLoanPayment + otherDebtPayment;
             const debtToIncomeRatio = totalMonthlyDebt / monthlyIncome * 100;
-            
+
             // Display results
             displayResults(totalQualifyingIncome, monthlyIncome, totalMonthlyDebt, debtToIncomeRatio);
             displayQualificationSummary(monthlyIncome, totalMonthlyDebt, debtToIncomeRatio);
         }
-        
+
         function displayResults(totalIncome, monthlyIncome, totalDebt, dtiRatio) {
             const resultsContent = document.getElementById('resultsContent');
-            
+
             resultsContent.innerHTML = `
                 <div class="result-item">
                     <span class="result-label">Total Qualifying Income</span>
@@ -551,13 +386,13 @@
                 </div>
             `;
         }
-        
+
         function displayQualificationSummary(monthlyIncome, totalDebt, dtiRatio) {
             const summaryDiv = document.getElementById('qualificationSummary');
-            
+
             let qualificationStatus = 'Qualified';
             let statusColor = 'var(--accent-success)';
-            
+
             if (dtiRatio > 43) {
                 qualificationStatus = 'May Need Additional Documentation';
                 statusColor = 'var(--accent-warning)';
@@ -566,7 +401,7 @@
                 qualificationStatus = 'Likely Disqualified';
                 statusColor = 'var(--accent-danger)';
             }
-            
+
             summaryDiv.innerHTML = `
                 <div class="qualification-summary">
                     <div class="qualification-item">
@@ -588,34 +423,34 @@
                 </div>
             `;
         }
-        
+
         function clearForm() {
             incomeSources = [];
             updateIncomeSources();
             clearIncomeForm();
-            
+
             // Clear debt information
             const debtInputs = document.querySelectorAll('#autoPayment, #creditCardPayment, #studentLoanPayment, #otherDebtPayment');
             debtInputs.forEach(input => {
                 input.value = '';
             });
-            
+
             document.getElementById('resultsContent').innerHTML = `
                 <div class="text-center text-secondary">
                     <div style="font-size: var(--font-size-4xl); margin-bottom: var(--space-4);">💼</div>
                     <p>Add income sources and click "Calculate Income" to see results</p>
                 </div>
             `;
-            
+
             document.getElementById('qualificationSummary').innerHTML = `
                 <p class="text-secondary">Qualification details will appear here after calculation</p>
             `;
         }
-        
+
         function selectPDFFile() {
             console.log('PDF file selection triggered');
         }
-        
+
         // Initialize calculator
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Income Calculator loaded');

@@ -1,343 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="css/master.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MSFG • Schedule D Income Calculator</title>
-    <style>
-        :root {
-            --bg-primary: #0a0a0a;
-            --bg-secondary: #1a1a1a;
-            --bg-card: rgba(255, 255, 255, 0.05);
-            --bg-card-hover: rgba(255, 255, 255, 0.08);
-            --text-primary: #ffffff;
-            --text-secondary: #b0b0b0;
-            --text-muted: #808080;
-            --accent-primary: #3b82f6;
-            --accent-secondary: #1d4ed8;
-            --accent-success: #10b981;
-            --accent-warning: #f59e0b;
-            --accent-danger: #ef4444;
-            --border-color: rgba(255, 255, 255, 0.1);
-            --border-hover: rgba(255, 255, 255, 0.2);
-            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.4);
-            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --gradient-success: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            --gradient-warning: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-            --gradient-danger: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
-        }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
-        }
-
-        .header {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-color);
-            padding: 1rem 2rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .logo img {
-            width: 80px;
-            height: auto;
-            border-radius: 8px;
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
-        }
-
-
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        .hero {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .hero h2 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero p {
-            font-size: 1.125rem;
-            color: var(--text-secondary);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .notes {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            line-height: 1.6;
-        }
-
-        .section {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            backdrop-filter: blur(20px);
-            transition: all 0.3s ease;
-        }
-
-        .section:hover {
-            border-color: var(--border-hover);
-            background: var(--bg-card-hover);
-        }
-
-        .section h3 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .section h3::before {
-            content: '';
-            width: 4px;
-            height: 24px;
-            background: var(--gradient-primary);
-            border-radius: 2px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 1.5rem;
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        th {
-            background: var(--accent-primary);
-            color: white;
-            padding: 1rem;
-            text-align: left;
-            font-weight: 600;
-            font-size: 0.875rem;
-        }
-
-        td {
-            padding: 1rem;
-            border-bottom: 1px solid var(--border-color);
-            color: var(--text-secondary);
-        }
-
-        tr:last-child td {
-            border-bottom: none;
-        }
-
-        tr:hover td {
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        input[type="number"] {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text-primary);
-            font-size: 0.875rem;
-            transition: all 0.3s ease;
-        }
-
-        input[type="number"]:focus {
-            outline: none;
-            border-color: var(--accent-primary);
-            background: rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-
-        .result {
-            font-weight: bold;
-            background: var(--gradient-success);
-            color: white;
-            padding: 0.75rem 1rem;
-            border-radius: 8px;
-            display: inline-block;
-            min-width: 140px;
-            text-align: right;
-            font-size: 1rem;
-        }
-
-        .result-label {
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-right: 1rem;
-        }
-
-        .results-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-
-        .result-item {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1.5rem;
-            text-align: center;
-        }
-
-        .result-item h4 {
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            margin-bottom: 0.5rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .result-item .result {
-            font-size: 1.25rem;
-            padding: 1rem 1.5rem;
-            min-width: 180px;
-        }
-
-        .footer {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 1.5rem;
-            margin-top: 2rem;
-            color: var(--text-muted);
-            font-size: 0.875rem;
-            line-height: 1.6;
-        }
-
-        .actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            justify-content: center;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: var(--accent-primary);
-            color: white;
-            text-decoration: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-            font-size: 0.875rem;
-        }
-
-        .btn:hover {
-            background: var(--accent-secondary);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-        }
-
-        .btn.secondary {
-            background: var(--accent-warning);
-        }
-
-        .btn.secondary:hover {
-            background: #d97706;
-            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
-            }
-            
-            .section {
-                padding: 1.5rem;
-            }
-            
-            .hero h2 {
-                font-size: 2rem;
-            }
-            
-            table {
-                font-size: 0.875rem;
-            }
-            
-            th, td {
-                padding: 0.75rem;
-            }
-            
-            .actions {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .results-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.25rem;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 500;
-            margin-left: 0.5rem;
-            background: rgba(16, 185, 129, 0.2);
-            color: var(--accent-success);
-        }
-    </style>
 </head>
 <body>
     <header class="header">
@@ -444,22 +112,22 @@
             const st2 = parseNum(document.getElementById('d_stcg2').value);
             const lt1 = parseNum(document.getElementById('d_ltcg1').value);
             const lt2 = parseNum(document.getElementById('d_ltcg2').value);
-            
+
             const total1 = st1 + lt1;
             const total2 = st2 + lt2;
-            
+
             document.getElementById('d_total1').textContent = formatCurrency(total1);
             document.getElementById('d_total2').textContent = formatCurrency(total2);
-            
+
             const hasYr2 = st2 !== 0 || lt2 !== 0;
             let monthly;
-            
+
             if (hasYr2 && total1 > total2) {
                 monthly = (total1 + total2) / 24;
             } else {
                 monthly = total1 / 12;
             }
-            
+
             document.getElementById('d_monthly').textContent = formatCurrency(monthly);
         }
 
@@ -468,13 +136,13 @@
             const st2 = parseNum(document.getElementById('d_stcg2').value);
             const lt1 = parseNum(document.getElementById('d_ltcg1').value);
             const lt2 = parseNum(document.getElementById('d_ltcg2').value);
-            
+
             const total1 = st1 + lt1;
             const total2 = st2 + lt2;
-            
+
             const hasYr2 = st2 !== 0 || lt2 !== 0;
             let monthly;
-            
+
             if (hasYr2 && total1 > total2) {
                 monthly = (total1 + total2) / 24;
             } else {
@@ -526,13 +194,13 @@
                 const st2 = parseNum(document.getElementById('d_stcg2').value);
                 const lt1 = parseNum(document.getElementById('d_ltcg1').value);
                 const lt2 = parseNum(document.getElementById('d_ltcg2').value);
-                
+
                 const total1 = st1 + lt1;
                 const total2 = st2 + lt2;
-                
+
                 const hasYr2 = st2 !== 0 || lt2 !== 0;
                 let monthly;
-                
+
                 if (hasYr2 && total1 > total2) {
                     monthly = (total1 + total2) / 24;
                 } else {
@@ -561,10 +229,10 @@
             }
         };
     </script>
-    
+
     <!-- Theme Switcher -->
     <script src="theme-switcher.js"></script>
-    
+
     <!-- ZZ Signature -->
     <div style="position: fixed; bottom: 20px; right: 20px; font-size: 12px; color: var(--text-muted); font-family: monospace; z-index: 1000;">
         ZZ

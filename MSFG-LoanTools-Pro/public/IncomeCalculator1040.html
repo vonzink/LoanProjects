@@ -1,348 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="css/master.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MSFG • Form 1040 Page 1 Income Calculator</title>
-    <style>
-        :root {
-            --bg-primary: #0a0a0a;
-            --bg-secondary: #1a1a1a;
-            --bg-card: rgba(255, 255, 255, 0.05);
-            --bg-card-hover: rgba(255, 255, 255, 0.08);
-            --text-primary: #ffffff;
-            --text-secondary: #b0b0b0;
-            --text-muted: #808080;
-            --accent-primary: #3b82f6;
-            --accent-secondary: #1d4ed8;
-            --accent-success: #10b981;
-            --accent-warning: #f59e0b;
-            --accent-danger: #ef4444;
-            --border-color: rgba(255, 255, 255, 0.1);
-            --border-hover: rgba(255, 255, 255, 0.2);
-            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.4);
-            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --gradient-success: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            --gradient-warning: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-            --gradient-danger: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
-        }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
-        }
-
-        .header {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-color);
-            padding: 1rem 2rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .back-link {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.875rem;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            border: 1px solid var(--border-color);
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .back-link:hover {
-            color: var(--text-primary);
-            background: rgba(255, 255, 255, 0.1);
-            border-color: var(--accent-primary);
-            transform: translateX(-2px);
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .logo img {
-            width: 80px;
-            height: auto;
-            border-radius: 8px;
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
-        }
-
-
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        .hero {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .hero h2 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero p {
-            font-size: 1.125rem;
-            color: var(--text-secondary);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .section {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            backdrop-filter: blur(20px);
-            transition: all 0.3s ease;
-        }
-
-        .section:hover {
-            border-color: var(--border-hover);
-            background: var(--bg-card-hover);
-        }
-
-        .section h3 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .section h3::before {
-            content: '';
-            width: 4px;
-            height: 24px;
-            background: var(--gradient-primary);
-            border-radius: 2px;
-        }
-
-        .section p {
-            color: var(--text-secondary);
-            margin-bottom: 1rem;
-            font-size: 0.875rem;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 1.5rem;
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        th {
-            background: var(--accent-primary);
-            color: white;
-            padding: 1rem;
-            text-align: left;
-            font-weight: 600;
-            font-size: 0.875rem;
-        }
-
-        td {
-            padding: 1rem;
-            border-bottom: 1px solid var(--border-color);
-            color: var(--text-secondary);
-        }
-
-        tr:last-child td {
-            border-bottom: none;
-        }
-
-        tr:hover td {
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        input[type="number"] {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text-primary);
-            font-size: 0.875rem;
-            transition: all 0.3s ease;
-        }
-
-        input[type="number"]:focus {
-            outline: none;
-            border-color: var(--accent-primary);
-            background: rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-
-        .result {
-            font-weight: bold;
-            background: var(--gradient-success);
-            color: white;
-            padding: 0.75rem 1rem;
-            border-radius: 8px;
-            display: inline-block;
-            min-width: 140px;
-            text-align: right;
-            font-size: 1rem;
-        }
-
-        .result-label {
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-right: 1rem;
-        }
-
-        .combined-total {
-            background: var(--gradient-primary);
-            border: 1px solid var(--accent-primary);
-            border-radius: 16px;
-            padding: 2rem;
-            text-align: center;
-            margin-top: 2rem;
-        }
-
-        .combined-total h3 {
-            color: white;
-            margin-bottom: 1rem;
-            font-size: 1.5rem;
-        }
-
-        .combined-total .result {
-            font-size: 1.5rem;
-            padding: 1rem 2rem;
-            min-width: 200px;
-        }
-
-        .footer {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 1.5rem;
-            margin-top: 2rem;
-            color: var(--text-muted);
-            font-size: 0.875rem;
-            line-height: 1.6;
-        }
-
-        .actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            justify-content: center;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: var(--accent-primary);
-            color: white;
-            text-decoration: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-            font-size: 0.875rem;
-        }
-
-        .btn:hover {
-            background: var(--accent-secondary);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-        }
-
-        .btn.secondary {
-            background: var(--accent-warning);
-        }
-
-        .btn.secondary:hover {
-            background: #d97706;
-            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
-            }
-            
-            .section {
-                padding: 1.5rem;
-            }
-            
-            .hero h2 {
-                font-size: 2rem;
-            }
-            
-            table {
-                font-size: 0.875rem;
-            }
-            
-            th, td {
-                padding: 0.75rem;
-            }
-            
-            .actions {
-                flex-direction: column;
-                align-items: center;
-            }
-        }
-
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.25rem;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 500;
-            margin-left: 0.5rem;
-            background: rgba(16, 185, 129, 0.2);
-            color: var(--accent-success);
-        }
-    </style>
 </head>
 <body>
     <header class="header">
@@ -366,7 +29,7 @@
         <!-- Section: Self-Employed W-2s -->
         <!-- PDF Drop Zone -->
         <div id="pdfDropZone" style="display: block;"></div>
-        
+
         <!-- Target Location Selector -->
         <div style="text-align: center; margin: 20px 0;">
             <label for="targetLocation" style="margin-right: 10px; font-weight: bold;">Target Location:</label>
@@ -381,7 +44,7 @@
                 <option value="current_year">Current Year</option>
                 <option value="prior_year">Prior Year</option>
             </select>
-            
+
             <button onclick="testAPI()" style="
                 padding: 8px 16px;
                 background: var(--accent-primary);
@@ -756,14 +419,14 @@
             constructor() {
                 this.initializeDropZone();
             }
-            
+
             initializeDropZone() {
                 this.createDropZone('pdfDropZone', 'Form 1040');
                 document.addEventListener('dragover', this.handleDragOver.bind(this));
                 document.addEventListener('dragleave', this.handleDragLeave.bind(this));
                 document.addEventListener('drop', this.handleDrop.bind(this));
             }
-            
+
             createDropZone(containerId, documentType) {
                 console.log(`Creating dropzone for ${documentType} in container: ${containerId}`);
                 const dropZone = document.createElement('div');
@@ -783,7 +446,7 @@
                     transition: all 0.3s ease;
                     cursor: pointer;
                 `;
-                
+
                 dropZone.innerHTML = `
                     <div style="font-size: 48px; margin-bottom: 16px;">📄</div>
                     <h3 style="margin-bottom: 8px; color: var(--text-primary);">Drop Form 1040 PDF or Image</h3>
@@ -791,7 +454,7 @@
                         Drop your Form 1040 PDF or image (JPG, PNG) to automatically populate form fields
                     </p>
                 `;
-                
+
                 const dropZoneContainer = document.getElementById(containerId);
                 if (dropZoneContainer) {
                     dropZoneContainer.appendChild(dropZone);
@@ -799,100 +462,100 @@
                 } else {
                     document.body.appendChild(dropZone);
                 }
-                
+
                 dropZone.addEventListener('dragover', this.handleDragOver.bind(this));
                 dropZone.addEventListener('dragleave', this.handleDragLeave.bind(this));
                 dropZone.addEventListener('drop', this.handleDrop.bind(this));
             }
-            
+
             handleDragOver(e) {
                 e.preventDefault();
                 e.stopPropagation();
                 e.dataTransfer.dropEffect = 'copy';
-                
+
                 const dropZone = document.getElementById('dropZone_form1040');
                 if (dropZone) {
                     dropZone.style.borderColor = 'var(--accent-success)';
                     dropZone.style.background = 'rgba(16, 185, 129, 0.2)';
                 }
             }
-            
+
             handleDragLeave(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                
+
                 const dropZone = document.getElementById('dropZone_form1040');
                 if (dropZone) {
                     dropZone.style.borderColor = 'var(--accent-primary)';
                     dropZone.style.background = 'rgba(59, 130, 246, 0.1)';
                 }
             }
-            
+
             async handleDrop(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                
+
                 const dropZone = document.getElementById('dropZone_form1040');
                 if (dropZone) {
                     dropZone.style.borderColor = 'var(--accent-primary)';
                     dropZone.style.background = 'rgba(59, 130, 246, 0.1)';
                 }
-                
+
                 const files = Array.from(e.dataTransfer.files);
                 const pdfFiles = files.filter(file => file.type === 'application/pdf');
                 const imageFiles = files.filter(file => file.type.startsWith('image/'));
-                
+
                 if (pdfFiles.length === 0 && imageFiles.length === 0) {
                     this.showNotification('Please drop PDF files or images (JPG, PNG) only', 'warning');
                     return;
                 }
-                
+
                 const allFiles = [...pdfFiles, ...imageFiles];
                 for (const file of allFiles) {
                     await this.processFile(file);
                 }
             }
-            
+
             async processFile(file) {
                 try {
                     this.showNotification(`Processing ${file.name}...`, 'info');
-                    
+
                     const targetLocation = document.getElementById('targetLocation').value;
                     const formData = new FormData();
                     formData.append('file', file);
                     formData.append('target_location', targetLocation);
-                    
+
                     const response = await fetch('http://localhost:5001/parse-form-1040', {
                         method: 'POST',
                         body: formData
                     });
-                    
+
                     const result = await response.json();
-                    
+
                     if (!result.success) {
                         throw new Error(result.error);
                     }
-                    
+
                     console.log('API Response:', result);
                     window.lastExtractedText = result.raw_text || '';
                     this.populateFormFromAPI(result.data, targetLocation);
                     this.showNotification(`Successfully processed ${file.name}`, 'success');
-                    
+
                 } catch (error) {
                     console.error('Error processing file:', error);
                     this.showNotification(`Error processing ${file.name}: ${error.message}`, 'error');
                 }
             }
-            
+
             populateFormFromAPI(data, targetLocation) {
                 console.log(`Populating Form 1040 with data for ${targetLocation}:`, data);
-                
+
                 // Map extracted data to form fields
                 const fieldMappings = {
                     'wages': 'w2_1_y1', // Default to first W-2 field
                     'total_income': 'w2_1_y1'
                 };
-                
+
                 Object.entries(fieldMappings).forEach(([apiKey, formId]) => {
                     const input = document.getElementById(formId);
                     if (input && data[apiKey] !== undefined) {
@@ -900,13 +563,13 @@
                         input.dispatchEvent(new Event('input', { bubbles: true }));
                     }
                 });
-                
+
                 calc1040();
             }
-            
+
             showNotification(message, type = 'info') {
                 console.log(`[${type.toUpperCase()}] ${message}`);
-                
+
                 const notification = document.createElement('div');
                 notification.style.cssText = `
                     position: fixed;
@@ -920,7 +583,7 @@
                     max-width: 300px;
                     word-wrap: break-word;
                 `;
-                
+
                 switch (type) {
                     case 'success':
                         notification.style.background = '#10b981';
@@ -934,10 +597,10 @@
                     default:
                         notification.style.background = '#3b82f6';
                 }
-                
+
                 notification.textContent = message;
                 document.body.appendChild(notification);
-                
+
                 setTimeout(() => {
                     if (notification.parentNode) {
                         notification.parentNode.removeChild(notification);
@@ -952,7 +615,7 @@
                 console.log('Testing API connection...');
                 const response = await fetch('http://localhost:5001/health');
                 const result = await response.json();
-                
+
                 if (result.status === 'healthy') {
                     alert('API connection successful! Python server is running.');
                 } else {
@@ -980,7 +643,7 @@
                     justify-content: center;
                     z-index: 10000;
                 `;
-                
+
                 const content = document.createElement('div');
                 content.style.cssText = `
                     background: var(--bg-secondary);
@@ -992,7 +655,7 @@
                     overflow-y: auto;
                     color: var(--text-primary);
                 `;
-                
+
                 content.innerHTML = `
                     <h3 style="margin-bottom: 16px; color: var(--accent-primary);">Last Extracted PDF Text</h3>
                     <pre style="background: var(--bg-secondary); padding: 12px; border-radius: 6px; font-size: 12px; overflow-x: auto; white-space: pre-wrap;">${window.lastExtractedText}</pre>
@@ -1007,7 +670,7 @@
                         ">Close</button>
                     </div>
                 `;
-                
+
                 modal.appendChild(content);
                 document.body.appendChild(modal);
             } else {
@@ -1037,10 +700,10 @@
             }
         };
     </script>
-    
+
     <!-- Theme Switcher -->
     <script src="theme-switcher.js"></script>
-    
+
     <!-- ZZ Signature -->
     <div style="position: fixed; bottom: 20px; right: 20px; font-size: 12px; color: var(--text-muted); font-family: monospace; z-index: 1000;">
         ZZ

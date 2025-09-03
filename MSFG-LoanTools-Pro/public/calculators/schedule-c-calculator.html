@@ -4,365 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MSFG • Schedule C Income Calculator</title>
-    <style>
-        :root {
-            --bg-primary: #0a0a0a;
-            --bg-secondary: #1a1a1a;
-            --bg-card: rgba(255, 255, 255, 0.05);
-            --bg-card-hover: rgba(255, 255, 255, 0.08);
-            --text-primary: #ffffff;
-            --text-secondary: #b0b0b0;
-            --text-muted: #808080;
-            --accent-primary: #3b82f6;
-            --accent-secondary: #1d4ed8;
-            --accent-success: #10b981;
-            --accent-warning: #f59e0b;
-            --accent-danger: #ef4444;
-            --border-color: rgba(255, 255, 255, 0.1);
-            --border-hover: rgba(255, 255, 255, 0.2);
-            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.4);
-            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --gradient-success: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            --gradient-warning: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-            --gradient-danger: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
-        }
-
-        .header {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-color);
-            padding: 1rem 2rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .back-link {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.875rem;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            border: 1px solid var(--border-color);
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .back-link:hover {
-            color: var(--text-primary);
-            background: rgba(255, 255, 255, 0.1);
-            border-color: var(--accent-primary);
-            transform: translateX(-2px);
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .logo img {
-            width: 80px;
-            height: auto;
-            border-radius: 8px;
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
-        }
-
-
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        .hero {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .hero h2 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero p {
-            font-size: 1.125rem;
-            color: var(--text-secondary);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .notes {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            line-height: 1.6;
-        }
-
-        .section {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            backdrop-filter: blur(20px);
-            transition: all 0.3s ease;
-        }
-
-        .section:hover {
-            border-color: var(--border-hover);
-            background: var(--bg-card-hover);
-        }
-
-        .section h3 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .section h3::before {
-            content: '';
-            width: 4px;
-            height: 24px;
-            background: var(--gradient-primary);
-            border-radius: 2px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 1.5rem;
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        th {
-            background: var(--accent-primary);
-            color: white;
-            padding: 1rem;
-            text-align: left;
-            font-weight: 600;
-            font-size: 0.875rem;
-        }
-
-        td {
-            padding: 1rem;
-            border-bottom: 1px solid var(--border-color);
-            color: var(--text-secondary);
-        }
-
-        tr:last-child td {
-            border-bottom: none;
-        }
-
-        tr:hover td {
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        input[type="number"] {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text-primary);
-            font-size: 0.875rem;
-            transition: all 0.3s ease;
-        }
-
-        input[type="number"]:focus {
-            outline: none;
-            border-color: var(--accent-primary);
-            background: rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-
-        .result {
-            font-weight: bold;
-            background: var(--gradient-success);
-            color: white;
-            padding: 0.75rem 1rem;
-            border-radius: 8px;
-            display: inline-block;
-            min-width: 140px;
-            text-align: right;
-            font-size: 1rem;
-        }
-
-        .result-label {
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-right: 1rem;
-        }
-
-        .sign-positive {
-            color: var(--accent-success);
-            font-weight: bold;
-        }
-
-        .sign-negative {
-            color: var(--accent-danger);
-            font-weight: bold;
-        }
-
-        .sign-both {
-            color: var(--accent-warning);
-            font-weight: bold;
-        }
-
-        .combined-total {
-            background: var(--gradient-primary);
-            border: 1px solid var(--accent-primary);
-            border-radius: 16px;
-            padding: 2rem;
-            text-align: center;
-            margin-top: 2rem;
-        }
-
-        .combined-total h3 {
-            color: white;
-            margin-bottom: 1rem;
-            font-size: 1.5rem;
-        }
-
-        .combined-total .result {
-            font-size: 1.5rem;
-            padding: 1rem 2rem;
-            min-width: 200px;
-        }
-
-        .footer {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 1.5rem;
-            margin-top: 2rem;
-            color: var(--text-muted);
-            font-size: 0.875rem;
-            line-height: 1.6;
-        }
-
-        .actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-            justify-content: center;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: var(--accent-primary);
-            color: white;
-            text-decoration: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-            font-size: 0.875rem;
-        }
-
-        .btn:hover {
-            background: var(--accent-secondary);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-        }
-
-        .btn.secondary {
-            background: var(--accent-warning);
-        }
-
-        .btn.secondary:hover {
-            background: #d97706;
-            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
-            }
-            
-            .section {
-                padding: 1.5rem;
-            }
-            
-            .hero h2 {
-                font-size: 2rem;
-            }
-            
-            table {
-                font-size: 0.875rem;
-            }
-            
-            th, td {
-                padding: 0.75rem;
-            }
-            
-            .actions {
-                flex-direction: column;
-                align-items: center;
-            }
-        }
-
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.25rem;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 500;
-            margin-left: 0.5rem;
-            background: rgba(16, 185, 129, 0.2);
-            color: var(--accent-success);
-        }
-    </style>
+    <link rel="stylesheet" href="../css/master.css">
 </head>
 <body>
     <header class="header">
@@ -392,7 +34,7 @@
         <!-- PDF Drop Zones -->
         <div id="pdfDropZone" style="display: block;"></div>
         <div id="pdfDropZone2" style="display: block;"></div>
-        
+
         <!-- Target Location Selector -->
         <div style="text-align: center; margin: 20px 0;">
             <label for="targetLocation" style="margin-right: 10px; font-weight: bold;">Target Location:</label>
@@ -409,7 +51,7 @@
                 <option value="business2_current">Business 2 - Current Year</option>
                 <option value="business2_prior">Business 2 - Prior Year</option>
             </select>
-            
+
             <button onclick="testAPI()" style="
                 padding: 8px 16px;
                 background: var(--accent-primary);
@@ -511,7 +153,7 @@
         <!-- Business 2 -->
         <section class="section">
             <h3>Business 2 <span class="status-badge">Live</span></h3>
-            
+
             <!-- Business 2 PDF Drop Zone -->
             <div id="business2DropZone" style="display: block;"></div>
             <table>
@@ -746,7 +388,7 @@
                 console.log('Testing API connection...');
                 const response = await fetch('http://localhost:5001/health');
                 const result = await response.json();
-                
+
                 if (response.ok) {
                     alert('API connection successful! Server is running.');
                 } else {
@@ -764,13 +406,13 @@
                 alert('No text has been extracted yet. Please drop a PDF first.');
                 return;
             }
-            
+
             // Also show the raw text content if available
             if (window.lastTextContent) {
                 console.log('=== RAW TEXT CONTENT STRUCTURE ===');
                 console.log('Text content:', window.lastTextContent);
             }
-            
+
                             const modal = document.createElement('div');
                 modal.id = 'extractedTextModal';
                 modal.style.cssText = `
@@ -786,7 +428,7 @@
                     justify-content: center;
                     padding: 20px;
                 `;
-            
+
             const content = document.createElement('div');
             content.style.cssText = `
                 background: var(--bg-primary);
@@ -797,7 +439,7 @@
                 overflow-y: auto;
                 color: var(--text-primary);
             `;
-            
+
             content.innerHTML = `
                 <h3 style="margin-bottom: 16px; color: var(--accent-primary);">Last Extracted PDF Text</h3>
                 <pre style="background: var(--bg-secondary); padding: 12px; border-radius: 6px; font-size: 12px; overflow-x: auto; white-space: pre-wrap;">${lastExtractedText}</pre>
@@ -812,7 +454,7 @@
                         ">Close</button>
                     </div>
             `;
-            
+
             modal.appendChild(content);
             document.body.appendChild(modal);
         }
@@ -839,10 +481,10 @@
             }
         };
     </script>
-    
+
     <!-- PDF.js Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" onerror="console.error('Failed to load PDF.js from CDN')"></script>
-    
+
     <!-- PDF Parser -->
     <script>
         class ScheduleCPDFParser {
@@ -850,20 +492,20 @@
                 this.initializeDropZone();
                 this.pdfjsLoaded = false;
             }
-            
+
             initializeDropZone() {
                 // Create Business 1 drop zone
                 this.createDropZone('pdfDropZone', 'Business 1', 'b1');
-                
+
                 // Create Business 2 drop zone
                 this.createDropZone('business2DropZone', 'Business 2', 'b2');
-                
+
                 // Add global drag and drop handlers
                 document.addEventListener('dragover', this.handleDragOver.bind(this));
                 document.addEventListener('dragleave', this.handleDragLeave.bind(this));
                 document.addEventListener('drop', this.handleDrop.bind(this));
             }
-            
+
             createDropZone(containerId, businessName, businessPrefix) {
                 console.log(`Creating dropzone for ${businessName} in container: ${containerId}`);
                 const dropZone = document.createElement('div');
@@ -884,7 +526,7 @@
                     transition: all 0.3s ease;
                     cursor: pointer;
                 `;
-                
+
                 dropZone.innerHTML = `
                     <div style="font-size: 48px; margin-bottom: 16px;">📄</div>
                     <h3 style="margin-bottom: 8px; color: var(--text-primary);">Drop Schedule C PDF or Image for ${businessName}</h3>
@@ -892,7 +534,7 @@
                         Drop your Schedule C PDF or image (JPG, PNG) to automatically populate ${businessName} fields
                     </p>
                 `;
-                
+
                 // Insert drop zone into the designated container
                 const dropZoneContainer = document.getElementById(containerId);
                 console.log(`Container ${containerId} found:`, dropZoneContainer);
@@ -905,44 +547,44 @@
                     console.log(`Container ${containerId} not found, adding to body`);
                     document.body.appendChild(dropZone);
                 }
-                
+
                 // Add drop zone specific handlers
                 dropZone.addEventListener('dragover', this.handleDragOver.bind(this));
                 dropZone.addEventListener('dragleave', this.handleDragLeave.bind(this));
                 dropZone.addEventListener('drop', this.handleDrop.bind(this));
             }
-            
+
             handleDragOver(e) {
                 e.preventDefault();
                 e.stopPropagation();
                 e.dataTransfer.dropEffect = 'copy';
-                
+
                 const dropZone = document.getElementById('pdfDropZone');
                 if (dropZone) {
                     dropZone.style.borderColor = 'var(--accent-success)';
                     dropZone.style.background = 'rgba(16, 185, 129, 0.2)';
                 }
             }
-            
+
             handleDragLeave(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                
+
                 const dropZone = document.getElementById('pdfDropZone');
                 if (dropZone) {
                     dropZone.style.borderColor = 'var(--accent-primary)';
                     dropZone.style.background = 'rgba(59, 130, 246, 0.1)';
                 }
             }
-            
+
             async handleDrop(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                
+
                 // Determine which business this drop is for
                 let targetBusiness = 'b1'; // Default to Business 1
                 let dropZone = document.getElementById('pdfDropZone');
-                
+
                 // Check if the drop was on Business 2 drop zone
                 if (e.target.closest('#dropZone_b2') || e.target.closest('#business2DropZone')) {
                     targetBusiness = 'b2';
@@ -951,76 +593,76 @@
                     targetBusiness = 'b1';
                     dropZone = document.getElementById('dropZone_b1');
                 }
-                
+
                 if (dropZone) {
                     dropZone.style.borderColor = 'var(--accent-primary)';
                     dropZone.style.background = 'rgba(59, 130, 246, 0.1)';
                 }
-                
+
                 const files = Array.from(e.dataTransfer.files);
                 const pdfFiles = files.filter(file => file.type === 'application/pdf');
                 const imageFiles = files.filter(file => file.type.startsWith('image/'));
-                
+
                 if (pdfFiles.length === 0 && imageFiles.length === 0) {
                     this.showNotification('Please drop PDF files or images (JPG, PNG) only', 'warning');
                     return;
                 }
-                
+
                 // Process all files (PDFs and images)
                 const allFiles = [...pdfFiles, ...imageFiles];
                 for (const file of allFiles) {
                     await this.processFile(file, targetBusiness);
                 }
             }
-            
+
             async processFile(file, targetBusiness = 'b1') {
                 try {
                     this.showNotification(`Processing ${file.name} for ${targetBusiness === 'b1' ? 'Business 1' : 'Business 2'}...`, 'info');
-                    
+
                     console.log('Processing file:', file.name, 'for business:', targetBusiness);
-                    
+
                     // Get target location from the selector
                     const targetLocation = document.getElementById('targetLocation').value;
-                    
+
                     // Create form data for API call
                     const formData = new FormData();
                     formData.append('file', file);
                     formData.append('target_location', targetLocation);
-                    
+
                     // Call Python API
                     const response = await fetch('http://localhost:5001/parse-schedule-c', {
                         method: 'POST',
                         body: formData
                     });
-                    
+
                     const result = await response.json();
-                    
+
                     if (!result.success) {
                         throw new Error(result.error);
                     }
-                    
+
                     console.log('API Response:', result);
-                    
+
                     // Store extracted text globally for debugging
                     window.lastExtractedText = result.raw_text || '';
-                    
+
                     // Show debug info
                     this.showDebugInfo(result.raw_text || '', result.data);
-                    
+
                     // Populate form fields
                     this.populateFormFromAPI(result.data, targetLocation);
-                    
+
                     this.showNotification(`Successfully processed ${file.name}`, 'success');
-                    
+
                 } catch (error) {
                     console.error('Error processing file:', error);
                     this.showNotification(`Error processing ${file.name}: ${error.message}`, 'error');
                 }
             }
-            
+
             async loadPDFJS() {
                 if (this.pdfjsLoaded) return;
-                
+
                 return new Promise((resolve, reject) => {
                     // Check if already loaded
                     if (window.pdfjsLib) {
@@ -1033,7 +675,7 @@
                         resolve();
                         return;
                     }
-                    
+
                     // Wait a bit for the script tag to load
                     setTimeout(() => {
                         if (window.pdfjsLib) {
@@ -1046,7 +688,7 @@
                             resolve();
                             return;
                         }
-                        
+
                         // If still not loaded, try dynamic loading
                         console.log('Attempting to load PDF.js dynamically...');
                         const script = document.createElement('script');
@@ -1068,46 +710,46 @@
                     }, 1000);
                 });
             }
-            
+
             extractScheduleCData(text) {
                 const data = {};
-                
+
                 // First, let's try to extract using the raw text content with positions
                 if (window.lastTextContent && window.lastTextContent.length > 0) {
                     console.log('=== USING POSITION-BASED EXTRACTION ===');
                     return this.extractUsingPositions(window.lastTextContent);
                 }
-                
+
                 // Fallback to regex patterns
                 const patterns = {
                     // Net Profit or Loss (Line 31) - This is the main field we need
                     netProfit: /(?:Net profit or loss|Line 31|Net profit|Net loss)\s*\$?\s*([\d,]+\.?\d*)/i,
-                    
+
                     // Other Income (Line 6)
                     otherIncome: /(?:Other income|Line 6)\s*\$?\s*([\d,]+\.?\d*)/i,
-                    
+
                     // Depletion (Line 12)
                     depletion: /(?:Depletion|Line 12)\s*\$?\s*([\d,]+\.?\d*)/i,
-                    
+
                     // Depreciation (Line 13)
                     depreciation: /(?:Depreciation|Line 13)\s*\$?\s*([\d,]+\.?\d*)/i,
-                    
+
                     // Meal & Entertainment Exclusion (Line 24b)
                     meals: /(?:Meal and entertainment|Line 24b|Meals)\s*\$?\s*([\d,]+\.?\d*)/i,
-                    
+
                     // Business Use of Home (Line 30)
                     homeOffice: /(?:Business use of home|Line 30|Home office)\s*\$?\s*([\d,]+\.?\d*)/i,
-                    
+
                     // Mileage Depreciation
                     mileage: /(?:Mileage depreciation|Mileage)\s*\$?\s*([\d,]+\.?\d*)/i,
-                    
+
                     // Amortization
                     amortization: /(?:Amortization|Casualty loss)\s*\$?\s*([\d,]+\.?\d*)/i
                 };
-                
+
                 console.log('=== REGEX PATTERN MATCHING ===');
                 console.log('Text to search:', text.substring(0, 500) + '...');
-                
+
                 for (const [field, pattern] of Object.entries(patterns)) {
                     const match = text.match(pattern);
                     console.log(`${field}:`, match ? `Found: ${match[1]}` : 'Not found');
@@ -1115,50 +757,50 @@
                         data[field] = this.parseCurrency(match[1]);
                     }
                 }
-                
+
                 // Try some alternative patterns for common Schedule C formats
                 console.log('=== TRYING ALTERNATIVE PATTERNS ===');
-                
+
                 // Look for "31" or "Line 31" followed by numbers
                 const line31Match = text.match(/(?:Line\s*)?31[:\s]*\$?\s*([\d,]+\.?\d*)/i);
                 if (line31Match) {
                     console.log('Line 31 alternative match:', line31Match[1]);
                     data.netProfit = this.parseCurrency(line31Match[1]);
                 }
-                
+
                 // Look for "Net profit" or "Net loss" anywhere in text
                 const netProfitMatch = text.match(/(?:Net\s+(?:profit|loss))[:\s]*\$?\s*([\d,]+\.?\d*)/i);
                 if (netProfitMatch) {
                     console.log('Net profit/loss alternative match:', netProfitMatch[1]);
                     data.netProfit = this.parseCurrency(netProfitMatch[1]);
                 }
-                
+
                 // Look for "31" in a box format - common IRS form layout
                 const line31BoxMatch = text.match(/31\s+Net\s+profit\s+or\s*\(?loss\)?[^]*?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)/i);
                 if (line31BoxMatch) {
                     console.log('Line 31 box format match:', line31BoxMatch[1]);
                     data.netProfit = this.parseCurrency(line31BoxMatch[1]);
                 }
-                
+
                 // Look for "31" followed by description and then a number on the right
                 const line31RightMatch = text.match(/31[^]*?Net\s+profit[^]*?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)/i);
                 if (line31RightMatch) {
                     console.log('Line 31 right side match:', line31RightMatch[1]);
                     data.netProfit = this.parseCurrency(line31RightMatch[1]);
                 }
-                
+
                 // Look for any number that appears after "31" and "Net profit" text
                 const line31AnyMatch = text.match(/31[^]*?Net\s+profit[^]*?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)/i);
                 if (line31AnyMatch) {
                     console.log('Line 31 any format match:', line31AnyMatch[1]);
                     data.netProfit = this.parseCurrency(line31AnyMatch[1]);
                 }
-                
+
                 // Look for any large number that might be the net profit (common patterns)
                 const numberMatches = text.match(/\$?\s*([\d,]+\.?\d*)/g);
                 if (numberMatches) {
                     console.log('All numbers found:', numberMatches.slice(0, 10));
-                    
+
                     // Look for the largest number that could be net profit (usually the biggest number)
                     const largeNumbers = numberMatches
                         .map(match => this.parseCurrency(match.replace('$', '')))
@@ -1166,7 +808,7 @@
                         .filter(num => num !== 2023 && num !== 2022 && num !== 2021) // Filter out years
                         .filter(num => num !== 1040 && num !== 1041 && num !== 1065) // Filter out form numbers
                         .sort((a, b) => b - a); // Sort descending
-                    
+
                     if (largeNumbers.length > 0) {
                         console.log('Largest numbers found (filtered):', largeNumbers.slice(0, 5));
                         // Use the largest number as net profit if we haven't found it yet
@@ -1176,30 +818,30 @@
                         }
                     }
                 }
-                
+
                 // Advanced approach: Look for the specific numbers we know are in the document
                 console.log('=== LOOKING FOR SPECIFIC NUMBERS ===');
-                
+
                 // Look for the net profit amount (69,297) - it's the last large number
                 const allNumbers = text.match(/\$?\s*([\d,]+\.?\d*)/g);
                 if (allNumbers) {
                     console.log('All numbers found:', allNumbers);
-                    
+
                     // Convert to numbers and filter out non-money amounts
                     const moneyNumbers = allNumbers
                         .map(match => this.parseCurrency(match.replace('$', '')))
                         .filter(num => num > 1000 && num < 1000000) // Reasonable range for business income
                         .filter(num => num !== 2023 && num !== 1040) // Filter out years and form numbers
                         .sort((a, b) => b - a); // Sort descending
-                    
+
                     console.log('Money numbers found:', moneyNumbers);
-                    
+
                     // The largest number is likely the net profit (69,297)
                     if (moneyNumbers.length > 0) {
                         console.log('Using largest money number as net profit:', moneyNumbers[0]);
                         data.netProfit = moneyNumbers[0];
                     }
-                    
+
                     // Look for meals amount (4,250) - it's a medium-sized number
                     const mealsNumber = moneyNumbers.find(num => num >= 4000 && num <= 5000);
                     if (mealsNumber) {
@@ -1207,60 +849,60 @@
                         data.meals = mealsNumber;
                     }
                 }
-                
+
                 return data;
             }
-            
+
             parseCurrency(value) {
                 if (!value) return 0;
                 return parseFloat(value.replace(/[$,]/g, '')) || 0;
             }
-            
+
             cleanText(text) {
                 if (!text) return '';
-                
+
                 // Remove control characters and non-printable characters
                 let cleaned = text.replace(/[\x00-\x1F\x7F-\x9F]/g, '');
-                
+
                 // Remove common PDF artifacts
                 cleaned = cleaned.replace(/[^\x20-\x7E]/g, ' '); // Keep only printable ASCII
-                
+
                 // Clean up multiple spaces
                 cleaned = cleaned.replace(/\s+/g, ' ');
-                
+
                 // Remove leading/trailing whitespace
                 cleaned = cleaned.trim();
-                
+
                 // If the text is mostly control characters or very short, return empty
                 if (cleaned.length < 2 || cleaned.match(/^[\s\x00-\x1F]+$/)) {
                     return '';
                 }
-                
+
                 return cleaned;
             }
-            
+
             extractUsingPositions(textContentArray) {
                 const data = {};
                 console.log('Extracting using positions from', textContentArray.length, 'pages');
-                
+
                 // Collect all amounts across all pages
                 let allAmounts = [];
-                
+
                 // Process each page
                 for (let pageIndex = 0; pageIndex < textContentArray.length; pageIndex++) {
                     const pageContent = textContentArray[pageIndex];
                     console.log(`Processing page ${pageIndex + 1} with ${pageContent.items.length} text items`);
-                    
+
                     // Find line numbers and their associated amounts
                     const lineNumbers = [];
                     const amounts = [];
-                    
+
                     // Extract all text items with their positions
                     pageContent.items.forEach(item => {
                         const text = item.str.trim();
                         const x = item.transform[4];
                         const y = item.transform[5];
-                        
+
                         // Look for line numbers (1-31)
                         if (/^\d{1,2}$/.test(text) && parseInt(text) >= 1 && parseInt(text) <= 31) {
                             lineNumbers.push({
@@ -1270,7 +912,7 @@
                                 text: text
                             });
                         }
-                        
+
                         // Look for line 24b specifically (meals)
                         if (text === '24b' || text === '24 b' || text === '24') {
                             lineNumbers.push({
@@ -1281,7 +923,7 @@
                                 isMeals: true
                             });
                         }
-                        
+
                         // Look for amounts (numbers with commas or decimals)
                         if (/^\$?[\d,]+\.?\d*$/.test(text) || /^\d{1,3}(,\d{3})*(\.\d{2})?$/.test(text)) {
                             const amount = this.parseCurrency(text);
@@ -1291,7 +933,7 @@
                                     console.log(`Skipping gross income amount: ${amount} at (${x}, ${y})`);
                                     return;
                                 }
-                                
+
                                 amounts.push({
                                     amount: amount,
                                     x: x,
@@ -1301,34 +943,34 @@
                             }
                         }
                     });
-                    
+
                     console.log('Line numbers found:', lineNumbers);
                     console.log('Amounts found:', amounts);
-                    
+
                     // Add amounts from this page to the global collection
                     allAmounts = allAmounts.concat(amounts);
-                    
+
                     // Match line numbers with amounts based on proximity
                     lineNumbers.forEach(lineItem => {
                         console.log(`Processing line ${lineItem.line} at position (${lineItem.x}, ${lineItem.y})`);
-                        
+
                         // Find amounts that are close to this line number (within 30 pixels vertically for tighter matching)
                         const nearbyAmounts = amounts.filter(amount => 
                             Math.abs(amount.y - lineItem.y) < 30 && 
                             amount.x > lineItem.x && // Amount should be to the right of line number
                             amount.x < lineItem.x + 400 // But not too far to the right
                         );
-                        
+
                         console.log(`Line ${lineItem.line} has ${nearbyAmounts.length} nearby amounts:`, nearbyAmounts);
-                        
+
                         if (nearbyAmounts.length > 0) {
                             // Use the closest amount
                             const closestAmount = nearbyAmounts.reduce((closest, current) => 
                                 Math.abs(current.y - lineItem.y) < Math.abs(closest.y - lineItem.y) ? current : closest
                             );
-                            
+
                             console.log(`Line ${lineItem.line} matched with amount ${closestAmount.amount} at position (${closestAmount.x}, ${closestAmount.y})`);
-                            
+
                             // Map to our data structure - only set if we're confident about the match
                             switch (lineItem.line) {
                                 case 6:
@@ -1388,10 +1030,10 @@
                         }
                     });
                 }
-                
+
                 console.log('Position-based extraction result:', data);
                 console.log('All amounts found across pages:', allAmounts);
-                
+
                 // Fallback: Look for specific amounts we know should be there
                 if (!data.netProfit) {
                     const netProfitAmount = allAmounts.find(amount => amount.amount >= 69000 && amount.amount <= 70000);
@@ -1400,7 +1042,7 @@
                         data.netProfit = netProfitAmount.amount;
                     }
                 }
-                
+
                 if (!data.meals) {
                     const mealsAmount = allAmounts.find(amount => amount.amount >= 4200 && amount.amount <= 4300);
                     if (mealsAmount) {
@@ -1408,80 +1050,80 @@
                         data.meals = mealsAmount.amount;
                     }
                 }
-                
+
                 // If we still don't have data, try to extract from the raw text
                 if (Object.keys(data).length === 0 || (!data.netProfit && !data.meals)) {
                     console.log('Trying to extract from raw text due to encoding issues...');
                     const rawText = window.lastExtractedText || '';
-                    
+
                     // Look for numbers in the raw text (even if corrupted)
                     const numberMatches = rawText.match(/\d{1,3}(?:,\d{3})*(?:\.\d{2})?/g);
                     if (numberMatches) {
                         console.log('Found numbers in raw text:', numberMatches);
-                        
+
                         // Convert to numbers and find the largest (likely net profit)
                         const numbers = numberMatches
                             .map(match => this.parseCurrency(match))
                             .filter(num => num > 1000 && num < 1000000)
                             .sort((a, b) => b - a);
-                        
+
                         if (numbers.length > 0) {
                             console.log('Largest number found:', numbers[0]);
                             data.netProfit = numbers[0];
                         }
                     }
                 }
-                
+
                 // Ensure other fields are 0 if not found
                 if (!data.otherIncome) data.otherIncome = 0;
                 if (!data.depletion) data.depletion = 0;
                 if (!data.depreciation) data.depreciation = 0;
                 if (!data.homeOffice) data.homeOffice = 0;
-                
+
                 return data;
             }
-            
+
             async processImageFile(file, targetBusiness = 'b1') {
                 try {
                     this.showNotification(`Processing image ${file.name} for ${targetBusiness === 'b1' ? 'Business 1' : 'Business 2'}...`, 'info');
-                    
+
                     console.log('Processing image file:', file.name, 'for business:', targetBusiness);
-                    
+
                     // Convert image to base64
                     const base64 = await this.fileToBase64(file);
-                    
+
                     // Use OCR to extract text from image
                     const extractedText = await this.extractTextFromImage(base64);
-                    
+
                     // Store extracted text globally for debugging
                     window.lastExtractedText = extractedText;
                     console.log('=== IMAGE EXTRACTED TEXT ===');
                     console.log('Text length:', extractedText.length);
                     console.log('FULL TEXT:', extractedText);
-                    
+
                     // Extract Schedule C data using regex patterns
                     const extractedData = this.extractScheduleCData(extractedText);
-                    
+
                     // Debug: Show extracted text and parsed data
                     console.log('=== EXTRACTED IMAGE TEXT ===');
                     console.log(extractedText);
                     console.log('=== PARSED SCHEDULE C DATA ===');
                     console.log(extractedData);
-                    
+
                     // Show debug info to user
                     this.showDebugInfo(extractedText, extractedData);
-                    
+
                     // Populate form fields
                     this.populateForm(extractedData, targetBusiness);
-                    
+
                     this.showNotification(`Successfully processed image ${file.name}`, 'success');
-                    
+
                 } catch (error) {
                     console.error('Error processing image:', error);
                     this.showNotification(`Error processing image ${file.name}: ${error.message}`, 'error');
                 }
             }
-            
+
             fileToBase64(file) {
                 return new Promise((resolve, reject) => {
                     const reader = new FileReader();
@@ -1490,13 +1132,13 @@
                     reader.readAsDataURL(file);
                 });
             }
-            
+
             async extractTextFromImage(base64Image) {
                 try {
                     // Use a free OCR API (OCR.Space)
                     const apiKey = 'K81724188988957'; // Free API key
                     const url = 'https://api.ocr.space/parse/image';
-                    
+
                     const formData = new FormData();
                     formData.append('apikey', apiKey);
                     formData.append('base64Image', `data:image/jpeg;base64,${base64Image}`);
@@ -1504,20 +1146,20 @@
                     formData.append('isOverlayRequired', 'false');
                     formData.append('filetype', 'jpg');
                     formData.append('detectOrientation', 'true');
-                    
+
                     console.log('Sending image to OCR API...');
-                    
+
                     const response = await fetch(url, {
                         method: 'POST',
                         body: formData
                     });
-                    
+
                     const result = await response.json();
-                    
+
                     if (result.IsErroredOnProcessing) {
                         throw new Error(`OCR Error: ${result.ErrorMessage}`);
                     }
-                    
+
                     if (result.ParsedResults && result.ParsedResults.length > 0) {
                         const extractedText = result.ParsedResults.map(result => result.ParsedText).join('\n');
                         console.log('OCR extracted text:', extractedText);
@@ -1525,15 +1167,15 @@
                     } else {
                         throw new Error('No text found in image');
                     }
-                    
+
                 } catch (error) {
                     console.error('OCR API error:', error);
-                    
+
                     // Fallback: Try alternative OCR service or return error
                     throw new Error(`OCR failed: ${error.message}. Please try a clearer image or PDF format.`);
                 }
             }
-            
+
             showDebugInfo(extractedText, parsedData) {
                 // Create debug modal
                 const modal = document.createElement('div');
@@ -1551,7 +1193,7 @@
                     justify-content: center;
                     padding: 20px;
                 `;
-                
+
                 const content = document.createElement('div');
                 content.style.cssText = `
                     background: var(--bg-primary);
@@ -1562,20 +1204,20 @@
                     overflow-y: auto;
                     color: var(--text-primary);
                 `;
-                
+
                 content.innerHTML = `
                     <h3 style="margin-bottom: 16px; color: var(--accent-primary);">PDF Parsing Debug Info</h3>
-                    
+
                     <div style="margin-bottom: 20px;">
                         <h4 style="margin-bottom: 8px;">Parsed Data:</h4>
                         <pre style="background: var(--bg-secondary); padding: 12px; border-radius: 6px; font-size: 12px; overflow-x: auto;">${JSON.stringify(parsedData, null, 2)}</pre>
                     </div>
-                    
+
                     <div style="margin-bottom: 20px;">
                         <h4 style="margin-bottom: 8px;">Full Extracted Text:</h4>
                         <pre style="background: var(--bg-secondary); padding: 12px; border-radius: 6px; font-size: 12px; overflow-x: auto; max-height: 400px; white-space: pre-wrap;">${extractedText}</pre>
                     </div>
-                    
+
                     <div style="display: flex; gap: 12px; justify-content: flex-end;">
                         <button onclick="document.getElementById('debugModal').remove()" style="
                             padding: 8px 16px;
@@ -1587,18 +1229,18 @@
                         ">Close</button>
                     </div>
                 `;
-                
+
                 content.className = 'debug-modal';
                 modal.appendChild(content);
                 document.body.appendChild(modal);
             }
-            
+
             populateFormFromAPI(data, targetLocation) {
                 console.log(`Populating Schedule C form with API data for ${targetLocation}:`, data);
-                
+
                 // Determine business prefix and year suffix based on target location
                 let businessPrefix, yearSuffix;
-                
+
                 switch (targetLocation) {
                     case 'business1_current':
                         businessPrefix = 'b1';
@@ -1620,7 +1262,7 @@
                         businessPrefix = 'b1';
                         yearSuffix = '1';
                 }
-                
+
                 // Map API data to form fields based on business prefix and year
                 const fieldMappings = {
                     'net_profit': `${businessPrefix}_np${yearSuffix}`,           // Net Profit or Loss (Line 31)
@@ -1630,7 +1272,7 @@
                     'meals': `${businessPrefix}_meals${yearSuffix}`,             // Meal & Entertainment Exclusion (Line 24b)
                     'home_office': `${businessPrefix}_home${yearSuffix}`,         // Business Use of Home (Line 30)
                 };
-                
+
                 // Populate form fields
                 Object.entries(fieldMappings).forEach(([apiKey, formId]) => {
                     const input = document.getElementById(formId);
@@ -1640,14 +1282,14 @@
                         input.dispatchEvent(new Event('input', { bubbles: true }));
                     }
                 });
-                
+
                 // Recalculate after populating
                 calcC();
             }
-            
+
             populateForm(data, businessPrefix = 'b1') {
                 console.log(`Populating Schedule C form with data for ${businessPrefix}:`, data);
-                
+
                 // Map extracted data to form fields based on business prefix
                 const fieldMappings = {
                     'netProfit': `${businessPrefix}_np1`,           // Net Profit or Loss (Line 31)
@@ -1659,7 +1301,7 @@
                     'mileage': `${businessPrefix}_mile1`,            // Mileage Depreciation
                     'amortization': `${businessPrefix}_amort1`       // Amortization/Casualty Loss
                 };
-                
+
                 // Populate form fields
                 Object.entries(fieldMappings).forEach(([dataKey, formId]) => {
                     const input = document.getElementById(formId);
@@ -1669,14 +1311,14 @@
                         input.dispatchEvent(new Event('input', { bubbles: true }));
                     }
                 });
-                
+
                 // Recalculate after populating
                 calcC();
             }
-            
+
             showNotification(message, type = 'info') {
                 console.log(`[${type.toUpperCase()}] ${message}`);
-                
+
                 const notification = document.createElement('div');
                 notification.style.cssText = `
                     position: fixed;
@@ -1690,7 +1332,7 @@
                     max-width: 300px;
                     word-wrap: break-word;
                 `;
-                
+
                 switch (type) {
                     case 'success':
                         notification.style.background = '#10b981';
@@ -1704,10 +1346,10 @@
                     default:
                         notification.style.background = '#3b82f6';
                 }
-                
+
                 notification.textContent = message;
                 document.body.appendChild(notification);
-                
+
                 setTimeout(() => {
                     if (notification.parentNode) {
                         notification.parentNode.removeChild(notification);
@@ -1715,25 +1357,25 @@
                 }, 5000);
             }
         }
-        
+
         // Initialize PDF parser when page loads
         document.addEventListener('DOMContentLoaded', function() {
             console.log('DOM Content Loaded - Initializing ScheduleCPDFParser');
-            
+
             // Debug: Check if containers exist
             const container1 = document.getElementById('pdfDropZone');
             const container2 = document.getElementById('business2DropZone');
             console.log('pdfDropZone container:', container1);
             console.log('business2DropZone container:', container2);
-            
+
             window.scheduleCPDFParser = new ScheduleCPDFParser();
             console.log('ScheduleCPDFParser initialized');
         });
     </script>
-    
+
     <!-- Theme Switcher -->
     <!-- Theme switcher removed - not needed for this calculator -->
-    
+
     <!-- ZZ Signature -->
     <div style="position: fixed; bottom: 20px; right: 20px; font-size: 12px; color: var(--text-muted); font-family: monospace; z-index: 1000;">
         ZZ
