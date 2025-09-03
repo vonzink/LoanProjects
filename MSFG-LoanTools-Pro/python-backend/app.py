@@ -8,6 +8,20 @@ import re
 import logging
 import os
 from werkzeug.utils import secure_filename
+import tempfile
+from pathlib import Path
+
+# Import the new Advanced Tax Processor
+try:
+    from advanced_processor import AdvancedTaxProcessor
+    ADVANCED_PROCESSOR_AVAILABLE = True
+    logger = logging.getLogger(__name__)
+    logger.info("Advanced Tax Processor imported successfully")
+except ImportError as e:
+    ADVANCED_PROCESSOR_AVAILABLE = False
+    logger = logging.getLogger(__name__)
+    logger.warning(f"Advanced Tax Processor not available: {e}")
+    logger.warning("Falling back to legacy processing")
 
 app = Flask(__name__)
 CORS(app)
@@ -837,7 +851,11 @@ def extract_text_from_image(file):
 @app.route('/health', methods=['GET'])
 def health_check():
     """Health check endpoint"""
-    return jsonify({'status': 'healthy', 'message': 'Schedule C Parser API is running'})
+    return jsonify({
+        'status': 'healthy', 
+        'message': 'MSFG Loan Tools Backend API is running',
+        'advanced_processor': ADVANCED_PROCESSOR_AVAILABLE
+    })
 
 @app.route('/parse-schedule-c', methods=['POST'])
 def parse_schedule_c():
@@ -1386,6 +1404,139 @@ class Form1120Parser:
             'raw_text': text[:2000] + '...' if len(text) > 2000 else text
         }
 
+
+# Advanced Tax Processor API Endpoints
+@app.route('/api/v2/process-tax-document', methods=['POST'])
+def process_tax_document_v2():
+    """
+    Advanced tax document processing endpoint using the new processor.
+    
+    Expected form data:
+    - file: Tax document (PDF or image)
+    - form_type: Type of tax form (schedule_c, form_1040, schedule_e, etc.)
+    - target_location: Target location identifier (optional)
+    """
+    try:
+        if not ADVANCED_PROCESSOR_AVAILABLE:
+            return jsonify({
+                'success': False,
+                'error': 'Advanced Tax Processor not available'
+            }), 503
+        
+        # Check if file was uploaded
+        if 'file' not in request.files:
+            return jsonify({
+                'success': False,
+                'error': 'No file uploaded'
+            }), 400
+        
+        file = request.files['file']
+        if file.filename == '':
+            return jsonify({
+                'success': False,
+                'error': 'No file selected'
+            }), 400
+        
+        # Get form type and target location
+        form_type = request.form.get('form_type', 'schedule_c')
+        target_location = request.form.get('target_location')
+        
+        # Validate form type
+        valid_form_types = [
+            'schedule_c', 'form_1040', 'schedule_e', 'schedule_b', 
+            'form_1065', 'w2', 'schedulec', 'form1040', 'schedulee', 
+            'scheduleb', 'form1065'
+        ]
+        
+        if form_type.lower() not in valid_form_types:
+            return jsonify({
+                'success': False,
+                'error': f'Invalid form type. Must be one of: {", ".join(valid_form_types)}'
+            }), 400
+        
+        # Save file temporarily
+        with tempfile.NamedTemporaryFile(delete=False, suffix=Path(file.filename).suffix) as temp_file:
+            file.save(temp_file.name)
+            temp_file_path = temp_file.name
+        
+        try:
+            # Initialize advanced processor
+            processor = AdvancedTaxProcessor()
+            
+            # Process the document
+            result = processor.process_document(
+                file_path=temp_file_path,
+                form_type=form_type,
+                target_location=target_location
+            )
+            
+            # Clean up temporary file
+            os.unlink(temp_file_path)
+            
+            return jsonify(result)
+            
+        except Exception as e:
+            # Clean up temporary file on error
+            if os.path.exists(temp_file_path):
+                os.unlink(temp_file_path)
+            raise e
+            
+    except Exception as e:
+        logger.error(f"Error processing tax document: {str(e)}")
+        return jsonify({
+            'success': False,
+            'error': f'Processing failed: {str(e)}'
+        }), 500
+
+@app.route('/api/v2/supported-forms', methods=['GET'])
+def get_supported_forms():
+    """Get list of supported tax form types."""
+    try:
+        if not ADVANCED_PROCESSOR_AVAILABLE:
+            return jsonify({
+                'success': False,
+                'error': 'Advanced Tax Processor not available'
+            }), 503
+        
+        processor = AdvancedTaxProcessor()
+        forms = processor.get_supported_forms()
+        
+        return jsonify({
+            'success': True,
+            'supported_forms': forms
+        })
+        
+    except Exception as e:
+        logger.error(f"Error getting supported forms: {str(e)}")
+        return jsonify({
+            'success': False,
+            'error': f'Failed to get supported forms: {str(e)}'
+        }), 500
+
+@app.route('/api/v2/processor-status', methods=['GET'])
+def get_processor_status():
+    """Get status and health of the advanced processor."""
+    try:
+        if not ADVANCED_PROCESSOR_AVAILABLE:
+            return jsonify({
+                'success': False,
+                'error': 'Advanced Tax Processor not available'
+            }), 503
+        
+        processor = AdvancedTaxProcessor()
+        status = processor.get_processing_status()
+        
+        return jsonify({
+            'success': True,
+            'processor_status': status
+        })
+        
+    except Exception as e:
+        logger.error(f"Error getting processor status: {str(e)}")
+        return jsonify({
+            'success': False,
+            'error': f'Failed to get processor status: {str(e)}'
+        }), 500
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5001)
